@@ -106,20 +106,16 @@ static int cmd_si(char *args) {
 
 static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
-	if (arg == NULL) {
-		cmd_wrong_parameters();
-		return 0;
-	}
-	if (strcmp(arg, "r") == 0) {
-		printf("eax = %8xH = %10dD\n", cpu.eax, cpu.eax);
-		printf("ecx = %8xH = %10dD\n", cpu.ecx, cpu.ecx);
-		printf("edx = %8xH = %10dD\n", cpu.edx, cpu.edx);
-		printf("ebx = %8xH = %10dD\n", cpu.ebx, cpu.ebx);
-		printf("esp = %8xH = %10dD\n", cpu.esp, cpu.esp);
-		printf("ebp = %8xH = %10dD\n", cpu.ebp, cpu.ebp);
-		printf("esi = %8xH = %10dD\n", cpu.esi, cpu.esi);
-		printf("edi = %8xH = %10dD\n", cpu.edi, cpu.edi);
-		printf("eip = %8xH = %10dD\n", cpu.eip, cpu.eip);
+	if (arg == NULL || strcmp(arg, "r") == 0) {
+		printf("eax = 0x%08xH = %10dD\n", cpu.eax, cpu.eax);
+		printf("ecx = 0x%08xH = %10dD\n", cpu.ecx, cpu.ecx);
+		printf("edx = 0x%08xH = %10dD\n", cpu.edx, cpu.edx);
+		printf("ebx = 0x%08xH = %10dD\n", cpu.ebx, cpu.ebx);
+		printf("esp = 0x%08xH = %10dD\n", cpu.esp, cpu.esp);
+		printf("ebp = 0x%08xH = %10dD\n", cpu.ebp, cpu.ebp);
+		printf("esi = 0x%08xH = %10dD\n", cpu.esi, cpu.esi);
+		printf("edi = 0x%08xH = %10dD\n", cpu.edi, cpu.edi);
+		printf("eip = 0x%08xH = %10dD\n", cpu.eip, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
 	  //TODO: Implement watchpoint in /monitor/debug/watchpoint.c
 	} else {
@@ -141,7 +137,7 @@ static int cmd_x(char *args) {
 	} else {
 		int st = strtol(arg, NULL, 0); //TODO: replace paddr with EXPR
 		int res = paddr_read(st, 4);
-		printf("%08x:%08x=%10d\n", st, res, res); 
+		printf("0x%08x: 0x%08x = %10d\n", st, res, res); 
 	}
 	return 0;
 }
