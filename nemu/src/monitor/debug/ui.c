@@ -55,13 +55,13 @@ static struct {
 	{ "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-	{ "si [N]", "Continue running and stop after [N] steps. If [N] is not given, debugger will run only one step.", cmd_si },
-  { "info SUBCMD", "Print info about the program.	SUBCMD can be given in two types, register or watch points.", cmd_info },
-	{ "p EXPR", "Calculate the value of EXPR.", cmd_p },
-	{ "x N EXPR", "Calculate EXPR and print 4 bytes of memory data from EXPR.",
+	{ "si", "Continue running and stop after [N] steps. If [N] is not given, debugger will run only one step.", cmd_si },
+  { "info", "Print info about the program.	SUBCMD can be given in two types, register or watch points.", cmd_info },
+	{ "p", "Calculate the value of EXPR.", cmd_p },
+	{ "x", "Calculate EXPR and print 4 bytes of memory data from EXPR.",
               cmd_x	},
-	{ "w EXPR", "Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
-  { "d N", "Delete watch point numbered with N.", cmd_d },
+	{ "w", "Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
+  { "d", "Delete watch point numbered with N.", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
