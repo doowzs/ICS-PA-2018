@@ -37,18 +37,34 @@ static int cmd_q(char *args) {
 }
 
 static int cmd_help(char *args);
+static int cmd_si(char *args);
+static int cmd_info(char *args);
+static int cmd_p(char *args);
+static int cmd_x(char *args);
+static int cmd_w(char *args);
+static int cmd_d(char *args);
 
 static struct {
   char *name;
   char *description;
   int (*handler) (char *);
 } cmd_table [] = {
-  { "help", "Display informations about all supported commands", cmd_help },
+  /*
+	 * This is the list of 9 basic commands for nemu debugger."
+	 */
+	{ "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
-  /* TODO: Add more commands */
-
+	{ "si [N]", "Continue running and stop after [N] steps. If [N] is not given, \
+		           debugger will run only one step.", cmd_si },
+  { "info SUBCMD", "Print info about the program.	SUBCMD can be given in two \
+		                types, register or watch points.", cmd_info },
+	{ "p EXPR", "Calculate the value of EXPR.", cmd_p },
+	{ "x N EXPR", "Calculate EXPR and print 4 bytes of memory data from EXPR.",
+              cmd_x	},
+	{ "w EXPR", "Watch point - automaticly pause the program when the value \
+		          stored in EXPR is changed.", cmd_w },
+  { "d N", "Delete watch point numbered with N.", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
@@ -74,6 +90,43 @@ static int cmd_help(char *args) {
     printf("Unknown command '%s'\n", arg);
   }
   return 0;
+}
+
+static int cmd_si(char *args) {
+  /* parse the first argument to integer (N) */
+	long int N = strtol(args, NULL, 0);
+	if (N == 0) {
+		/* no argument given */
+		cpu_exec(1);
+	} else {
+		cpu_exec(N);
+	}
+	return 0;
+}
+
+static int cmd_info(char *args) {
+	//TODO: finish cmd_info function
+  return 0;
+}
+
+static int cmd_p(char *args) {
+	//TODO: finish cmd_p function
+	return 0;
+}
+
+static int cmd_x(char *args) {
+	//TODO: finish cmd_x function
+	return 0;
+}
+
+static int cmd_w(char *args) {
+	//TODO: finish cmd_w function
+	return 0;
+}
+
+static int cmd_d(char *args) {
+	//TODO: finish cmd_d function
+	return 0;
 }
 
 void ui_mainloop(int is_batch_mode) {
