@@ -109,6 +109,7 @@ static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL) {
 		cmd_wrong_parameters();
+		return 0;
 	}
 	if (strcmp(arg, "r") == 0) {
 		printf("eax = %xH = %dD\n", cpu.eax, cpu.eax);
