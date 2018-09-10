@@ -27,15 +27,8 @@ char* rl_gets() {
   return line_read;
 }
 
-static int cmd_c(char *args) {
-  cpu_exec(-1);
-  return 0;
-}
-
-static int cmd_q(char *args) {
-  return -1;
-}
-
+static int cmd_c(char *args);
+static int cmd_q(char *args);
 static int cmd_help(char *args);
 static int cmd_si(char *args);
 static int cmd_info(char *args);
@@ -90,6 +83,17 @@ static int cmd_help(char *args) {
   return 0;
 }
 
+static int cmd_c(char *args) {
+	/* pass -1 for no-stop running */
+	cpu_exec(-1);
+	return 0;
+}
+
+static int cmd_q(char *args) {
+	/* exit nemu */
+	return -1;
+}
+
 static int cmd_si(char *args) {
   /* parse the first argument to integer (N) */
   char *arg = strtok(NULL, " ");
@@ -105,8 +109,10 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
+	/* extract the parameter */
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL || strcmp(arg, "r") == 0) {
+		/* r-mode (default), print all registers */
 		printf("eax = 0x%08xH = %10dD\n", cpu.eax, cpu.eax);
 		printf("ecx = 0x%08xH = %10dD\n", cpu.ecx, cpu.ecx);
 		printf("edx = 0x%08xH = %10dD\n", cpu.edx, cpu.edx);
@@ -117,8 +123,10 @@ static int cmd_info(char *args) {
 		printf("edi = 0x%08xH = %10dD\n", cpu.edi, cpu.edi);
 		printf("eip = 0x%08xH = %10dD\n", cpu.eip, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
+		/* w-mode, list all watchnodes */
 	  //TODO: Implement watchpoint in /monitor/debug/watchpoint.c
 	} else {
+		/* wrong parameter given, call handler */
 		cmd_wrong_parameter(args);
 	}
   return 0;
@@ -130,14 +138,16 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
-	//TODO: implement EXPR fuction and improve cmd_x
+	/* extract parameter from args (should be EXPR) */
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL) {
+		/* no EXPR given, call handler */
 		cmd_wrong_parameter(args);
 	} else {
+		/* calculate EXPR (not implemented) */
 		int st = strtol(arg, NULL, 0); //TODO: replace paddr with EXPR
 		int res = paddr_read(st, 4);
-		printf("0x%08x: 0x%08xH = %10dD\n", st, res, res); 
+		printf("0x%08x: 0x%08xH = %10dD\n", st, res, res);
 	}
 	return 0;
 }
@@ -153,6 +163,7 @@ static int cmd_d(char *args) {
 }
 
 static void cmd_wrong_parameter(char *args) {
+	/* input a prompt message and abort running the command */
 	printf("Wrong parameter \'%s\'. Please check your input.\n", args);
 }
 
