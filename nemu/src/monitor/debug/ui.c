@@ -112,15 +112,15 @@ static int cmd_info(char *args) {
 		return 0;
 	}
 	if (strcmp(arg, "r") == 0) {
-		printf("eax = %xH = %dD\n", cpu.eax, cpu.eax);
-		printf("ecx = %xH = %dD\n", cpu.ecx, cpu.ecx);
-		printf("edx = %xH = %dD\n", cpu.edx, cpu.edx);
-		printf("ebx = %xH = %dD\n", cpu.ebx, cpu.ebx);
-		printf("esp = %xH = %dD\n", cpu.esp, cpu.esp);
-		printf("ebp = %xH = %dD\n", cpu.ebp, cpu.ebp);
-		printf("esi = %xH = %dD\n", cpu.esi, cpu.esi);
-		printf("edi = %xH = %dD\n", cpu.edi, cpu.edi);
-		printf("eax = %xH = %dD\n", cpu.eax, cpu.eip);
+		printf("eax = %8xH = %10dD\n", cpu.eax, cpu.eax);
+		printf("ecx = %8xH = %10dD\n", cpu.ecx, cpu.ecx);
+		printf("edx = %8xH = %10dD\n", cpu.edx, cpu.edx);
+		printf("ebx = %8xH = %10dD\n", cpu.ebx, cpu.ebx);
+		printf("esp = %8xH = %10dD\n", cpu.esp, cpu.esp);
+		printf("ebp = %8xH = %10dD\n", cpu.ebp, cpu.ebp);
+		printf("esi = %8xH = %10dD\n", cpu.esi, cpu.esi);
+		printf("edi = %8xH = %10dD\n", cpu.edi, cpu.edi);
+		printf("eax = %8xH = %10dD\n", cpu.eax, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
 	  
 	} else {
