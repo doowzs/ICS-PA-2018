@@ -107,16 +107,19 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
 	//TODO: finish cmd_info function
 	char *arg = strtok(NULL, " ");
+	if (arg == NULL) {
+		cmd_wrong_parameters();
+	}
 	if (strcmp(arg, "r") == 0) {
-		printf("eax is %xH=%dD\n", cpu.eax, cpu.eax);
-		printf("ecx is %xH=%dD\n", cpu.ecx, cpu.ecx);
-		printf("edx is %xH=%dD\n", cpu.edx, cpu.edx);
-		printf("ebx is %xH=%dD\n", cpu.ebx, cpu.ebx);
-		printf("esp is %xH=%dD\n", cpu.esp, cpu.esp);
-		printf("ebp is %xH=%dD\n", cpu.ebp, cpu.ebp);
-		printf("esi is %xH=%dD\n", cpu.esi, cpu.esi);
-		printf("edi is %xH=%dD\n", cpu.edi, cpu.edi);
-		printf("eip is %xH=%dD\n", cpu.eip, cpu.eip);
+		printf("eax = %xH = %dD\n", cpu.eax, cpu.eax);
+		printf("ecx = %xH = %dD\n", cpu.ecx, cpu.ecx);
+		printf("edx = %xH = %dD\n", cpu.edx, cpu.edx);
+		printf("ebx = %xH = %dD\n", cpu.ebx, cpu.ebx);
+		printf("esp = %xH = %dD\n", cpu.esp, cpu.esp);
+		printf("ebp = %xH = %dD\n", cpu.ebp, cpu.ebp);
+		printf("esi = %xH = %dD\n", cpu.esi, cpu.esi);
+		printf("edi = %xH = %dD\n", cpu.edi, cpu.edi);
+		printf("eax = %xH = %dD\n", cpu.eax, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
 	  
 	} else {
