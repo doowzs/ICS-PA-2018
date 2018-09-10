@@ -91,11 +91,13 @@ static int cmd_help(char *args) {
 
 static int cmd_si(char *args) {
   /* parse the first argument to integer (N) */
-	long int N = strtol(args, NULL, 0);
-	if (N == 0) {
+  char *arg = strtok(NULL, " ");
+	if (arg == NULL) {
 		/* no argument given */
 		cpu_exec(1);
 	} else {
+		/* if given 0, run 0 steps. */
+		int N = strtol(arg, NULL, 0);
 		cpu_exec(N);
 	}
 	return 0;
