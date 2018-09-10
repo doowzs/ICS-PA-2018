@@ -43,7 +43,7 @@ static int cmd_p(char *args);
 static int cmd_x(char *args);
 static int cmd_w(char *args);
 static int cmd_d(char *args);
-static void cmd_wrong_parameters();
+static void cmd_wrong_parameter();
 
 static struct {
   char *name;
@@ -119,7 +119,7 @@ static int cmd_info(char *args) {
 	} else if (strcmp(arg, "w") == 0) {
 	  //TODO: Implement watchpoint in /monitor/debug/watchpoint.c
 	} else {
-		cmd_wrong_parameters();
+		cmd_wrong_parameter(args);
 	}
   return 0;
 }
@@ -133,11 +133,11 @@ static int cmd_x(char *args) {
 	//TODO: implement EXPR fuction and improve cmd_x
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL) {
-		cmd_wrong_parameters();
+		cmd_wrong_parameter(args);
 	} else {
 		int st = strtol(arg, NULL, 0); //TODO: replace paddr with EXPR
 		int res = paddr_read(st, 4);
-		printf("0x%08x: 0x%08x = %10d\n", st, res, res); 
+		printf("0x%08x: 0x%08xH = %10dD\n", st, res, res); 
 	}
 	return 0;
 }
@@ -152,8 +152,8 @@ static int cmd_d(char *args) {
 	return 0;
 }
 
-static void cmd_wrong_parameters() {
-	printf("Wrong parameters. Please check your input.\n");
+static void cmd_wrong_parameter(char *args) {
+	printf("Wrong parameter \'%s\'. Please check your input.\n", args);
 }
 
 void ui_mainloop(int is_batch_mode) {
