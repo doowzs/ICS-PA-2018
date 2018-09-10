@@ -43,6 +43,7 @@ static int cmd_p(char *args);
 static int cmd_x(char *args);
 static int cmd_w(char *args);
 static int cmd_d(char *args);
+static void cmd_wrong_parameters();
 
 static struct {
   char *name;
@@ -56,7 +57,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Continue running and stop after [N] steps. If [N] is not given, debugger will run only one step.", cmd_si },
-  { "info", "Print info about the program.	SUBCMD can be given in two types, register or watch points.", cmd_info },
+  { "info", "Print info about the program.	SUBCMD can be given in two types, \'r\' for register and \'w\' for all watch points.", cmd_info },
 	{ "p", "Calculate the value of EXPR.", cmd_p },
 	{ "x", "Calculate EXPR and print 4 bytes of memory data from EXPR.",
               cmd_x	},
@@ -105,6 +106,22 @@ static int cmd_si(char *args) {
 
 static int cmd_info(char *args) {
 	//TODO: finish cmd_info function
+	char *arg = strtok(NULL, " ");
+	if (strcmp(arg, "r") == 0) {
+		printf("eax is %xH=%dD\n", cpu.eax, cpu.eax);
+		printf("ecx is %xH=%dD\n", cpu.ecx, cpu.ecx);
+		printf("edx is %xH=%dD\n", cpu.edx, cpu.edx);
+		printf("ebx is %xH=%dD\n", cpu.ebx, cpu.ebx);
+		printf("esp is %xH=%dD\n", cpu.esp, cpu.esp);
+		printf("ebp is %xH=%dD\n", cpu.ebp, cpu.ebp);
+		printf("esi is %xH=%dD\n", cpu.esi, cpu.esi);
+		printf("edi is %xH=%dD\n", cpu.edi, cpu.edi);
+		printf("eip is %xH=%dD\n", cpu.eip, cpu.eip);
+	} else if (strcmp(arg, "w") == 0) {
+	  
+	} else {
+		cmd_wrong_parameters();
+	}
   return 0;
 }
 
@@ -126,6 +143,10 @@ static int cmd_w(char *args) {
 static int cmd_d(char *args) {
 	//TODO: finish cmd_d function
 	return 0;
+}
+
+static void cmd_wrong_parameters() {
+	printf("Wrong parameters. Please check your input.\n");
 }
 
 void ui_mainloop(int is_batch_mode) {
