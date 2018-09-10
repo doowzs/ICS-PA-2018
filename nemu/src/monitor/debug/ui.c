@@ -57,12 +57,12 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Continue running and stop after [N] steps. If [N] is not given, debugger will run only one step.", cmd_si },
-  { "info", "Print info about the program.	SUBCMD can be given in two types, \'r\' for register and \'w\' for all watch points.", cmd_info },
+  { "info", "Print info about the program.	SUBCMD can be given in two types, \'r\' for register and \'w\' for all watchpoints.", cmd_info },
 	{ "p", "Calculate the value of EXPR.", cmd_p },
 	{ "x", "Calculate EXPR and print 4 bytes of memory data from EXPR.",
               cmd_x	},
 	{ "w", "Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
-  { "d", "Delete watch point numbered with N.", cmd_d },
+  { "d", "Delete watchpoint numbered with N.", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
@@ -105,7 +105,6 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-	//TODO: finish cmd_info function
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL) {
 		cmd_wrong_parameters();
@@ -120,9 +119,9 @@ static int cmd_info(char *args) {
 		printf("ebp = %8xH = %10dD\n", cpu.ebp, cpu.ebp);
 		printf("esi = %8xH = %10dD\n", cpu.esi, cpu.esi);
 		printf("edi = %8xH = %10dD\n", cpu.edi, cpu.edi);
-		printf("eax = %8xH = %10dD\n", cpu.eax, cpu.eip);
+		printf("eip = %8xH = %10dD\n", cpu.eip, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
-	  
+	  //TODO: Implement watchpoint in /monitor/debug/watchpoint.c
 	} else {
 		cmd_wrong_parameters();
 	}
@@ -135,7 +134,15 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
-	//TODO: finish cmd_x function
+	//TODO: implement EXPR fuction and improve cmd_x
+	char *arg = strtok(NULL, " ");
+	if (arg == NULL) {
+		cmd_wrong_parameters();
+	} else {
+		int st = strtol(arg, NULL, 0); //TODO: replace paddr with EXPR
+		int res = paddr_read(st, 4);
+		printf("%08x:%08x=%10d\n", st, res, res); 
+	}
 	return 0;
 }
 
