@@ -51,11 +51,11 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 	{ "si", "Continue running and stop after [N] steps. If [N] is not given, debugger will run only one step.", cmd_si },
   { "info", "Print info about the program.	SUBCMD can be given in two types, \'r\' for register and \'w\' for all watchpoints.", cmd_info },
-	{ "p", "Calculate the value of EXPR.", cmd_p },
-	{ "x", "Calculate EXPR and print 4 bytes of memory data from EXPR.",
+	{ "p", "Usage: p EXPR, Calculate the value of EXPR.", cmd_p },
+	{ "x", "Usage: x N EXPR, Calculate EXPR and print 4N bytes of memory data from EXPR.",
               cmd_x	},
-	{ "w", "Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
-  { "d", "Delete watchpoint numbered with N.", cmd_d },
+	{ "w", "usage: w EXPR, Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
+  { "d", "Usage: d N, Delete watchpoint numbered with N.", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
@@ -138,16 +138,21 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
-	/* extract parameter from args (should be EXPR) */
-	char *arg = strtok(NULL, " ");
-	if (arg == NULL) {
-		/* no EXPR given, call handler */
+	/* extract parameter from args (should be N and EXPR) */
+	char *arg1 = strtok(NULL, " ");
+	char *arg2 = strtok(NULL, " ");
+	if (arg1 == NULL || arg2 == NULL) {
+		/* wrong parameters given, call handler */
 		cmd_wrong_parameter(args);
 	} else {
 		/* calculate EXPR (not implemented) */
-		int st = strtol(arg, NULL, 0); //TODO: replace paddr with EXPR
-		int res = paddr_read(st, 4);
-		printf("0x%08x: 0x%08xH = %10dD\n", st, res, res);
+		int n = strtol(arg1, NULL, 0);
+		int st = strtol(arg2, NULL, 0); //TODO: replace paddr with EXPR
+		int res = 0;
+		for (int i = 0; i < n; ++i) {
+      res = paddr_read(st + (i << 2), 4);
+      printf("0x%08x: 0x%08xH = %10dD\n", st, res, res);
+		}
 	}
 	return 0;
 }
