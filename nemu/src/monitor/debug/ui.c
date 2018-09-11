@@ -52,8 +52,7 @@ static struct {
 	{ "si", "Continue running and stop after [N] steps. If [N] is not given, debugger will run only one step.", cmd_si },
   { "info", "Print info about the program.	SUBCMD can be given in two types, \'r\' for register and \'w\' for all watchpoints.", cmd_info },
 	{ "p", "Usage: p EXPR, Calculate the value of EXPR.", cmd_p },
-	{ "x", "Usage: x N EXPR, Calculate EXPR and print 4N bytes of memory data from EXPR.",
-              cmd_x	},
+	{ "x", "Usage: x N EXPR, Calculate EXPR and print 4N bytes of memory data from EXPR.", cmd_x	},
 	{ "w", "usage: w EXPR, Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
   { "d", "Usage: d N, Delete watchpoint numbered with N.", cmd_d },
 };
@@ -151,7 +150,7 @@ static int cmd_x(char *args) {
 		int res = 0;
 		for (int i = 0; i < n; ++i) {
       res = paddr_read(st + (i << 2), 4);
-      printf("0x%08x: 0x%08xH = %10dD\n", st, res, res);
+      printf("0x%08x: 0x%08xH = %10dD\n", (st + (i << 2)), res, res);
 		}
 	}
 	return 0;
