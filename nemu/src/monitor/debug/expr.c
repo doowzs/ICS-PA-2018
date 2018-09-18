@@ -24,19 +24,17 @@ static struct rule {
   char *regex;
   int token_type;
 } rules[] = {
-
-  /* TODO: Add more rules.
+  /* DONE: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-
   {" +", TK_NOTYPE},     // spaces
 	{"(0x)?\\d+", TK_NUM}, // numbers
-  {"\\+", TK_PLUS},    // plus
-	{"-", TK_MINUS},   // minus
-	{"\\*", TK_MUL},     // multiply
-	{"\\/", TK_DIV},     // division
-	{"\\(", TK_PLEFT},   // left parenthesis
-	{"\\)", TK_PRIGHT},  // right parenthesis
+  {"\\+", TK_PLUS},      // plus
+	{"-", TK_MINUS},       // minus
+	{"\\*", TK_MUL},       // multiply
+	{"\\/", TK_DIV},       // division
+	{"\\(", TK_PLEFT},     // left parenthesis
+	{"\\)", TK_PRIGHT},    // right parenthesis
   {"==", TK_EQ}          // equal
 };
 
