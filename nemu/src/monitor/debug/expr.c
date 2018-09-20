@@ -28,7 +28,7 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   {" +", TK_NOTYPE},     // spaces
-	{"(0x)?\\d+", TK_NUM}, // numbers
+	{"(0x)?\\d+", TK_NUM}, // numbers, TODO: deal with negative numbers.
   {"\\+", TK_PLUS},      // plus
 	{"-", TK_MINUS},       // minus
 	{"\\*", TK_MUL},       // multiply
@@ -85,15 +85,24 @@ static bool make_token(char *e) {
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
         position += substr_len;
 
-        /* TODO: Now a new token is recognized with rules[i]. Add codes
+        /* FIXME: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
 
         switch (rules[i].token_type) {
-          default: TODO();
+					case TK_NUM:
+						if (substr_len > 31) {
+							// TODO: deal with overflow
+						}
+						strcpy(tokens[nr_token].str, substr_start, min(substr_len, 31));
+          default: 
+				    tokens[nr_token].type = rules[i].token_type;
+						if (rules[i].type != TK_NOTYPE) {
+							nr_token++;
+						}
         }
-
+    
         break;
       }
     }
@@ -107,6 +116,34 @@ static bool make_token(char *e) {
   return true;
 }
 
+uint32_t eval(int p, int q, bool *success) {
+	if (p > q) {
+		/* Bad expression */
+		*success = false;
+		return 0;
+	} else if (p == q) {
+		/* Single token. Should be a number for now. */
+		// TODO: add support for registers and varients.
+		if (tokens[p].type == TK_NUM) {
+			*success = true;
+			return strtol(tokens[p].str, NULL, 0);
+		} else {
+			*success = false;
+			return 0;
+		}
+	} else if (check_parenthesis(p, q)) {
+		/* The expression is surrounded by a matched pair of parentheses 
+		 * If that is the case, just throw them. 
+		 */
+		return eval(p + 1, q - 1, success);
+	} else {
+		// TODO: add more things here.
+	} 
+	*success = false;
+	return 0;
+}
+
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -114,7 +151,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  uint32_t ret = eval(0, nr_token, success);
 
   return 0;
 }
