@@ -176,7 +176,7 @@ uint32_t eval(int p, int q, bool *success) {
 			uint32_t val2 = eval(op + 1, q, success);
 			assert(success); //TODO: change assert to human friendly prompt.
 
-			switch (op) {
+			switch (tokens[op].type) {
 				case TK_PLUS:
 					return val1 + val2;
 				case TK_MINUS:
