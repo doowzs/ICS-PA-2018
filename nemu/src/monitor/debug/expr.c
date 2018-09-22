@@ -146,7 +146,7 @@ bool check_parentheses(int p, int q, bool *isValid) {
 /* Find the main operator and return its index. */
 int find_main_operator(int p, int q, bool *success) {
   // TODO: realize the function!!!
-	for (int i = p; i <= q; ++i) {
+	for (int i = q; i >= p; --i) {
 		int cur = tokens[i].type;
 		if (cur == TK_PLUS || cur == TK_MINUS) {
 		 return i;
