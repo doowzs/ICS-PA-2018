@@ -95,8 +95,10 @@ static bool make_token(char *e) {
 					case TK_NUM:
 						if (substr_len > 31) {
 							// TODO: deal with overflow
+							substr_len = 31;
 						}
-						strncpy(tokens[nr_token].str, substr_start, substr_len < 32 ? substr_len : 31);
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = 0; // end of string
           default: 
 				    tokens[nr_token].type = rules[i].token_type;
 						if (rules[i].token_type != TK_NOTYPE) {
