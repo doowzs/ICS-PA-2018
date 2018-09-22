@@ -29,7 +29,7 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   {" +", TK_NOTYPE},     // spaces
-	{"(0x)?\\d+", TK_NUM}, // numbers, TODO: deal with negative numbers.
+	{"(0x)?(\\d)+", TK_NUM}, // numbers, TODO: deal with negative numbers.
   {"\\+", TK_PLUS},      // plus
 	{"-", TK_MINUS},       // minus
 	{"\\*", TK_MUL},       // multiply
@@ -197,7 +197,7 @@ uint32_t eval(int p, int q, bool *success) {
 
 /* Create tokens and calculate value. */
 uint32_t expr(char *e, bool *success) {
-  Log("The expression is %s", e);
+  Log("The expression is \"%s\"", e);
   if (!make_token(e)) {
     *success = false;
     return 0;
