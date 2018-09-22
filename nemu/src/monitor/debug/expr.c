@@ -78,6 +78,7 @@ static bool make_token(char *e) {
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
+			Log("Trying regex %s", rules[i].regex);
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
@@ -196,7 +197,7 @@ uint32_t eval(int p, int q, bool *success) {
 
 /* Create tokens and calculate value. */
 uint32_t expr(char *e, bool *success) {
-	printf("\033[32m[Info]\033[0mYour expression is %s\n", e);
+  Log("The expression is %s", e);
   if (!make_token(e)) {
     *success = false;
     return 0;
