@@ -5,6 +5,7 @@
  */
 #include <sys/types.h>
 #include <regex.h>
+#include <stdlib.h>
 
 /* DONE: Add more token types */
 enum {
@@ -95,10 +96,10 @@ static bool make_token(char *e) {
 						if (substr_len > 31) {
 							// TODO: deal with overflow
 						}
-						strcpy(tokens[nr_token].str, substr_start, min(substr_len, 31));
+						strncpy(tokens[nr_token].str, substr_start, substr_len < 32 ? substr_len : 31);
           default: 
 				    tokens[nr_token].type = rules[i].token_type;
-						if (rules[i].type != TK_NOTYPE) {
+						if (rules[i].token_type != TK_NOTYPE) {
 							nr_token++;
 						}
         }
@@ -116,6 +117,31 @@ static bool make_token(char *e) {
   return true;
 }
 
+/* Check whether the expression [p,q]
+ * is surrounded by parentheses.
+ * Also returns false if parentheses don't match.
+ */
+bool check_parentheses(int p, int q, bool *isValid) {
+  int lcount = 0;
+	for (int i = p; i <= q; ++i) {
+    if (tokens[i].type == TK_PLEFT) {
+			lcount++;
+		} else if (tokens[i].type == TK_PRIGHT) {
+			lcount--;
+		}
+		if (i == q) {
+			break;
+		}
+		if (lcount <= 0) {
+			*isValid = (lcount == 0);
+			return false;
+		}
+	}
+  *isValid = true;
+	return lcount == 0;
+}
+
+/* Calculate the value of expression [p,q]. */
 uint32_t eval(int p, int q, bool *success) {
 	if (p > q) {
 		/* Bad expression */
@@ -126,24 +152,49 @@ uint32_t eval(int p, int q, bool *success) {
 		// TODO: add support for registers and varients.
 		if (tokens[p].type == TK_NUM) {
 			*success = true;
-			return strtol(tokens[p].str, NULL, 0);
+			return (uint32_t) strtol(tokens[p].str, NULL, 0);
 		} else {
-			*success = false;
+			assert(false); //TODO: change to *success = false;
 			return 0;
 		}
-	} else if (check_parenthesis(p, q)) {
-		/* The expression is surrounded by a matched pair of parentheses 
-		 * If that is the case, just throw them. 
-		 */
-		return eval(p + 1, q - 1, success);
 	} else {
-		// TODO: add more things here.
-	} 
+		bool isValid = true;
+		bool parenthesesCheck = check_parentheses(p, q, &isValid);
+		if (!isValid) {
+			/* invalid expression */
+			assert(false); //TODO: change to *success = false;
+			return 0;
+		}
+		if (parenthesesCheck) {
+			/* The expression is surrounded by a matched pair of parentheses, throw them. */ 
+		  return eval(p + 1, q - 1, success);
+		} else {
+			// TODO: add more things here.
+			int op = TK_PLUS; //how to judge operator???
+			uint32_t val1 = eval(p, op - 1, success);
+			assert(success); //TODO: change assert to human friendly prompt.
+			uint32_t val2 = eval(op + 1, q, success);
+			assert(success); //TODO: change assert to human friendly prompt.
+
+			switch (op) {
+				case TK_PLUS:
+					return val1 + val2;
+				case TK_MINUS:
+					return val1 - val2; //TODO: deal with overflow
+				case TK_MUL:
+					return val1 * val2; //TODO: deal with overflow
+				case TK_DIV:
+					return val1 / val2;
+				default:
+					assert(false); // invalid token
+			}
+		} 
+	}
 	*success = false;
 	return 0;
 }
 
-
+/* Create tokens and calculate value. */
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -152,6 +203,9 @@ uint32_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   uint32_t ret = eval(0, nr_token, success);
-
-  return 0;
+  if (success) {
+		return ret;
+	} else {
+		return 0;
+	}
 }

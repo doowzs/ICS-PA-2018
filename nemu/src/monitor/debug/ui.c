@@ -132,7 +132,15 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-	//TODO: finish cmd_p function
+	printf("Your expression is %s\n", args);
+	bool success = false;
+	uint32_t res = expr(args, &success);
+	if (success) {
+		printf("The result is 0x%xH = %dD\n", res, res);
+	} else {
+		printf("Calculation failed.\n");
+		//TODO: handle better with failed situation
+	}
 	return 0;
 }
 
