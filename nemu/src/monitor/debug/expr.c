@@ -29,7 +29,7 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   {" +", TK_NOTYPE},     // spaces
-	{"(0x)?(\\d)+", TK_NUM}, // numbers, TODO: deal with negative numbers.
+	{"(0x)?[[:digits:]]+", TK_NUM}, // numbers, TODO: deal with negative numbers.
   {"\\+", TK_PLUS},      // plus
 	{"-", TK_MINUS},       // minus
 	{"\\*", TK_MUL},       // multiply
