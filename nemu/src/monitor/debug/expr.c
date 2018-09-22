@@ -184,11 +184,11 @@ uint32_t eval(int p, int q, bool *success) {
 		} else {
 			// TODO: add more things here.
 			int op = find_main_operator(p, q, success);
-			assert(success); //TODO: change assert to human friendly prompt.
+			assert(*success); //TODO: change assert to human friendly prompt.
 			uint32_t val1 = eval(p, op - 1, success);
-			assert(success); //TODO: change assert to human friendly prompt.
+			assert(*success); //TODO: change assert to human friendly prompt.
 			uint32_t val2 = eval(op + 1, q, success);
-			assert(success); //TODO: change assert to human friendly prompt.
+			assert(*success); //TODO: change assert to human friendly prompt.
 
 			switch (tokens[op].type) {
 				case TK_PLUS:
@@ -217,6 +217,7 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
+	*success = true;
   uint32_t ret = eval(0, nr_token - 1, success); // indexed from 0 to nr_token-1
   if (*success) {
 		return ret;
