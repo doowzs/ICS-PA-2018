@@ -147,7 +147,7 @@ int find_main_operator(int p, int q, bool *success) {
 	for (int i = p; i <= q; ++i) {
 		int cur = tokens[i].type;
 		if (cur == TK_PLUS || cur == TK_MINUS) {
-		 return cur;
+		 return i;
 		}
 	}
   *success = false;
