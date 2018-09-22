@@ -141,6 +141,19 @@ bool check_parentheses(int p, int q, bool *isValid) {
 	return lcount == 0;
 }
 
+/* Find the main operator and return its index. */
+int find_main_operator(int p, int q, bool *success) {
+  // TODO: realize the function!!!
+	for (int i = p; i <= q; ++i) {
+		int cur = tokens[i].type;
+		if (cur == TK_PLUS || cur == TK_MINUS) {
+		 return cur;
+		}
+	}
+  *success = false;
+  return -1;	
+}
+
 /* Calculate the value of expression [p,q]. */
 uint32_t eval(int p, int q, bool *success) {
 	if (p > q) {
@@ -170,7 +183,8 @@ uint32_t eval(int p, int q, bool *success) {
 		  return eval(p + 1, q - 1, success);
 		} else {
 			// TODO: add more things here.
-			int op = 1; //how to judge operator???
+			int op = find_main_operator(p, q, success);
+			assert(success); //TODO: change assert to human friendly prompt.
 			uint32_t val1 = eval(p, op - 1, success);
 			assert(success); //TODO: change assert to human friendly prompt.
 			uint32_t val2 = eval(op + 1, q, success);
