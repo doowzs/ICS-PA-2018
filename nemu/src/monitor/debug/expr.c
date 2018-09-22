@@ -196,6 +196,7 @@ uint32_t eval(int p, int q, bool *success) {
 
 /* Create tokens and calculate value. */
 uint32_t expr(char *e, bool *success) {
+	printf("\033[32m[Info]\033[0mYour expression is %s\n", e);
   if (!make_token(e)) {
     *success = false;
     return 0;

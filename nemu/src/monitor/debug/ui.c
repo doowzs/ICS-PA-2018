@@ -132,7 +132,6 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-	printf("Your expression is %s\n", args);
 	bool success = false;
 	uint32_t res = expr(args, &success);
 	if (success) {
