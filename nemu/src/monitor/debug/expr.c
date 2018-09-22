@@ -170,7 +170,7 @@ uint32_t eval(int p, int q, bool *success) {
 		  return eval(p + 1, q - 1, success);
 		} else {
 			// TODO: add more things here.
-			int op = TK_PLUS; //how to judge operator???
+			int op = 1; //how to judge operator???
 			uint32_t val1 = eval(p, op - 1, success);
 			assert(success); //TODO: change assert to human friendly prompt.
 			uint32_t val2 = eval(op + 1, q, success);
