@@ -162,6 +162,7 @@ int find_main_operator(int p, int q, bool *success) {
 	 */
 	int rcount = 0, index = -1, optype = TK_DIV + 1;
 	for (int i = q; i >= p; --i) {
+		Log("At %d, %s, rcount = %d.", i, tokens[i].str, rcount);
 		switch (tokens[i].type) {
 			case TK_PRIGHT:
 				rcount++;
