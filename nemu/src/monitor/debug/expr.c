@@ -214,8 +214,12 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 		/* Single token. Should be a number for now. */
 		// TODO: add support for registers and varients.
 		if (tokens[p].type == TK_NUM) {
-			*success = true;
-			return (uint32_t) strtol(tokens[p].str, NULL, 0);
+			long res = strtol(tokens[p].str, NULL, 0);
+			if (res > UINT32_MAX) {
+				*overflow = true;
+				strcpy(msg, "Number larger than UINT32_MAX.");
+			}
+			return (uint32_t) res;
 		} else {
 			*success = false;
 			strcpy(msg, "Cannot calculate a signle non-number token.");
