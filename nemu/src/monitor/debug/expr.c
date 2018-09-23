@@ -142,6 +142,10 @@ bool check_parentheses(int p, int q, bool *isValid) {
 			break;
 		}
 		if (lcount <= 0) {
+			/* check is invalid or ok 
+			 * e.g. (a)) is invalid,
+			 * while (a+b)+c is ok, but return false.
+			 */
 			*isValid = (lcount == 0);
 			return false;
 		}
@@ -154,7 +158,7 @@ bool check_parentheses(int p, int q, bool *isValid) {
 /* Find the main operator and return its index. */
 int find_main_operator(int p, int q, bool *success) {
 	/* Update the return value if found an operator with higher priority. */
-	int rcount = 0, index = 0, optype = TK_DIV + 1;
+	int rcount = 0, index = -1, optype = TK_DIV + 1;
 	for (int i = q; i >= p; --i) {
 		switch (tokens[i].type) {
 			case TK_PRIGHT:
@@ -182,12 +186,15 @@ int find_main_operator(int p, int q, bool *success) {
 				}
 		}
 	}
-	Log("Found main operator \"%s\" at position %d", tokens[index].str, index);
+	if (index < 0) {
+		*success = false;
+		return -1;
+	}
 	return index; // the index of main operator
 }
 
 /* Calculate the value of expression [p,q]. */
-uint32_t eval(int p, int q, bool *success) {
+uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 	{  
 		/*   DEBUG   */
 		char *express = (char*) malloc(128);
@@ -201,6 +208,7 @@ uint32_t eval(int p, int q, bool *success) {
 	if (p > q) {
 		/* Bad expression */
 		*success = false;
+		strcpy(msg, "Invalid expression. Please check your input.");
 		return 0;
 	} else if (p == q) {
 		/* Single token. Should be a number for now. */
@@ -209,43 +217,66 @@ uint32_t eval(int p, int q, bool *success) {
 			*success = true;
 			return (uint32_t) strtol(tokens[p].str, NULL, 0);
 		} else {
-			assert(false); //TODO: change to *success = false;
+			*success = false;
+			strcpy(msg, "Cannot calculate a signle non-number token.");
 			return 0;
 		}
 	} else {
 		bool isValid = true;
 		bool parenthesesCheck = check_parentheses(p, q, &isValid);
 		if (!isValid) {
-			/* invalid expression */
-			assert(false); //TODO: change to *success = false;
+			*success = false;
+			strcpy(msg, "Parentheses check failed.");
 			return 0;
 		}
 		if (parenthesesCheck) {
 			/* The expression is surrounded by a matched pair of parentheses, throw them. */ 
-		  return eval(p + 1, q - 1, success);
+		  return eval(p + 1, q - 1, success, overflow, msg);
 		} else {
-			// TODO: add more things here.
 			int op = find_main_operator(p, q, success);
-			assert(*success); //TODO: change assert to human friendly prompt.
-			uint32_t val1 = eval(p, op - 1, success);
-			assert(*success); //TODO: change assert to human friendly prompt.
-			uint32_t val2 = eval(op + 1, q, success);
-			assert(*success); //TODO: change assert to human friendly prompt.
+			if (op < 0) {
+				*success = false;
+				strcpy(msg, "Main operator not found.");
+			}
+	    Log("Found main operator \"%s\" at position %d", tokens[op].str, op);
 
+			uint32_t val1 = eval(p, op - 1, success, overflow, msg);
+			if (!*success) {
+				// message has been written by callee
+				return 0;
+			}
+
+			uint32_t val2 = eval(op + 1, q, success, overflow, msg);
+			if (!*success) {
+				// message has been written by callee
+				return 0;
+			}
+
+			uint32_t res = 0;
 			switch (tokens[op].type) {
 				case TK_PLUS:
-					return val1 + val2;
+					res = val1 + val2; //TODO: OVERFLOW??
 				case TK_MINUS:
-					return val1 - val2; //TODO: deal with overflow
+					res = val1 - val2;
+					*overflow = ((int) res < 0);
+					break;
 				case TK_MUL:
-					return val1 * val2; //TODO: deal with overflow
+					res = val1 * val2;
+					*overflow = ((int) res < 0);
+					break;
 				case TK_DIV:
-					return val1 / val2;
+					res = val1 / val2;
+					*overflow = ((int) res < 0);
+					break;
 				default:
-					assert(false); // invalid token
+					*success = false;
+					strcpy(msg, "Calculation error: unknown operation token.");
+					return 0;
 			}
+			return res;
 		} 
 	}
+
 	*success = false;
 	return 0;
 }
@@ -261,7 +292,7 @@ uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
 
   /* TODO: Insert codes to evaluate the expression. */
 	*success = true;
-  uint32_t ret = eval(0, nr_token - 1, success); // indexed from 0 to nr_token-1
+  uint32_t ret = eval(0, nr_token - 1, success, overflow, msg); // indexed from 0 to nr_token-1
   if (*success) {
 		return ret;
 	} else {
