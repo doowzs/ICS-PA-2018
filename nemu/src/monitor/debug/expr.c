@@ -251,10 +251,11 @@ uint32_t eval(int p, int q, bool *success) {
 }
 
 /* Create tokens and calculate value. */
-uint32_t expr(char *e, bool *success) {
+uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
   Log("The expression is \"%s\"", e);
   if (e == NULL || !make_token(e)) {
     *success = false;
+		strcpy(msg, "Failed to match regex. Pleach check your input.");
     return 0;
   }
 
