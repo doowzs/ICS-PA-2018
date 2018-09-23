@@ -190,11 +190,12 @@ int find_main_operator(int p, int q, bool *success) {
 uint32_t eval(int p, int q, bool *success) {
 	{  
 		/*   DEBUG   */
-		char *express = "";
+		char *express = (char*) malloc(128);
 		for (int i = p; i <= q; ++i) {
 			strcat(express, tokens[i].str);
 		}
 	  Log("Calculating period [%d, %d]:\"%s\".", p, q, express);
+		free(express);
 	}
 	if (p > q) {
 		/* Bad expression */
