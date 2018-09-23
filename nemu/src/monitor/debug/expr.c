@@ -162,7 +162,7 @@ int find_main_operator(int p, int q, bool *success) {
 	 */
 	int rcount = 0, index = -1, optype = TK_DIV + 1;
 	for (int i = q; i >= p; --i) {
-		Log("At %d, %s, rcount = %d.", i, tokens[i].str, rcount);
+		//Log("At %d, %s, rcount = %d.", i, tokens[i].str, rcount);
 		switch (tokens[i].type) {
 			case TK_PRIGHT:
 				rcount++;
@@ -203,7 +203,7 @@ int find_main_operator(int p, int q, bool *success) {
 }
 
 /* Calculate the value of expression [p,q]. */
-uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
+int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 	{  
 		/*   DEBUG   */
 		char *express = (char*) malloc(128);
@@ -229,7 +229,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 				strcpy(msg, "Number larger than UINT32_MAX.");
 			}
 			Log("Returning value for [%d, %d]: %d", p, q, (uint32_t) res);
-			return (uint32_t) res;
+			return (int) res;
 		} else {
 			*success = false;
 			strcpy(msg, "Cannot calculate a signle non-number token.");
@@ -256,19 +256,19 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 	    Log("Found main operator \"%s\" at position %d", tokens[op].str, op);
 
 			/* If op is the sign of number, e.g. "-1", val1 should be zero. */
-			uint32_t val1 = (op == p ? 0 : eval(p, op - 1, success, overflow, msg));
+			int val1 = (op == p ? 0 : eval(p, op - 1, success, overflow, msg));
 			if (!*success) {
 				// message has been written by callee
 				return 0;
 			}
 
-			uint32_t val2 = eval(op + 1, q, success, overflow, msg);
+			int val2 = eval(op + 1, q, success, overflow, msg);
 			if (!*success) {
 				// message has been written by callee
 				return 0;
 			}
 
-			uint32_t res = 0;
+			int res = 0;
 			switch (tokens[op].type) {
 				case TK_PLUS:
 					res = val1 + val2;
@@ -328,7 +328,7 @@ uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
 
   /* TODO: Insert codes to evaluate the expression. */
 	*success = true;
-  uint32_t ret = eval(0, nr_token - 1, success, overflow, msg); // indexed from 0 to nr_token-1
+  uint32_t ret = (uint32_t) eval(0, nr_token - 1, success, overflow, msg); // indexed from 0 to nr_token-1
   if (*success) {
 		return ret;
 	} else {
