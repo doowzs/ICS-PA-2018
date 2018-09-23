@@ -250,6 +250,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			if (op < 0) {
 				*success = false;
 				strcpy(msg, "Main operator not found.");
+				return 0;
 			}
 	    Log("Found main operator \"%s\" at position %d", tokens[op].str, op);
 
