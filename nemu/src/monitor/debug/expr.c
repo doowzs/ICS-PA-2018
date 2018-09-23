@@ -256,6 +256,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			switch (tokens[op].type) {
 				case TK_PLUS:
 					res = val1 + val2; //TODO: OVERFLOW??
+					break;
 				case TK_MINUS:
 					res = val1 - val2;
 					*overflow = ((int) res < 0);
