@@ -150,7 +150,8 @@ bool check_parentheses(int p, int q, bool *isValid) {
 
 /* Find the main operator and return its index. */
 int find_main_operator(int p, int q, bool *success) {
-	int rcount = 0;
+	/* Update the return value if found an operator with higher priority. */
+	int rcount = 0, index = 0, optype = TK_DIV + 1;
 	for (int i = q; i >= p; --i) {
 		switch (tokens[i].type) {
 			case TK_PRIGHT:
@@ -159,23 +160,27 @@ int find_main_operator(int p, int q, bool *success) {
 			case TK_PLEFT:
 				rcount--;
 				if (rcount < 0) {
+					/* invalid expression */
 					*success = false;
 					return -1;
 				}
 				break;
 			case TK_PLUS:
 			case TK_MINUS:
-				if (rcount == 0) {
-					return i;
+				if (rcount == 0 && optype > TK_MINUS) {
+					index = i;
+					optype = tokens[i].type;
 				}
-		  default:
-				break;
-				// TODO: FIX THE FUNCTION
+			case TK_MUL:
+			case TK_DIV:
+				if (rcount == 0 && optype > TK_DIV) {
+					index = i;
+					optype = tokens[i].type;
+				}
 		}
 	}
-
-  *success = false;
-  return -1;	
+	Log("Main operator at position %d", index);
+	return index; // the index of main operator
 }
 
 /* Calculate the value of expression [p,q]. */
