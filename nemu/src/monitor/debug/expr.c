@@ -70,7 +70,7 @@ typedef struct token {
 Token tokens[32];
 int nr_token;
 
-static bool make_token(char *e) {
+static bool make_token(char *e, bool *overflow, char *msg) {
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -86,17 +86,15 @@ static bool make_token(char *e) {
 
         Log("Hit rule \"%s\" at position %d with len %d: \"%.*s\"",
              rules[i].description, position, substr_len, substr_len, substr_start);
+
         position += substr_len;
-
-        /* FIXME: Now a new token is recognized with rules[i]. Add codes
-         * to record the token in the array `tokens'. For certain types
-         * of tokens, some extra actions should be performed.
-         */
-
+			  tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
 					case TK_NUM:
 						if (substr_len > 31) {
 							// TODO: deal with overflow
+							*overflow = true;
+							strcpy(msg, "Number token is too long.");
 							substr_len = 31;
 						}
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
@@ -104,7 +102,6 @@ static bool make_token(char *e) {
 						nr_token++;
 						break;
           default: 
-				    tokens[nr_token].type = rules[i].token_type;
 						tokens[nr_token].str[0] = *substr_start;
 						tokens[nr_token].str[1] = 0;
 						if (rules[i].token_type != TK_NOTYPE) {
@@ -294,7 +291,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 /* Create tokens and calculate value. */
 uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
   Log("The expression is \"%s\"", e);
-  if (e == NULL || !make_token(e)) {
+  if (e == NULL || !make_token(e, overflow, msg)) {
     *success = false;
 		strcpy(msg, "Failed to match regex. Pleach check your input.");
     return 0;

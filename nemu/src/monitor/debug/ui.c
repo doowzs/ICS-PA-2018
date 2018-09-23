@@ -137,7 +137,7 @@ static int cmd_p(char *args) {
 	uint32_t res = expr(args, &success, &overflow, msg);
 	if (success) {
 		if (overflow) { 
-			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
+			printf("[\033[1;33mWarning\033[0m] Overflow detected. Detail: %s\n", msg);
 		}
 		printf("The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
 	} else {
