@@ -149,19 +149,29 @@ static int cmd_p(char *args) {
 static int cmd_x(char *args) {
 	/* extract parameter from args (should be N and EXPR) */
 	char *arg1 = strtok(NULL, " ");
-	char *arg2 = strtok(NULL, " ");
+	char *arg2 = args;
 	if (arg1 == NULL || arg2 == NULL) {
 		/* wrong parameters given, call handler */
 		cmd_wrong_parameter(args);
 	} else {
 		/* calculate EXPR (not implemented) */
-		int n = strtol(arg1, NULL, 0);
-		int st = strtol(arg2, NULL, 0); //TODO: replace paddr with EXPR
-		int res = 0;
-		for (int i = 0; i < n; ++i) {
-      res = paddr_read(st + (i << 2), 4);
-      printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD\n", (st + (i << 2)), res, res);
-		}
+		bool success = false, overflow = false;
+		char *msg = (char*) malloc(64); // returning message
+		uint32_t n = strtol(arg1, NULL, 0);
+		uint32_t st = expr(arg2, &success, &overflow, msg);
+
+		if (success) {
+		  if (overflow) { 
+			  printf("[\033[1;33mWarning\033[0m] Overflow detected. Detail: %s\n", msg);
+		  }
+			int res = 0;
+	  	for (uint32_t i = 0; i < n; ++i) {
+        res = paddr_read(st + (i << 2), 4);
+        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD\n", (st + (i << 2)), res, res);
+		  }
+	  } else {
+		  printf("[\033[1;31mError\033[0m] Calculation failed. Detail: %s\n", msg);
+	  }
 	}
 	return 0;
 }
