@@ -192,7 +192,18 @@ static void cmd_wrong_parameter(char *args) {
 }
 
 void ui_mainloop(int is_batch_mode) {
-  if (is_batch_mode) {
+	uint32_t res = 0;
+	char *buf = (char*) malloc(65536);
+	while (1) {
+		scanf("%d%s", &res, buf);
+		if (res == 1145141919) cmd_q(buf);
+		cmd_p(buf);
+		printf("[\033[1;31mCorrect Answer\033[1;0m] %u\n", res);
+	}
+
+
+
+	if (is_batch_mode) {
     cmd_c(NULL);
     return;
   }
