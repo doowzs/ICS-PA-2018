@@ -9,34 +9,36 @@
 
 /* DONE: Add more token types */
 enum {
-  TK_NOTYPE = 256, TK_EQ,
-	TK_NUM = 1, // DEC and OCT numbers share same type
+  TK_NOTYPE = 256, 
+	TK_NUM    = 1, // DEC and OCT numbers share same type
 	// TK_REG = 2,
 	// TK_VAR = 3,
-  TK_PLUS = 11,
-	TK_MINUS = 12,
-	TK_MUL = 21,
-	TK_DIV = 22,
-	TK_PLEFT = 31,
-	TK_PRIGHT = 32
+  TK_PLUS   = 11,
+	TK_MINUS  = 12,
+	TK_MUL    = 21,
+	TK_DIV    = 22,
+	TK_PLEFT  = 31,
+	TK_PRIGHT = 32,
+	TK_EQ
 };
 
 static struct rule {
   char *regex;
+	char *description;
   int token_type;
 } rules[] = {
   /* DONE: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {" +", TK_NOTYPE},     // spaces
-	{"(0x)?[[:digit:]]+", TK_NUM}, // numbers, TODO: deal with negative numbers.
-  {"\\+", TK_PLUS},      // plus
-	{"-", TK_MINUS},       // minus
-	{"\\*", TK_MUL},       // multiply
-	{"\\/", TK_DIV},       // division
-	{"\\(", TK_PLEFT},     // left parenthesis
-	{"\\)", TK_PRIGHT},    // right parenthesis
-  {"==", TK_EQ}          // equal
+  {" +",                "SPACE",   TK_NOTYPE},   // spaces
+	{"(0x)?[[:digit:]]+", "NUM",     TK_NUM   },   // numbers, TODO: deal with negative numbers.
+  {"\\+",               "PLUS",    TK_PLUS  },   // plus
+	{"-",                 "MINUS",   TK_MINUS },   // minus
+	{"\\*",               "MUL",     TK_MUL   },   // multiply
+	{"\\/",               "DIV",     TK_DIV   },   // division
+	{"\\(",               "PLEFT",   TK_PLEFT },   // left parenthesis
+	{"\\)",               "PRIGHT",  TK_PRIGHT},   // right parenthesis
+  {"==",                "EQ",      TK_EQ    }    // equal
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -82,8 +84,8 @@ static bool make_token(char *e) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        Log("Hit rule \"%s\" at position %d with len %d: \"%.*s\"",
+             rules[i].description, position, substr_len, substr_len, substr_start);
         position += substr_len;
 
         /* FIXME: Now a new token is recognized with rules[i]. Add codes
@@ -101,6 +103,7 @@ static bool make_token(char *e) {
 						tokens[nr_token].str[substr_len] = 0; // end of string
           default: 
 				    tokens[nr_token].type = rules[i].token_type;
+						tokens[nr_token].str[0] = *substr_start;
 						if (rules[i].token_type != TK_NOTYPE) {
 							nr_token++;
 						}
@@ -111,7 +114,7 @@ static bool make_token(char *e) {
     }
 
     if (i == NR_REGEX) {
-      printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      printf("No match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
   }
@@ -185,7 +188,14 @@ int find_main_operator(int p, int q, bool *success) {
 
 /* Calculate the value of expression [p,q]. */
 uint32_t eval(int p, int q, bool *success) {
-	Log("Calculating period [%d, %d].", p, q);
+	{  
+		/*   DEBUG   */
+		char *express = "";
+		for (int i = p; i <= q; ++i) {
+			strcat(express, tokens[i].str);
+		}
+	  Log("Calculating period [%d, %d]:\"%s\".", p, q, express);
+	}
 	if (p > q) {
 		/* Bad expression */
 		*success = false;
