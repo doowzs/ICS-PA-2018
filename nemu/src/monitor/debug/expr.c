@@ -126,11 +126,15 @@ static bool make_token(char *e) {
 bool check_parentheses(int p, int q, bool *isValid) {
   int lcount = 0;
 	for (int i = p; i <= q; ++i) {
-    if (tokens[i].type == TK_PLEFT) {
-			lcount++;
-		} else if (tokens[i].type == TK_PRIGHT) {
-			lcount--;
+		switch (tokens[i].type) {
+			case TK_PLEFT:
+				lcount++;
+				break;
+			case TK_PRIGHT:
+				lcount--;
+				break;
 		}
+
 		if (i == q) {
 			break;
 		}
@@ -139,19 +143,37 @@ bool check_parentheses(int p, int q, bool *isValid) {
 			return false;
 		}
 	}
+
   *isValid = true;
 	return lcount == 0;
 }
 
 /* Find the main operator and return its index. */
 int find_main_operator(int p, int q, bool *success) {
-  // TODO: realize the function!!!
+	int rcount = 0;
 	for (int i = q; i >= p; --i) {
-		int cur = tokens[i].type;
-		if (cur == TK_PLUS || cur == TK_MINUS) {
-		 return i;
+		switch (tokens[i].type) {
+			case TK_PRIGHT:
+				rcount++;
+				break;
+			case TK_PLEFT:
+				rcount--;
+				if (rcount < 0) {
+					*success = false;
+					return -1;
+				}
+				break;
+			case TK_PLUS:
+			case TK_MINUS:
+				if (rcount == 0) {
+					return i;
+				}
+		  default:
+				break;
+				// TODO: FIX THE FUNCTION
 		}
 	}
+
   *success = false;
   return -1;	
 }
