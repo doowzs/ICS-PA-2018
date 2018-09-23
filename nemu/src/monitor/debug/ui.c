@@ -141,7 +141,7 @@ static int cmd_p(char *args) {
 		}
 		printf("The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
 	} else {
-		printf("[\033[1;31mError\033[0m] Calculation failed. \nDetail: %s\n", msg);
+		printf("[\033[1;31mError\033[0m] Calculation failed. Detail: %s\n", msg);
 	}
 	return 0;
 }
