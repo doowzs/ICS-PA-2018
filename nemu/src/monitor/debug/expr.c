@@ -191,6 +191,7 @@ uint32_t eval(int p, int q, bool *success) {
 	{  
 		/*   DEBUG   */
 		char *express = (char*) malloc(128);
+		*express = 0; // empty the temporary string
 		for (int i = p; i <= q; ++i) {
 			strcat(express, tokens[i].str);
 		}
