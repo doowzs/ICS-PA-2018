@@ -157,7 +157,9 @@ bool check_parentheses(int p, int q, bool *isValid) {
 
 /* Find the main operator and return its index. */
 int find_main_operator(int p, int q, bool *success) {
-	/* Update the return value if found an operator with higher priority. */
+	/* Update the return value if found an operator with higher priority.
+	 * If the next token is + or - (sign), then update to the current one.
+	 */
 	int rcount = 0, index = -1, optype = TK_DIV + 1;
 	for (int i = q; i >= p; --i) {
 		switch (tokens[i].type) {
@@ -174,15 +176,21 @@ int find_main_operator(int p, int q, bool *success) {
 				break;
 			case TK_PLUS:
 			case TK_MINUS:
-				if (rcount == 0 && optype > TK_MINUS) {
-					index = i;
-					optype = tokens[i].type;
+				if (rcount == 0) {
+				 	if (optype > TK_MINUS ||
+							(index == i+1 && optype < TK_MUL)) {
+					    index = i;
+					    optype = tokens[i].type;
+					}
 				}
 			case TK_MUL:
 			case TK_DIV:
-				if (rcount == 0 && optype > TK_DIV) {
-					index = i;
-					optype = tokens[i].type;
+				if (rcount == 0) {
+					if (optype > TK_DIV ||
+							(index == i + 1 && optype < TK_MUL)) {
+					  index = i;
+					  optype = tokens[i].type;
+					}
 				}
 		}
 	}
@@ -245,7 +253,8 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			}
 	    Log("Found main operator \"%s\" at position %d", tokens[op].str, op);
 
-			uint32_t val1 = eval(p, op - 1, success, overflow, msg);
+			/* If op is the sign of number, e.g. "-1", val1 should be zero. */
+			uint32_t val1 = (op == p ? 0 : eval(p, op - 1, success, overflow, msg));
 			if (!*success) {
 				// message has been written by callee
 				return 0;
