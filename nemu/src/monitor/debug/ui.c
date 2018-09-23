@@ -139,7 +139,7 @@ static int cmd_p(char *args) {
 		if (overflow) { 
 			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
 		}
-		printf("The result is \033[1;33m0x%x\033[0mH = \033[1;33m%d\033[0mD = \033[1;33m%u\033[0mU\n", res, res, res);
+		printf("The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
 	} else {
 		printf("[\033[1;31mError\033[0m] Calculation failed. \nDetail: %s\n", msg);
 	}
@@ -160,7 +160,7 @@ static int cmd_x(char *args) {
 		int res = 0;
 		for (int i = 0; i < n; ++i) {
       res = paddr_read(st + (i << 2), 4);
-      printf("0x%08x: 0x%08xH = %10dD\n", (st + (i << 2)), res, res);
+      printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD\n", (st + (i << 2)), res, res);
 		}
 	}
 	return 0;
