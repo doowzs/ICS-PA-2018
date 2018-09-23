@@ -149,7 +149,7 @@ static int cmd_p(char *args) {
 static int cmd_x(char *args) {
 	/* extract parameter from args (should be N and EXPR) */
 	char *arg1 = strtok(NULL, " ");
-	char *arg2 = args;
+	char *arg2 = args + strlen(arg1);
 	if (arg1 == NULL || arg2 == NULL) {
 		/* wrong parameters given, call handler */
 		cmd_wrong_parameter(args);
