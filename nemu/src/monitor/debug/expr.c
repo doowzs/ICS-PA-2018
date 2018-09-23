@@ -260,24 +260,36 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			switch (tokens[op].type) {
 				case TK_PLUS:
 					res = val1 + val2;
-					*overflow = (res < val1 || res < val2);
+					if (res < val1 || res < val2) {
+						*overflow = true;
+						strcpy(msg, "PLUS overflow.");
+					}
 					break;
 				case TK_MINUS:
 					res = val1 - val2;
-					*overflow = ((int) res < 0);
+					if ((int) res < 0) {
+						*overflow = true;
+						strcpy(msg, "PLUS overflow.");
+					}
 					break;
 				case TK_MUL:
 					res = val1 * val2;
-					*overflow = (!val1 || (res / val1 == val2));
+					if (!val1 && (res / val1 != val2)) {
+						*overflow = true;
+						strcpy(msg, "MUL overflow.");
+					}
 					break;
 				case TK_DIV:
 					if (val2 == 0) {
 						*success = false;
-						strcpy(msg, "Divide by 0.");
+						strcpy(msg, "Dividing zero.");
 						return 0;
 					}
 					res = val1 / val2;
-					*overflow = (res * val2 == val1);
+					if (res * val2 == val1) {
+						*overflow = true;
+						strcpy(msg, "DIV overflow.");
+					}
 					break;
 				default:
 					*success = false;
