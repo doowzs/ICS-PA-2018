@@ -182,7 +182,7 @@ int find_main_operator(int p, int q, bool *success) {
 				}
 		}
 	}
-	Log("Main operator at position %d", index);
+	Log("Found main operator \"%s\" at position %d", tokens[index].str, index);
 	return index; // the index of main operator
 }
 
