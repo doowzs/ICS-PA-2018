@@ -101,9 +101,12 @@ static bool make_token(char *e) {
 						}
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
 						tokens[nr_token].str[substr_len] = 0; // end of string
+						nr_token++;
+						break;
           default: 
 				    tokens[nr_token].type = rules[i].token_type;
 						tokens[nr_token].str[0] = *substr_start;
+						tokens[nr_token].str[1] = 0;
 						if (rules[i].token_type != TK_NOTYPE) {
 							nr_token++;
 						}
@@ -202,7 +205,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 		for (int i = p; i <= q; ++i) {
 			strcat(express, tokens[i].str);
 		}
-	  Log("Calculating period [%d, %d]:\"%s\".", p, q, express);
+	  Log("Calculating section [%d, %d]: \"%s\"", p, q, express);
 		free(express);
 	}
 	if (p > q) {
@@ -255,7 +258,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			uint32_t res = 0;
 			switch (tokens[op].type) {
 				case TK_PLUS:
-					res = val1 + val2; //TODO: OVERFLOW??
+					res = val1 + val2;
 					*overflow = (res < val1 || res < val2);
 					break;
 				case TK_MINUS:
@@ -264,11 +267,16 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					break;
 				case TK_MUL:
 					res = val1 * val2;
-					*overflow = ((int) res < 0);
+					*overflow = (!val1 || (res / val1 == val2));
 					break;
 				case TK_DIV:
+					if (val2 == 0) {
+						*success = false;
+						strcpy(msg, "Divide by 0.");
+						return 0;
+					}
 					res = val1 / val2;
-					*overflow = ((int) res < 0);
+					*overflow = (res * val2 == val1);
 					break;
 				default:
 					*success = false;
