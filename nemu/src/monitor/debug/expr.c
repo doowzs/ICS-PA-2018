@@ -185,6 +185,7 @@ int find_main_operator(int p, int q, bool *success) {
 
 /* Calculate the value of expression [p,q]. */
 uint32_t eval(int p, int q, bool *success) {
+	Log("Calculating period [%d, %d].", p, q);
 	if (p > q) {
 		/* Bad expression */
 		*success = false;
