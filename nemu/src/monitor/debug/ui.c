@@ -136,12 +136,12 @@ static int cmd_p(char *args) {
 	char *msg = (char*) malloc(64); // returning message
 	uint32_t res = expr(args, &success, &overflow, msg);
 	if (success) {
-		if (overflow) {
-			printf("[\033[33Warning\033[0m] Overflow detected.\n");
+		if (overflow) { 
+			printf("[\033[33mWarning\033[0m] Overflow detected.\n");
 		}
-		printf("The result is \033[330x%x\033[0mH = \033[33%dD\033[0m = \033[33%u\033[9mU\n", res, res, res);
+		printf("The result is \033[33m0x%x\033[0mH = \033[33m%dD\033[0m = \033[33m%u\033[9mU\n", res, res, res);
 	} else {
-		printf("Calculation failed. \nDetail: %s\n", msg);
+		printf("[\033[31mError\033[0m]Calculation failed. \nDetail: %s\n", msg);
 	}
 	return 0;
 }
