@@ -219,6 +219,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 				*overflow = true;
 				strcpy(msg, "Number larger than UINT32_MAX.");
 			}
+			Log("Returning value for [%d, %d] is %d", p, q, (uint32_t) res);
 			return (uint32_t) res;
 		} else {
 			*success = false;
@@ -296,6 +297,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					strcpy(msg, "Calculation error: unknown operation token.");
 					return 0;
 			}
+			Log("Returning value for [%d, %d] is %d", p, q, res);
 			return res;
 		} 
 	}
