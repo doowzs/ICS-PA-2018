@@ -192,15 +192,14 @@ static void cmd_wrong_parameter(char *args) {
 }
 
 void ui_mainloop(int is_batch_mode) {
-	uint32_t res = 0;
-	char *buf;
 	bool success = true, overflow = false;
 	char *msg = (char*) malloc(64);
 	while (1) {
-		scanf("%d", &res);
-		buf = rl_gets();
-		if (res == 1145141919) cmd_q(buf);
-		printf("[\033[1;33mYour Answer\033[1;0m] %u\n", expr(buf, &success, &overflow, msg));
+		char *buf = rl_gets();
+		uint32_t res = strtol((char*) strtok(buf, " "), NULL, 0);
+		char *exp = strtok(NULL, "\0");
+		if (res == 1145141919) cmd_q(exp);
+		printf("[\033[1;33mYour Answer\033[1;0m] %u\n", expr(exp, &success, &overflow, msg));
 		printf("[\033[1;32mCorrect Answer\033[1;0m] %u\n", res);
 	}
 
