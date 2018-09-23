@@ -269,7 +269,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					res = val1 - val2;
 					if ((int) res < 0) {
 						*overflow = true;
-						strcpy(msg, "PLUS overflow.");
+						strcpy(msg, "MINUS overflow.");
 					}
 					break;
 				case TK_MUL:
@@ -286,7 +286,7 @@ uint32_t eval(int p, int q, bool *success, bool *overflow, char *msg) {
 						return 0;
 					}
 					res = val1 / val2;
-					if (res * val2 == val1) {
+					if (res * val2 != val1) {
 						*overflow = true;
 						strcpy(msg, "DIV overflow.");
 					}
