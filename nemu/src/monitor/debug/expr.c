@@ -235,7 +235,7 @@ uint32_t eval(int p, int q, bool *success) {
 /* Create tokens and calculate value. */
 uint32_t expr(char *e, bool *success) {
   Log("The expression is \"%s\"", e);
-  if (!make_token(e)) {
+  if (e == NULL || !make_token(e)) {
     *success = false;
     return 0;
   }
