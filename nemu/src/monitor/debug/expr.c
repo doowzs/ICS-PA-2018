@@ -78,13 +78,14 @@ typedef struct token {
 Token tokens[128];
 int nr_token;
 
-static void error_prompt(int pos) {
+static void print_prompt(int pos, bool isError, const char *msg) {
   int space_cnt = 0;
   for(int i = 0; i < nr_token; ++i) {
 		printf("%s", tokens[i].str);
 		space_cnt += (i < pos) ? strlen(tokens[i].str) : 0;
 	}
-	printf("\n\033[1;31m%*.s^%*.s\033[0m\n", space_cnt, "", (int) strlen(tokens[pos].str) - 1, "~");
+	printf("\n\033[1;%dm%*.s^\033[0m\n", isError ? 31 : 33, space_cnt, "");
+	printf("[\033[1;%dm%s\033[0m] %s\n", isError ? 31 : 33, isError ? "Error" : "Warning", msg);
 }
 
 static bool make_token(char *e, bool *overflow, char *msg) {
@@ -115,8 +116,7 @@ static bool make_token(char *e, bool *overflow, char *msg) {
 						tokens[nr_token].type = rules[i].token_type;
 						if (substr_len > 31) {
 							*overflow = true;
-							error_prompt(i);
-							strcpy(msg, "Number token is too long.");
+							print_prompt(i, false, "Number token is too long.");
 							substr_len = 31;
 						}
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
@@ -163,7 +163,7 @@ static bool check_parentheses(int p, int q, bool *isValid) {
 			 */
 			*isValid = (lcount == 0);
 			if (!isValid) {
-				error_prompt(i);
+				print_prompt(i, true, "Parentheses check failed.");
 			}
 			return false;
 		}
@@ -190,7 +190,7 @@ int find_main_operator(int p, int q, bool *success) {
 				if (rcount < 0) {
 					/* invalid expression */
 					*success = false;
-					error_prompt(i);
+					print_prompt(i, true, "Not a valid expression.");
 					return -1;
 				}
 				break;
@@ -258,8 +258,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 	if (p > q) {
 		/* Bad expression */
 		*success = false;
-		error_prompt(p);
-		strcpy(msg, "Invalid expression. Please check your input.");
+		print_prompt(p, true, "Invalid expression. Please check your input.");
 		return 0;
 	} else if (p == q) {
 		/* Single token. Should be a number for now. */
@@ -268,8 +267,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			long res = strtol(tokens[p].str, NULL, 0);
 			if (res > UINT32_MAX) {
 				*overflow = true;
-				error_prompt(p);
-				strcpy(msg, "Number larger than UINT32_MAX.");
+				print_prompt(p, false, "Number larger than UINT32_MAX.");
 			}
 			#ifdef DEBUG
 				Log("Returning value for [%d, %d]: %d", p, q, (uint32_t) res);
@@ -277,8 +275,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			return (int) res;
 		} else {
 			*success = false;
-			error_prompt(p);
-			strcpy(msg, "Cannot calculate a signle non-number token.");
+			print_prompt(p, true, "Cannot calculate a signle non-number token.");
 			return 0;
 		}
 	} else {
@@ -286,7 +283,6 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 		bool parenthesesCheck = check_parentheses(p, q, &isValid);
 		if (!isValid) {
 			*success = false;
-			strcpy(msg, "Parentheses check failed.");
 			return 0;
 		}
 		if (parenthesesCheck) {
@@ -296,8 +292,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			int op = find_main_operator(p, q, success);
 			if (op < 0) {
 				*success = false;
-				error_prompt(p);
-				strcpy(msg, "Main operator not found.");
+				print_prompt(p, true, "Main operator not found.");
 				return 0;
 			}
 			#ifdef DEBUG
@@ -324,8 +319,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					res = val1 + val2;
 					if (res < val1 || res < val2) {
 						*overflow = true;
-						error_prompt(op);
-						strcpy(msg, "PLUS overflow.");
+						print_prompt(op, false, "PLUS overflow.");
 					}
 					break;
 				case TK_NEGA:
@@ -333,30 +327,26 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					res = val1 - val2;
 					if ((int) res < 0) {
 						*overflow = true;
-						error_prompt(op);
-						strcpy(msg, "MINUS result is negative.");
+						print_prompt(op, false, "MINUS result is negative.");
 					}
 					break;
 				case TK_MUL:
 					res = val1 * val2;
 					if (val1 && (res / val1 != val2)) {
 						*overflow = true;
-						error_prompt(op);
-						strcpy(msg, "MUL overflow.");
+						print_prompt(op, false, "MUL overflow.");
 					}
 					break;
 				case TK_DIV:
 					if (val2 == 0) {
 						*success = false;
-						error_prompt(op);
-						strcpy(msg, "Dividing zero.");
+						print_prompt(op, true, "Dividing zero.");
 						return 0;
 					}
 					res = val1 / val2;
 					if (res * val2 != val1) {
 						*overflow = true;
-						error_prompt(op);
-						strcpy(msg, "DIV mismatch (remainder is discarded).");
+						print_prompt(op, false, "DIV mismatch (remainder is discarded).");
 					}
 					break;
 				case TK_EQ:
@@ -370,8 +360,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					break;
 				default:
 					*success = false;
-					error_prompt(op);
-					strcpy(msg, "Calculation error: unknown operation token.");
+					print_prompt(op, true, "Calculation error: unknown operation token.");
 					return 0;
 			}
 			#ifdef DEBUG
@@ -389,7 +378,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 	}
 
 	*success = false;
-	error_prompt(p);
+	print_prompt(p, true, "Calculation failed. Unknown error.");
 	return 0;
 }
 
