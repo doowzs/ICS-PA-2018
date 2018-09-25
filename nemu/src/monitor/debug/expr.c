@@ -122,7 +122,7 @@ static bool make_token(char *e, bool *overflow) {
 						if (substr_len > 31) {
 							*overflow = true;
 							printf("[\033[1;33mWarning\033[0m] Number token is too long.\n");
-							printf("%s\n%*.s\033[1;33m^", e, position, "");
+							printf("%s\n%*.s\033[1;33m^", e, position - substr_len, "");
 							for (int j = 1; j < substr_len; ++j) {
 								printf("~");
 							}
