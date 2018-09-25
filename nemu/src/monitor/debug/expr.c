@@ -81,12 +81,16 @@ int nr_token;
 static void print_prompt(int pos, bool isError, const char *msg) {
 	printf("[\033[1;%dm%s\033[0m] %s\n", isError ? 31 : 33, isError ? "Error" : "Warning", msg);
 
-  int space_cnt = 0;
-  for(int i = 0; i < nr_token; ++i) {
+  int space_cnt = 0, token_len = strlen(tokens[pos].str);
+  for (int i = 0; i < nr_token; ++i) {
 		printf("%s", tokens[i].str);
 		space_cnt += (i < pos) ? strlen(tokens[i].str) : 0;
 	}
-	printf("\n[\033[1;%dm%s\033[0m] %s\n", isError ? 31 : 33, isError ? "Error" : "Warning", msg);
+	printf("\n%*.s\033[1;%d^", space_cnt, "", isError ? 31 : 33);
+	for (int i = 1; i < token_len; ++i) {
+		printf("~");
+	}
+	printf("\033[0m\n");
 }
 
 static bool make_token(char *e, bool *overflow) {
