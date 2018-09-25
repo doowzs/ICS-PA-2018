@@ -217,7 +217,7 @@ int find_main_operator(int p, int q, bool *success) {
 			case TK_NEGA:
 		  //case TK_DEREF:
 			  if (rcount == 0) {
-					if (optype > TK_NEGA) {
+					if (optype >= TK_POSI) { // deal signs in LTR method
 						index = i;
 						optype = tokens[i].type;
 					}
