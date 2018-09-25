@@ -33,18 +33,18 @@ static struct rule {
   /* DONE: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {" +",                     "SPACE",     TK_NOTYPE},
-	{"(0x)?[[:digit:]]+",        "NUM",       TK_NUM   },
-	{"\\$[[:alpha:]]+", "REG",       TK_REG   },
-  {"\\+",                    "PLUS",      TK_PLUS  },
-	{"-",                      "MINUS",     TK_MINUS },
-	{"\\*",                    "MUL/DEREF", TK_MUL   },
-	{"\\/",                    "DIV",       TK_DIV   },
-	{"\\(",                    "PLEFT",     TK_PLEFT },
-	{"\\)",                    "PRIGHT",    TK_PRIGHT},
-  {"==",                     "EQ",        TK_EQ    },
-	{"!=",                     "NEQ",       TK_NEQ   },
-  {"&&",                     "AND",       TK_AND   }
+  {" +",                  "SPACE",       TK_NOTYPE},
+	{"(0x)?[[:digit:]]+",   "NUM",         TK_NUM   },
+	{"\\$[[:alpha:]]+",     "REG",         TK_REG   },
+  {"\\+",                 "PLUS",        TK_PLUS  },
+	{"-",                   "MINUS",       TK_MINUS },
+	{"\\*",                 "MUL/DEREF",   TK_MUL   },
+	{"\\/",                 "DIV",         TK_DIV   },
+	{"\\(",                 "PLEFT",       TK_PLEFT },
+	{"\\)",                 "PRIGHT",      TK_PRIGHT},
+  {"==",                  "EQ",          TK_EQ    },
+	{"!=",                  "NEQ",         TK_NEQ   },
+  {"&&",                  "AND",         TK_AND   }
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
@@ -309,6 +309,15 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 						strcpy(msg, "DIV mismatch (remainder is discarded).");
 					}
 					break;
+				case TK_EQ:
+					res = (val1 == val2) ? 1 : 0;
+					break;
+				case TK_NEQ:
+					res = (val1 != val2) ? 1 : 0;
+					break;
+				case TK_AND:
+					res = (val1 && val2) ? 1 : 0;
+					break;
 				default:
 					*success = false;
 					strcpy(msg, "Calculation error: unknown operation token.");
@@ -331,6 +340,13 @@ uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
 		strcpy(msg, "Failed to match regex. Pleach check your input.");
     return 0;
   }
+
+	for (int i = 0; i < nr_token; ++i) {
+		if (tokens[i].type == TK_MUL && (i == 0 || tokens[i-1].type >= TK_PLUS)) {
+			Log("Token at position %d marked as DEREF", i);
+			tokens[i].type = TK_DEREF;
+		}
+	}
 
   /* TODO: Insert codes to evaluate the expression. */
 	*success = true;
