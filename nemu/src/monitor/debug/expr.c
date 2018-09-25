@@ -11,7 +11,7 @@
 enum {
   TK_NOTYPE = 256, 
 	TK_NUM    = 1, // DEC and OCT numbers share same type
-	// TK_REG = 2,
+	TK_REG    = 2,
 	// TK_VAR = 3,
   TK_PLUS   = 11,
 	TK_MINUS  = 12,
@@ -19,7 +19,10 @@ enum {
 	TK_DIV    = 22,
 	TK_PLEFT  = 31,
 	TK_PRIGHT = 32,
-	TK_EQ
+	TK_EQ     = 41, // EQUAL ==
+	TK_NEQ    = 42, // NEQ !=
+	TK_AND    = 43, // AND &&
+	TK_DEREF  = 99
 };
 
 static struct rule {
@@ -30,15 +33,18 @@ static struct rule {
   /* DONE: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {" +",                "SPACE",   TK_NOTYPE},   // spaces
-	{"(0x)?[[:digit:]]+", "NUM",     TK_NUM   },   // numbers, TODO: deal with negative numbers.
-  {"\\+",               "PLUS",    TK_PLUS  },   // plus
-	{"-",                 "MINUS",   TK_MINUS },   // minus
-	{"\\*",               "MUL",     TK_MUL   },   // multiply
-	{"\\/",               "DIV",     TK_DIV   },   // division
-	{"\\(",               "PLEFT",   TK_PLEFT },   // left parenthesis
-	{"\\)",               "PRIGHT",  TK_PRIGHT},   // right parenthesis
-  {"==",                "EQ",      TK_EQ    }    // equal
+  {" +",                "SPACE",     TK_NOTYPE},
+	{"(0x)?[[:digit:]]+", "NUM",       TK_NUM   },
+	{"$[[A-Za-z]]{1, 3}", "REG",       TK_REG   },
+  {"\\+",               "PLUS",      TK_PLUS  },
+	{"-",                 "MINUS",     TK_MINUS },
+	{"\\*",               "MUL/DEREF", TK_MUL   },
+	{"\\/",               "DIV",       TK_DIV   },
+	{"\\(",               "PLEFT",     TK_PLEFT },
+	{"\\)",               "PRIGHT",    TK_PRIGHT},
+  {"==",                "EQ",        TK_EQ    },
+	{"!=",                "NEQ",       TK_NEQ   },
+  {"&&",                "AND",       TK_AND   }
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
