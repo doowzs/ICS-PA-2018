@@ -79,13 +79,14 @@ Token tokens[128];
 int nr_token;
 
 static void print_prompt(int pos, bool isError, const char *msg) {
+	printf("[\033[1;%dm%s\033[0m] %s\n", isError ? 31 : 33, isError ? "Error" : "Warning", msg);
+
   int space_cnt = 0;
   for(int i = 0; i < nr_token; ++i) {
 		printf("%s", tokens[i].str);
 		space_cnt += (i < pos) ? strlen(tokens[i].str) : 0;
 	}
-	printf("\n\033[1;%dm%*.s^\033[0m\n", isError ? 31 : 33, space_cnt, "");
-	printf("[\033[1;%dm%s\033[0m] %s\n", isError ? 31 : 33, isError ? "Error" : "Warning", msg);
+	printf("\n[\033[1;%dm%s\033[0m] %s\n", isError ? 31 : 33, isError ? "Error" : "Warning", msg);
 }
 
 static bool make_token(char *e, bool *overflow) {
@@ -129,8 +130,8 @@ static bool make_token(char *e, bool *overflow) {
     }
 
     if (i == NR_REGEX) {
-      printf("%s\n%*.s^\n", e, position, "");
 			printf("[\033[1;31mError\033[0m] No match at position %d\n", position);
+      printf("%s\n%*.s^\n", e, position, "");
       return false;
     }
   }
