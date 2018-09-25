@@ -33,18 +33,18 @@ static struct rule {
   /* DONE: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-  {" +",                     "SPACE",     TK_NOTYPE},
-	{"(0x)?[[:digit:]]+",      "NUM",       TK_NUM   },
-	{"$[[:alpha:]]\\{1, 3\\}", "REG",       TK_REG   },
-  {"\\+",                    "PLUS",      TK_PLUS  },
-	{"-",                      "MINUS",     TK_MINUS },
-	{"\\*",                    "MUL/DEREF", TK_MUL   },
-	{"\\/",                    "DIV",       TK_DIV   },
-	{"\\(",                    "PLEFT",     TK_PLEFT },
-	{"\\)",                    "PRIGHT",    TK_PRIGHT},
-  {"==",                     "EQ",        TK_EQ    },
-	{"!=",                     "NEQ",       TK_NEQ   },
-  {"&&",                     "AND",       TK_AND   }
+  {" +",                       "SPACE",     TK_NOTYPE},
+	{"(0x)?[[:digit:]]+",        "NUM",       TK_NUM   },
+	{"\\$[[:alpha:]]\\{1, 3\\}", "REG",       TK_REG   },
+  {"\\+",                      "PLUS",      TK_PLUS  },
+	{"-",                        "MINUS",     TK_MINUS },
+	{"\\*",                      "MUL/DEREF", TK_MUL   },
+	{"\\/",                      "DIV",       TK_DIV   },
+	{"\\(",                      "PLEFT",     TK_PLEFT },
+	{"\\)",                      "PRIGHT",    TK_PRIGHT},
+  {"==",                       "EQ",        TK_EQ    },
+	{"!=",                       "NEQ",       TK_NEQ   },
+  {"&&",                       "AND",       TK_AND   }
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
