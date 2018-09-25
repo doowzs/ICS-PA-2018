@@ -233,16 +233,16 @@ int find_main_operator(int p, int q, bool *success) {
 
 /* Calculate the value of expression [p,q]. */
 int eval(int p, int q, bool *success, bool *overflow, char *msg) {
-  
-	/*   DEBUG   */
-	char *express = (char*) malloc(128);
-	*express = 0; // empty the temporary string
-	for (int i = p; i <= q; ++i) {
-		strcat(express, tokens[i].str);
-	}
-  Log("Calculating section [%d, %d]: \"%s\"", p, q, express);
-	free(express);
-
+	#ifdef DEBUG  
+		/*   DEBUG   */
+		char *express = (char*) malloc(128);
+		*express = 0; // empty the temporary string
+		for (int i = p; i <= q; ++i) {
+			strcat(express, tokens[i].str);
+		}
+	  Log("Calculating section [%d, %d]: \"%s\"", p, q, express);
+		free(express);
+	#endif
 	if (p > q) {
 		/* Bad expression */
 		*success = false;
@@ -348,7 +348,16 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					strcpy(msg, "Calculation error: unknown operation token.");
 					return 0;
 			}
-			Log("Returning value for [%d, %d]: \"%s\" is %d", p, q, express, res);
+			#ifdef DEBUG
+				/*   DEBUG   */
+				char *express = (char*) malloc(128);
+				*express = 0; // empty the temporary string
+				for (int i = p; i <= q; ++i) {
+					strcat(express, tokens[i].str);
+				}
+				Log("Returning value for [%d, %d] is %d", p, q, res);
+				free(express);
+			#endif
 			return res;
 		} 
 	}
