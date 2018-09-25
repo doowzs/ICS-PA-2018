@@ -121,7 +121,12 @@ static bool make_token(char *e, bool *overflow) {
 						tokens[nr_token].type = rules[i].token_type;
 						if (substr_len > 31) {
 							*overflow = true;
-							print_prompt(i, false, "Number token is too long.");
+							printf("[\033[1;33mWarning\033[0m] Number token is too long.\n");
+							printf("%s\n%*.s\033[1;33m^", e, position, "");
+							for (int j = 1; j < substr_len; ++j) {
+								printf("~");
+							}
+							printf("\033[0m\n");
 							substr_len = 31;
 						}
 						strncpy(tokens[nr_token].str, substr_start, substr_len);
