@@ -140,7 +140,7 @@ static bool make_token(char *e, bool *overflow) {
 
     if (i == NR_REGEX) {
 			printf("[\033[1;31mError\033[0m] No match at position %d\n", position);
-      printf("%s\n%*.s^\n", e, position, "");
+      printf("%s\n%*.s\033[1;31m^\033[0m\n", e, position, "");
       return false;
     }
   }
