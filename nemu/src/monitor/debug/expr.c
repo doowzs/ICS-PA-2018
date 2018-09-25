@@ -36,8 +36,8 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   {" +",                  "SPACE",       TK_NOTYPE},
-	{"[[:digit:]]+",        "OCTNUM",      TK_NUM   },
 	{"0x[[a-d0-9]]+",       "HEXNUM",      TK_NUM   },
+	{"[[:digit:]]+",        "OCTNUM",      TK_NUM   },
 	{"\\$[[:alpha:]]+",     "REG",         TK_REG   },
   {"\\+",                 "PLUS",        TK_PLUS  },
 	{"-",                   "MINUS",       TK_MINUS },
