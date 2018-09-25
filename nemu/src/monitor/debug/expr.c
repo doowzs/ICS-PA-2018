@@ -323,7 +323,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					break;
 				case TK_MUL:
 					res = val1 * val2;
-					if (!val1 && (res / val1 != val2)) {
+					if (val1 && (res / val1 != val2)) {
 						*overflow = true;
 						strcpy(msg, "MUL overflow.");
 					}
