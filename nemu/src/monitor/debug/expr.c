@@ -86,7 +86,7 @@ static void print_prompt(int pos, bool isError, const char *msg) {
 		printf("%s", tokens[i].str);
 		space_cnt += (i < pos) ? strlen(tokens[i].str) : 0;
 	}
-	printf("\n%*.s\033[1;%d^", space_cnt, "", isError ? 31 : 33);
+	printf("\n%*.s\033[1;%dm^", space_cnt, "", isError ? 31 : 33);
 	for (int i = 1; i < token_len; ++i) {
 		printf("~");
 	}
