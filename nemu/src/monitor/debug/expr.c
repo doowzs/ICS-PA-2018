@@ -78,6 +78,15 @@ typedef struct token {
 Token tokens[128];
 int nr_token;
 
+static void error_prompt(int pos) {
+  int space_cnt = 0;
+  for(int i = 0; i < nr_token; ++i) {
+		printf("%s", tokens[i].str);
+		space_cnt += (i < pos) ? strlen(tokens[i].str) : 0;
+	}
+	printf("\n\033[1;31m%*.s^%*.s\033[0m\n", space_cnt, "", (int) strlen(tokens[pos].str) - 1, "~");
+}
+
 static bool make_token(char *e, bool *overflow, char *msg) {
   int position = 0;
   int i;
@@ -106,6 +115,7 @@ static bool make_token(char *e, bool *overflow, char *msg) {
 						tokens[nr_token].type = rules[i].token_type;
 						if (substr_len > 31) {
 							*overflow = true;
+							error_prompt(i);
 							strcpy(msg, "Number token is too long.");
 							substr_len = 31;
 						}
@@ -125,15 +135,6 @@ static bool make_token(char *e, bool *overflow, char *msg) {
   }
 
   return true;
-}
-
-static void error_prompt(int pos) {
-  int space_cnt = 0;
-  for(int i = 0; i < nr_token; ++i) {
-		printf("%s", tokens[i].str);
-		space_cnt += (i < pos) ? strlen(tokens[i].str) : 0;
-	}
-	printf("\n\033[1;32m%*.s^%*.s\033[0m\n", space_cnt, "", (int) strlen(tokens[pos].str) - 1, "~");
 }
 
 /* Check whether the expression [p,q]
@@ -267,6 +268,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			long res = strtol(tokens[p].str, NULL, 0);
 			if (res > UINT32_MAX) {
 				*overflow = true;
+				error_prompt(p);
 				strcpy(msg, "Number larger than UINT32_MAX.");
 			}
 			#ifdef DEBUG
@@ -322,6 +324,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					res = val1 + val2;
 					if (res < val1 || res < val2) {
 						*overflow = true;
+						error_prompt(op);
 						strcpy(msg, "PLUS overflow.");
 					}
 					break;
@@ -330,6 +333,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					res = val1 - val2;
 					if ((int) res < 0) {
 						*overflow = true;
+						error_prompt(op);
 						strcpy(msg, "MINUS result is negative.");
 					}
 					break;
@@ -337,6 +341,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					res = val1 * val2;
 					if (val1 && (res / val1 != val2)) {
 						*overflow = true;
+						error_prompt(op);
 						strcpy(msg, "MUL overflow.");
 					}
 					break;
@@ -350,6 +355,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					res = val1 / val2;
 					if (res * val2 != val1) {
 						*overflow = true;
+						error_prompt(op);
 						strcpy(msg, "DIV mismatch (remainder is discarded).");
 					}
 					break;
