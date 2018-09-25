@@ -127,11 +127,20 @@ static bool make_token(char *e, bool *overflow, char *msg) {
   return true;
 }
 
+static void error_prompt(int pos) {
+  int space_cnt = 0;
+  for(int i = 0; i < nr_token; ++i) {
+		printf("%s", tokens[i].str);
+		space_cnt += (i < pos) ? strlen(tokens[i].str) : 0;
+	}
+	printf("\n\033[1;32m%*.s^%*.s\033[0m\n", space_cnt, "", (int) strlen(tokens[pos].str) - 1, "~");
+}
+
 /* Check whether the expression [p,q]
  * is surrounded by parentheses.
  * Also returns false if parentheses don't match.
  */
-bool check_parentheses(int p, int q, bool *isValid) {
+static bool check_parentheses(int p, int q, bool *isValid) {
   int lcount = 0;
 	for (int i = p; i <= q; ++i) {
 		switch (tokens[i].type) {
@@ -152,6 +161,9 @@ bool check_parentheses(int p, int q, bool *isValid) {
 			 * while (a+b)+c is ok, but return false.
 			 */
 			*isValid = (lcount == 0);
+			if (!isValid) {
+				error_prompt(i);
+			}
 			return false;
 		}
 	}
@@ -177,6 +189,7 @@ int find_main_operator(int p, int q, bool *success) {
 				if (rcount < 0) {
 					/* invalid expression */
 					*success = false;
+					error_prompt(i);
 					return -1;
 				}
 				break;
@@ -226,11 +239,7 @@ int find_main_operator(int p, int q, bool *success) {
 				}
 		}
 	}
-	if (index < 0) {
-		*success = false;
-		return -1;
-	}
-	return index; // the index of main operator
+	return index; // the index of main operator, -1 for not found
 }
 
 /* Calculate the value of expression [p,q]. */
@@ -248,6 +257,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 	if (p > q) {
 		/* Bad expression */
 		*success = false;
+		error_prompt(p);
 		strcpy(msg, "Invalid expression. Please check your input.");
 		return 0;
 	} else if (p == q) {
@@ -265,6 +275,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			return (int) res;
 		} else {
 			*success = false;
+			error_prompt(p);
 			strcpy(msg, "Cannot calculate a signle non-number token.");
 			return 0;
 		}
@@ -283,6 +294,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			int op = find_main_operator(p, q, success);
 			if (op < 0) {
 				*success = false;
+				error_prompt(p);
 				strcpy(msg, "Main operator not found.");
 				return 0;
 			}
@@ -331,6 +343,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 				case TK_DIV:
 					if (val2 == 0) {
 						*success = false;
+						error_prompt(op);
 						strcpy(msg, "Dividing zero.");
 						return 0;
 					}
@@ -351,6 +364,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 					break;
 				default:
 					*success = false;
+					error_prompt(op);
 					strcpy(msg, "Calculation error: unknown operation token.");
 					return 0;
 			}
@@ -361,7 +375,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 				for (int i = p; i <= q; ++i) {
 					strcat(express, tokens[i].str);
 				}
-				Log("Returning value for [%d, %d] is %d", p, q, res);
+				Log("Returning value for [%d, %d]: \"%s\" is %d", p, q, express, res);
 				free(express);
 			#endif
 			return res;
@@ -369,6 +383,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 	}
 
 	*success = false;
+	error_prompt(p);
 	return 0;
 }
 
