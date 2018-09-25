@@ -329,7 +329,8 @@ int eval(int p, int q, bool *success, bool *overflow) {
 				case TK_POSI:
 				case TK_PLUS:
 					res = val1 + val2;
-					if (res < val1 || res < val2) {
+					if (((val1 >= 0) == (val2 >= 0)) &&
+							((val1 >= 0) != (res >= 0))) {
 						*overflow = true;
 						print_prompt(op, false, "PLUS overflow.");
 					}
