@@ -168,7 +168,7 @@ int find_main_operator(int p, int q, bool *success) {
 	/* Update the return value if found an operator with higher priority.
 	 * If the next token is + or - (sign), then update to the current one.
 	 */
-	int rcount = 0, index = -1, optype = TK_DIV + 1;
+	int rcount = 0, index = -1, optype = TK_NOTYPE - 1;
 	for (int i = q; i >= p; --i) {
 		//Log("At %d, %s, rcount = %d.", i, tokens[i].str, rcount);
 		switch (tokens[i].type) {
@@ -191,6 +191,7 @@ int find_main_operator(int p, int q, bool *success) {
 						optype = tokens[i].type;
 					}
 				}
+				break;
 			case TK_AND:
 				if (rcount == 0) {
 					if (optype > TK_AND) {
@@ -198,6 +199,7 @@ int find_main_operator(int p, int q, bool *success) {
 						optype = tokens[i].type;
 					}
 				}
+				break;
 			case TK_PLUS:
 			case TK_MINUS:
 				if (rcount == 0) {
@@ -206,12 +208,23 @@ int find_main_operator(int p, int q, bool *success) {
 					  optype = tokens[i].type;
 					}
 				}
+				break;
 			case TK_MUL:
 			case TK_DIV:
 				if (rcount == 0) {
 					if (optype > TK_DIV) {
 					  index = i;
 					  optype = tokens[i].type;
+					}
+				}
+				break;
+			case TK_POSI:
+			case TK_NEGA:
+		  //case TK_DEREF:
+			  if (rcount == 0) {
+					if (optype > TK_NEGA) {
+						index = i;
+						optype = tokens[i].type;
 					}
 				}
 		}
