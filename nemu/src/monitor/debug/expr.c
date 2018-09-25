@@ -96,25 +96,19 @@ static bool make_token(char *e, bool *overflow, char *msg) {
              rules[i].description, position, substr_len, substr_len, substr_start);
 
         position += substr_len;
-			  tokens[nr_token].type = rules[i].token_type;
         switch (rules[i].token_type) {
-					case TK_NUM:
+					case TK_NOTYPE:
+						// do nothing
+						break;
+          default: 
+						tokens[nr_token].type = rules[i].token_type;
 						if (substr_len > 31) {
-							// TODO: deal with overflow
 							*overflow = true;
 							strcpy(msg, "Number token is too long.");
 							substr_len = 31;
 						}
-						strncpy(tokens[nr_token].str, substr_start, substr_len);
-						tokens[nr_token].str[substr_len] = 0; // end of string
+						strncpy(tokens[i].str, substr_start, substr_len);
 						nr_token++;
-						break;
-          default: 
-						tokens[nr_token].str[0] = *substr_start;
-						tokens[nr_token].str[1] = 0;
-						if (rules[i].token_type != TK_NOTYPE) {
-							nr_token++;
-						}
         }
     
         break;
