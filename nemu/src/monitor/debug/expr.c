@@ -13,16 +13,18 @@ enum {
 	TK_NUM    = 1, // DEC and OCT numbers share same type
 	TK_REG    = 2,
 	// TK_VAR = 3,
-  TK_PLUS   = 11,
-	TK_MINUS  = 12,
-	TK_MUL    = 21,
-	TK_DIV    = 22,
-	TK_PLEFT  = 31,
-	TK_PRIGHT = 32,
-	TK_EQ     = 41, // EQUAL ==
-	TK_NEQ    = 42, // NEQ !=
-	TK_AND    = 43, // AND &&
-	TK_DEREF  = 99
+	TK_EQ     = 11, // EQUAL ==
+	TK_NEQ    = 12, // NEQ !=
+	TK_AND    = 13, // AND &&
+  TK_PLUS   = 21,
+	TK_MINUS  = 22,
+	TK_MUL    = 31,
+	TK_DIV    = 32,
+	TK_PLEFT  = 41,
+	TK_PRIGHT = 42,
+	TK_POSI   = 51, // POSITIVE +
+	TK_NEGA   = 52, // NEGATIVE -
+	TK_DEREF  = 53
 };
 
 static struct rule {
@@ -181,20 +183,33 @@ int find_main_operator(int p, int q, bool *success) {
 					return -1;
 				}
 				break;
+			case TK_EQ:
+			case TK_NEQ:
+				if (rcount == 0) {
+					if (optype > TK_NEQ) {
+						index = i;
+						optype = tokens[i].type;
+					}
+				}
+			case TK_AND:
+				if (rcount == 0) {
+					if (optype > TK_AND) {
+						index = i;
+						optype = tokens[i].type;
+					}
+				}
 			case TK_PLUS:
 			case TK_MINUS:
 				if (rcount == 0) {
-				 	if (optype > TK_MINUS ||
-							(index == i+1 && optype < TK_MUL)) {
-					    index = i;
-					    optype = tokens[i].type;
+				 	if (optype > TK_MINUS) {
+					  index = i;
+					  optype = tokens[i].type;
 					}
 				}
 			case TK_MUL:
 			case TK_DIV:
 				if (rcount == 0) {
-					if (optype > TK_DIV ||
-							(index == i + 1 && optype < TK_MUL)) {
+					if (optype > TK_DIV) {
 					  index = i;
 					  optype = tokens[i].type;
 					}
@@ -276,6 +291,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 
 			int res = 0;
 			switch (tokens[op].type) {
+				case TK_POSI:
 				case TK_PLUS:
 					res = val1 + val2;
 					if (res < val1 || res < val2) {
@@ -283,6 +299,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 						strcpy(msg, "PLUS overflow.");
 					}
 					break;
+				case TK_NEGA:
 				case TK_MINUS:
 					res = val1 - val2;
 					if ((int) res < 0) {
@@ -342,9 +359,17 @@ uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
   }
 
 	for (int i = 0; i < nr_token; ++i) {
-		if (tokens[i].type == TK_MUL && (i == 0 || tokens[i-1].type >= TK_PLUS)) {
+		if (tokens[i].type == TK_MUL && (i == 0 || tokens[i - 1].type >= TK_PLUS)) {
 			Log("Token at position %d marked as DEREF", i);
 			tokens[i].type = TK_DEREF;
+		}
+		if (tokens[i].type == TK_PLUS && (i == 0 || tokens[i - 1].type >= TK_PLUS)) {
+			Log("Token at position %d marked as POSITIVE", i);
+			tokens[i].type = TK_POSI;
+		}
+		if (tokens[i].type == TK_MINUS && (i == 0 || tokens[i - 1].type >= TK_PLUS)) {
+			Log("Token at position %d marked as NEGATIVE", i);
+			tokens[i].type = TK_NEGA;
 		}
 	}
 
