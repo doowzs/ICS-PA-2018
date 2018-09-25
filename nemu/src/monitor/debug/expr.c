@@ -88,7 +88,7 @@ static void print_prompt(int pos, bool isError, const char *msg) {
 	printf("[\033[1;%dm%s\033[0m] %s\n", isError ? 31 : 33, isError ? "Error" : "Warning", msg);
 }
 
-static bool make_token(char *e, bool *overflow, char *msg) {
+static bool make_token(char *e, bool *overflow) {
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -129,7 +129,8 @@ static bool make_token(char *e, bool *overflow, char *msg) {
     }
 
     if (i == NR_REGEX) {
-      printf("No match at position %d\n%s\n%*.s^\n", position, e, position, "");
+      printf("%s\n%*.s^\n", e, position, "");
+			printf("[\033[1;31mError\033[0m] No match at position %d\n", position);
       return false;
     }
   }
@@ -244,7 +245,7 @@ int find_main_operator(int p, int q, bool *success) {
 }
 
 /* Calculate the value of expression [p,q]. */
-int eval(int p, int q, bool *success, bool *overflow, char *msg) {
+int eval(int p, int q, bool *success, bool *overflow) {
 	#ifdef DEBUG  
 		/*   DEBUG   */
 		char *express = (char*) malloc(128);
@@ -287,7 +288,7 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 		}
 		if (parenthesesCheck) {
 			/* The expression is surrounded by a matched pair of parentheses, throw them. */ 
-		  return eval(p + 1, q - 1, success, overflow, msg);
+		  return eval(p + 1, q - 1, success, overflow);
 		} else {
 			int op = find_main_operator(p, q, success);
 			if (op < 0) {
@@ -300,13 +301,13 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 			#endif
 
 			/* If op is the sign of number, e.g. "-1", val1 should be zero. */
-			int val1 = (op == p ? 0 : eval(p, op - 1, success, overflow, msg));
+			int val1 = (op == p ? 0 : eval(p, op - 1, success, overflow));
 			if (!*success) {
 				// message has been written by callee
 				return 0;
 			}
 
-			int val2 = eval(op + 1, q, success, overflow, msg);
+			int val2 = eval(op + 1, q, success, overflow);
 			if (!*success) {
 				// message has been written by callee
 				return 0;
@@ -383,13 +384,12 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 }
 
 /* Create tokens and calculate value. */
-uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
+uint32_t expr(char *e, bool *success, bool *overflow) {
 	#ifdef DEBUG
 		Log("The expression is \"%s\"", e);
 	#endif
-  if (e == NULL || !make_token(e, overflow, msg)) {
+  if (e == NULL || !make_token(e, overflow)) {
     *success = false;
-		strcpy(msg, "Failed to match regex. Pleach check your input.");
     return 0;
   }
 
@@ -416,7 +416,7 @@ uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
 
   /* TODO: Insert codes to evaluate the expression. */
 	*success = true;
-  uint32_t ret = (uint32_t) eval(0, nr_token - 1, success, overflow, msg); // indexed from 0 to nr_token-1
+  uint32_t ret = (uint32_t) eval(0, nr_token - 1, success, overflow); // indexed from 0 to nr_token-1
   if (*success) {
 		return ret;
 	} else {

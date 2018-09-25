@@ -133,15 +133,14 @@ static int cmd_info(char *args) {
 
 static int cmd_p(char *args) {
 	bool success = false, overflow = false;
-	char *msg = (char*) malloc(64); // returning message
-	uint32_t res = expr(args, &success, &overflow, msg);
+	uint32_t res = expr(args, &success, &overflow);
 	if (success) {
 		if (overflow) { 
-			printf("[\033[1;33mWarning\033[0m] Overflow detected. Detail: %s\n", msg);
+			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
 		}
 		printf("The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
 	} else {
-		printf("[\033[1;31mError\033[0m] Calculation failed. Detail: %s\n", msg);
+		printf("[\033[1;31mError\033[0m] Calculation failed.\n");
 	}
 	return 0;
 }
@@ -156,13 +155,12 @@ static int cmd_x(char *args) {
 	} else {
 		/* calculate EXPR (not implemented) */
 		bool success = false, overflow = false;
-		char *msg = (char*) malloc(64); // returning message
 		uint32_t n = strtol(arg1, NULL, 0);
-		uint32_t st = expr(arg2, &success, &overflow, msg);
+		uint32_t st = expr(arg2, &success, &overflow);
 
 		if (success) {
 		  if (overflow) { 
-			  printf("[\033[1;33mWarning\033[0m] Overflow detected. Detail: %s\n", msg);
+			  printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
 		  }
 			int res = 0;
 	  	for (uint32_t i = 0; i < n; ++i) {
@@ -170,7 +168,7 @@ static int cmd_x(char *args) {
         printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD\n", (st + (i << 2)), res, res);
 		  }
 	  } else {
-		  printf("[\033[1;31mError\033[0m] Calculation failed. Detail: %s\n", msg);
+		  printf("[\033[1;31mError\033[0m] Calculation failed.\n");
 	  }
 	}
 	return 0;
