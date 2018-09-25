@@ -107,8 +107,8 @@ static bool make_token(char *e, bool *overflow, char *msg) {
 							strcpy(msg, "Number token is too long.");
 							substr_len = 31;
 						}
-						strncpy(tokens[i].str, substr_start, substr_len);
-						tokens[i].str[substr_len] = 0; // end of string
+						strncpy(tokens[nr_token].str, substr_start, substr_len);
+						tokens[nr_token].str[substr_len] = 0; // end of string
 						nr_token++;
         }
     
