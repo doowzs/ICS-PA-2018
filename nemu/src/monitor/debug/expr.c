@@ -91,9 +91,11 @@ static bool make_token(char *e, bool *overflow, char *msg) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
-
-        Log("Hit rule \"%s\" at position %d with len %d: \"%.*s\"",
-             rules[i].description, position, substr_len, substr_len, substr_start);
+				
+			  #ifdef DEBUG
+          Log("Hit rule \"%s\" at position %d with len %d: \"%.*s\"",
+               rules[i].description, position, substr_len, substr_len, substr_start);
+				#endif
 
         position += substr_len;
         switch (rules[i].token_type) {
@@ -282,7 +284,9 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 				strcpy(msg, "Main operator not found.");
 				return 0;
 			}
-	    Log("Found main operator \"%s\" at position %d", tokens[op].str, op);
+			#ifdef DEBUG
+				Log("Found main operator \"%s\" at position %d", tokens[op].str, op);
+			#endif
 
 			/* If op is the sign of number, e.g. "-1", val1 should be zero. */
 			int val1 = (op == p ? 0 : eval(p, op - 1, success, overflow, msg));
@@ -368,7 +372,9 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 
 /* Create tokens and calculate value. */
 uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
-  Log("The expression is \"%s\"", e);
+	#ifdef DEBUG
+		Log("The expression is \"%s\"", e);
+	#endif
   if (e == NULL || !make_token(e, overflow, msg)) {
     *success = false;
 		strcpy(msg, "Failed to match regex. Pleach check your input.");
@@ -377,15 +383,21 @@ uint32_t expr(char *e, bool *success, bool *overflow, char* msg) {
 
 	for (int i = 0; i < nr_token; ++i) {
 		if (tokens[i].type == TK_MUL && (i == 0 || tokens[i - 1].type >= TK_PLUS)) {
-			Log("Token at position %d marked as DEREF", i);
+			#ifdef DEBUG
+				Log("Token at position %d marked as DEREF", i);
+			#endif
 			tokens[i].type = TK_DEREF;
 		}
 		if (tokens[i].type == TK_PLUS && (i == 0 || tokens[i - 1].type >= TK_PLUS)) {
-			Log("Token at position %d marked as POSITIVE", i);
+			#ifdef DEBUG
+				Log("Token at position %d marked as POSITIVE", i);
+			#endif
 			tokens[i].type = TK_POSI;
 		}
 		if (tokens[i].type == TK_MINUS && (i == 0 || tokens[i - 1].type >= TK_PLUS)) {
-			Log("Token at position %d marked as NEGATIVE", i);
+			#ifdef DEBUG
+				Log("Token at position %d marked as NEGATIVE", i);
+			#endif
 			tokens[i].type = TK_NEGA;
 		}
 	}
