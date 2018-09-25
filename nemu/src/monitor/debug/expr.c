@@ -13,6 +13,8 @@ enum {
 	TK_NUM    = 1, // DEC and OCT numbers share same type
 	TK_REG    = 2,
 	// TK_VAR = 3,
+	TK_PLEFT  = 4,
+	TK_PRIGHT = 5,
 	TK_EQ     = 11, // EQUAL ==
 	TK_NEQ    = 12, // NEQ !=
 	TK_AND    = 13, // AND &&
@@ -20,11 +22,9 @@ enum {
 	TK_MINUS  = 22,
 	TK_MUL    = 31,
 	TK_DIV    = 32,
-	TK_PLEFT  = 41,
-	TK_PRIGHT = 42,
-	TK_POSI   = 51, // POSITIVE +
-	TK_NEGA   = 52, // NEGATIVE -
-	TK_DEREF  = 53
+	TK_POSI   = 41, // POSITIVE +
+	TK_NEGA   = 42, // NEGATIVE -
+	TK_DEREF  = 43
 };
 
 static struct rule {
