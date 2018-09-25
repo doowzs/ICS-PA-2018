@@ -259,7 +259,9 @@ int eval(int p, int q, bool *success, bool *overflow, char *msg) {
 				*overflow = true;
 				strcpy(msg, "Number larger than UINT32_MAX.");
 			}
-			Log("Returning value for [%d, %d]: %d", p, q, (uint32_t) res);
+			#ifdef DEBUG
+				Log("Returning value for [%d, %d]: %d", p, q, (uint32_t) res);
+			#endif
 			return (int) res;
 		} else {
 			*success = false;
