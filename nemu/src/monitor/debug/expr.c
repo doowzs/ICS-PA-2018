@@ -10,7 +10,7 @@
 /* DONE: Add more token types */
 enum {
   TK_NOTYPE = 256, 
-	TK_NUM    = 1, // DEC and OCT numbers share same type
+	TK_NUM    = 1, // DEC and HEX numbers share same type
 	TK_REG    = 2,
 	// TK_VAR = 3,
 	TK_PLEFT  = 4,
@@ -36,8 +36,8 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
   {" +",                  "SPACE",       TK_NOTYPE},
-	{"0[xX][[:xdigit:]]+",     "HEXNUM",      TK_NUM   },
-	{"[[:digit:]]+",        "OCTNUM",      TK_NUM   },
+	{"0[xX][[:xdigit:]]+",  "HEXNUM",      TK_NUM   },
+	{"[[:digit:]]+",        "DECNUM",      TK_NUM   },
 	{"\\$[[:alpha:]]+",     "REG",         TK_REG   },
   {"\\+",                 "PLUS",        TK_PLUS  },
 	{"-",                   "MINUS",       TK_MINUS },
@@ -372,7 +372,7 @@ int eval(int p, int q, bool *success, bool *overflow) {
 					res = (val1 && val2) ? 1 : 0;
 					break;
 				case TK_DEREF:
-					res = vaddr_read(val2, 1);
+					res = vaddr_read(val2, 4);
 					break;
 				default:
 					*success = false;
