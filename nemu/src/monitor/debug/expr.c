@@ -186,7 +186,7 @@ static bool check_parentheses(int p, int q, bool *isValid) {
 }
 
 /* Find the main operator and return its index. */
-int find_main_operator(int p, int q, bool *success) {
+static int find_main_operator(int p, int q, bool *success) {
 	/* Update the return value if found an operator with higher priority.
 	 * If the next token is + or - (sign), then update to the current one.
 	 */
@@ -255,8 +255,31 @@ int find_main_operator(int p, int q, bool *success) {
 	return index; // the index of main operator, -1 for not found
 }
 
+/* Read the value of a given REG token. */
+static int read_reg(int pos, bool *success) {
+	char *name = tokens[pos].str + 1; // 0 is '$'
+	for (int i = 0; i < 8; ++i) {
+		if (strcmp(name, regsl[i]) == 0) {
+			return reg_l(i);
+		}
+	}
+	for (int i = 0; i < 8; ++i) {
+		if (strcmp(name, regsw[i]) == 0) {
+			return reg_w(i);
+		}
+	}
+	for (int i = 0; i < 8; ++i) {
+		if (strcmp(name, regsb[i]) == 0) {
+			return reg_b(i);
+		}
+	}
+	*success = false;
+	print_prompt(pos, true, "Not a valid register name.");
+	return 0;
+}
+
 /* Calculate the value of expression [p,q]. */
-int eval(int p, int q, bool *success, bool *overflow) {
+static int eval(int p, int q, bool *success, bool *overflow) {
 	#ifdef DEBUG  
 		/*   DEBUG   */
 		char *express = (char*) malloc(128);
@@ -273,23 +296,30 @@ int eval(int p, int q, bool *success, bool *overflow) {
 		print_prompt(p, true, "Invalid expression. Please check your input.");
 		return 0;
 	} else if (p == q) {
-		/* Single token. Should be a number for now. */
-		// TODO: add support for registers and varients.
-		if (tokens[p].type == TK_NUM) {
-			long res = strtol(tokens[p].str, NULL, 0);
-			if (res > UINT32_MAX) {
-				*overflow = true;
-				print_prompt(p, false, "Number larger than UINT32_MAX.");
-			}
-			#ifdef DEBUG
-				Log("Returning value for [%d, %d]: %d", p, q, (uint32_t) res);
-			#endif
-			return (int) res;
-		} else {
-			*success = false;
-			print_prompt(p, true, "Cannot calculate a signle non-number token.");
-			return 0;
+		/* Single token. A num or register. */
+		int res = 0;
+		long res_l = 0;
+	  switch (tokens[p].type) {
+			case TK_NUM:
+				res_l = strtol(tokens[p].str, NULL, 0);
+				if (res_l > UINT32_MAX) {
+					*overflow = true;
+					print_prompt(p, false, "Number larger than UINT32_MAX.");
+				}
+				res = (int) res_l;
+				break;
+			case TK_REG:
+				res = read_reg(p, success);
+				break;
+			default:
+				*success = false;
+				print_prompt(p, true, "Cannot calculate an invalid signle token.");
+				res = 0;
 		}
+		#ifdef DEBUG
+			Log("Returning value for [%d, %d]: %d", p, q, (uint32_t) res);
+		#endif
+		return res;
 	} else {
 		bool isValid = true;
 		bool parenthesesCheck = check_parentheses(p, q, &isValid);

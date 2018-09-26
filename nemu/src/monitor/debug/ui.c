@@ -165,7 +165,7 @@ static int cmd_x(char *args) {
 			int res = 0;
 	  	for (uint32_t i = 0; i < n; ++i) {
         res = paddr_read(st + (i << 2), 4);
-        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD\n", (st + (i << 2)), res, res);
+        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", (st + (i << 2)), res, res, res);
 		  }
 	  } else {
 		  printf("[\033[1;31mError\033[0m] Calculation failed.\n");
