@@ -243,7 +243,7 @@ int find_main_operator(int p, int q, bool *success) {
 				break;
 			case TK_POSI:
 			case TK_NEGA:
-		  //case TK_DEREF:
+		  case TK_DEREF:
 			  if (rcount == 0) {
 					if (optype >= TK_POSI) { // deal signs in LTR method
 						index = i;
