@@ -371,6 +371,9 @@ int eval(int p, int q, bool *success, bool *overflow) {
 				case TK_AND:
 					res = (val1 && val2) ? 1 : 0;
 					break;
+				case TK_DEREF:
+					res = vaddr_read(val2, 1);
+					break;
 				default:
 					*success = false;
 					print_prompt(op, true, "Calculation error: unknown operation token.");
