@@ -22,7 +22,7 @@ WP* new_wp() {
 	Assert(free_ != NULL, "Watchpoint pool is empty.");
 	WP *ret = free_;
 	free_ = ret->next;
-	if (head->NO >= ret->NO) {
+	if (head == NULL || head->NO >= ret->NO) {
 		ret->next = head;
 		head = ret;
 	} else {
