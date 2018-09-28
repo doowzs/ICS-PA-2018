@@ -197,7 +197,11 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-	//TODO: finish cmd_d function
+	char *arg = strtok(NULL, " ");
+	int wp_NO = (int) strtol(arg, NULL, 0);
+	if (free_wp(wp_NO)) {
+		printf("[\033[1;33mSuccess\033[0m] Deleted watchpoint #%02d.\n", wp_NO);
+	}
 	return 0;
 }
 

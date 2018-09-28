@@ -40,10 +40,11 @@ void cpu_exec(uint64_t n) {
     nr_guest_instr_add(1);
 
 #ifdef DEBUG
-	if (check_wp()) {
-		nemu_state = NEMU_STOP;
-		printf("[\033[1;36mCPU\033[0m] Program has stopped due to some change of watchpoints.\n");
-	}
+		if (check_wp()) {
+			nemu_state = NEMU_STOP;
+			printf("[\033[1;36mCPU\033[0m] Program has stopped due to some change of watchpoints.\n");
+			n = 0; // break the loop
+		}
 #endif
 
 #ifdef HAS_IOE

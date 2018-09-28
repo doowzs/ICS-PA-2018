@@ -36,16 +36,22 @@ WP* new_wp() {
 	return ret;
 }
 
-void free_wp(WP *wp) {
-	if (head == wp) {
-		head = wp->next;
+bool free_wp(int wp_NO) {
+	WP *wp = NULL;
+	if (head == NULL) {
+		printf("[\033[1;31mError\033[0m] No watchpoint in use.\n");
+		return false;
 	} else {
-		WP* iter = head;
-		while (iter->next != NULL && iter->next != wp) {
-			iter = iter->next;
+		for (WP *iter = head; iter != NULL; iter = iter->next) {
+			if (iter->NO == wp_NO) {
+				wp = iter;
+				break;
+			}
 		}
-		Assert(iter->next != NULL, "The watchpoint to be deleted is not in use.");
-		iter->next = wp->next;
+		if (wp == NULL) {
+			printf("[\033[1;31mError\033[0m] Watchpoint #%02d is not in use.\n", wp_NO);
+			return false;
+		}
 	}
 	if (free_ == NULL || free_->NO >= wp->NO) {
 		wp->next = free_;
@@ -58,6 +64,7 @@ void free_wp(WP *wp) {
 		wp->next = iter->next;
 		iter->next = wp;
 	}
+	return true;
 }
 
 void list_wp() {
