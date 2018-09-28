@@ -42,10 +42,16 @@ bool free_wp(int wp_NO) {
 		printf("[\033[1;31mError\033[0m] No watchpoint in use.\n");
 		return false;
 	} else {
-		for (WP *iter = head; iter != NULL; iter = iter->next) {
-			if (iter->NO == wp_NO) {
-				wp = iter;
-				break;
+		if (head->NO == wp_NO) {
+			wp = head;
+			head = wp->next;
+		} else {
+			for (WP *iter = head; iter->next != NULL; iter = iter->next) {
+				if (iter->next->NO == wp_NO) {
+					wp = iter->next;
+					iter->next = wp->next;
+					break;
+				}
 			}
 		}
 		if (wp == NULL) {
@@ -84,7 +90,7 @@ bool check_wp() {
 		new_val = expr(iter->expr, &success, &overflow);
 		if (!success || new_val != iter->val) {
 			changed = true;
-			printf("[\033[1;36mWatchpoint\033[0m] Watchpoint #%02d: 0x%08xH -> 0x%08xH %s\n", iter->NO, iter->val, new_val, success ? "" : "[\033[1;31mFATAL\033[0m]");
+			printf("[\033[1;36mWatchpoint\033[0m] WP #%02d: 0x%08xH -> 0x%08xH %s\n", iter->NO, iter->val, new_val, success ? "" : "[\033[1;31mFATAL\033[0m]");
 		}
 		iter->val = new_val;
 	}
