@@ -112,6 +112,7 @@ static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL || strcmp(arg, "r") == 0) {
 		/* r-mode (default), print all registers */
+		printf("[\033[1;31mInfo\033[0m] Printing all registers.\n");
 		printf("eax = 0x%08xH = %10dD\n", cpu.eax, cpu.eax);
 		printf("ecx = 0x%08xH = %10dD\n", cpu.ecx, cpu.ecx);
 		printf("edx = 0x%08xH = %10dD\n", cpu.edx, cpu.edx);
@@ -123,7 +124,8 @@ static int cmd_info(char *args) {
 		printf("eip = 0x%08xH = %10dD\n", cpu.eip, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
 		/* w-mode, list all watchnodes */
-	  //TODO: Implement watchpoint in /monitor/debug/watchpoint.c
+		printf("[\033[1;31mInfo\033[0m] Printing all watchpoints.\n");
+		list_wp();
 	} else {
 		/* wrong parameter given, call handler */
 		cmd_wrong_parameter(args);
@@ -175,7 +177,20 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
-	//TODO: finish cmd_w function
+	char *wp_expr = strtok(NULL, "\0");
+	bool success = false, overflow = false;
+	uint32_t wp_val = expr(wp_expr, &success, &overflow);
+	if (success) {
+		if (overflow) { 
+			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
+		}
+	} else {
+		printf("[\033[1;31mError\033[0m] Calculation failed.\n");
+		return 0;
+	}
+	WP *wp = new_wp();
+	wp->expr = wp_expr;
+	wp->val = wp_val;
 	return 0;
 }
 
