@@ -198,7 +198,10 @@ static int cmd_w(char *args) {
 
 static int cmd_d(char *args) {
 	char *arg = strtok(NULL, " ");
-	if (arg == NULL) cmd_wrong_parameter(args);
+	if (arg == NULL) {
+		cmd_wrong_parameter(args);
+		return 0;
+	}
 
 	int wp_NO = (int) strtol(arg, NULL, 0);
 	if (free_wp(wp_NO)) {
@@ -209,7 +212,7 @@ static int cmd_d(char *args) {
 
 static void cmd_wrong_parameter(char *args) {
 	/* input a prompt message and abort running the command */
-	printf("Wrong parameter \'%s\'. Please check your input.\n", args);
+	printf("[\033[1;31mError\033[0m] Wrong parameter \'%s\'. Please check your input. Type 'help' for usage.\n", args);
 }
 
 void ui_mainloop(int is_batch_mode) {
