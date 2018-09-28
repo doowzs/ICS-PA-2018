@@ -391,10 +391,11 @@ static int eval(int p, int q, bool *success, bool *overflow) {
 						return 0;
 					}
 					res = val1 / val2;
-					if (res * val2 != val1) {
-						*overflow = true;
-						print_prompt(op, false, "DIV mismatch (remainder is discarded).");
-					}
+					/* if (res * val2 != val1) {
+					 * *overflow = true;
+					 * print_prompt(op, false, "DIV mismatch (remainder is discarded).");
+					 * }
+					 */
 					break;
 				case TK_EQ:
 					res = (val1 == val2) ? 1 : 0;
