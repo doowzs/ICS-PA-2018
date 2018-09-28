@@ -192,6 +192,7 @@ static int cmd_w(char *args) {
 	WP *wp = new_wp();
   strcpy(wp->expr, wp_expr);	
 	wp->val = wp_val;
+	printf("[\033[1;33mSuccess\033[0m] Added watchpoint #%02d: 0x%08x = \"%s\".\n", wp->NO, wp->val, wp->expr);
 	return 0;
 }
 
