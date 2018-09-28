@@ -47,7 +47,7 @@ void free_wp(WP *wp) {
 		Assert(iter->next != NULL, "The watchpoint to be deleted is not in use.");
 		iter->next = wp->next;
 	}
-	if (free_->NO >= wp->NO) {
+	if (free_ == NULL || free_->NO >= wp->NO) {
 		wp->next = free_;
 		free_ = wp;
 	} else {
@@ -62,6 +62,6 @@ void free_wp(WP *wp) {
 
 void list_wp() {
 	for (WP *iter = head; iter != NULL; iter = iter->next) {
-		printf("#%02d: \"%s\"\n", iter->NO, iter->expr);
+		printf("#%02d: 0x%8x = \"%s\"\n", iter->NO, iter->val, iter->expr);
 	}
 }

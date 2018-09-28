@@ -173,6 +173,12 @@ static int cmd_x(char *args) {
 
 static int cmd_w(char *args) {
 	char *wp_expr = strtok(NULL, "\0");
+	int expr_len = strlen(wp_expr);
+	if (expr_len > 63) {
+		printf("[\033[1;31mError\033[00m] The expression is too long (>63 characters).\n");
+		return 0;
+	}
+
 	bool success = false, overflow = false;
 	uint32_t wp_val = expr(wp_expr, &success, &overflow);
 	if (success) {
@@ -184,7 +190,7 @@ static int cmd_w(char *args) {
 		return 0;
 	}
 	WP *wp = new_wp();
-	wp->expr = wp_expr;
+  strcpy(wp->expr, wp_expr);	
 	wp->val = wp_val;
 	return 0;
 }
