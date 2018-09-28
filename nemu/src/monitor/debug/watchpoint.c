@@ -90,7 +90,8 @@ bool check_wp() {
 		new_val = expr(iter->expr, &success, &overflow);
 		if (!success || new_val != iter->val) {
 			changed = true;
-			printf("[\033[1;36mWatchpoint\033[0m] WP #%02d: \"%s\"\n 0x%08xH -> \033[1;32m0x%08x\033[0mH %s\n", iter->NO, iter->expr, iter->val, new_val, success ? "" : "[\033[1;31mFATAL\033[0m]");
+			printf("[\033[1;36mWatchpoint\033[0m] WP #%02d: \"%s\"\n", iter->NO, iter->expr);
+		 printf("Value: 0x%08xH -> \033[1;32m0x%08x\033[0mH %s\n", iter->val, new_val, success ? "" : "[\033[1;31mFATAL\033[0m]");
 		}
 		iter->val = new_val;
 	}
