@@ -112,14 +112,14 @@ static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL || strcmp(arg, "r") == 0) {
 		/* r-mode (default), print all registers */
-		printf("[\033[1;31mInfo\033[0m] Printing all registers.\n");
+		printf("[\033[1;36mInfo\033[0m] Printing all registers.\n");
 		for (int i = 0; i < 8; ++i) {
 			printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", regsl[i], reg_l(i), reg_l(i), reg_l(i));
 		}
 		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
 		/* w-mode, list all watchnodes */
-		printf("[\033[1;31mInfo\033[0m] Printing all watchpoints.\n");
+		printf("[\033[1;36mInfo\033[0m] Printing all watchpoints.\n");
 		list_wp();
 	} else {
 		/* wrong parameter given, call handler */
