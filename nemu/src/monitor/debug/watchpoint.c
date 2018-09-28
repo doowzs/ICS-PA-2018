@@ -65,7 +65,21 @@ void list_wp() {
 		printf("No watchpoint to show.\n");
 	} else {
 		for (WP *iter = head; iter != NULL; iter = iter->next) {
-			printf("#%02d: 0x%08x = \"%s\"\n", iter->NO, iter->val, iter->expr);
+			printf("#%02d: 0x%08xH = \"%s\"\n", iter->NO, iter->val, iter->expr);
 		}
 	}
+}
+
+bool check_wp() {
+	int new_val = 0;
+	bool changed = false, success = false, overflow = false;
+	for (WP *iter = head; iter != NULL; iter = iter->next) {
+		new_val = expr(iter->expr, &success, &overflow);
+		if (!success || new_val != iter->val) {
+			changed = true;
+			printf("[\033[1;36mWatchpoint\033[0m] Watchpoint #%02d: 0x%08xH -> 0x%08xH %s\n", iter->NO, iter->val, new_val, success ? "" : "[\033[1;31mFATAL\033[0m]");
+		}
+		iter->val = new_val;
+	}
+	return changed;
 }

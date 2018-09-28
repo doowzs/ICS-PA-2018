@@ -1,5 +1,6 @@
 #include "nemu.h"
 #include "monitor/monitor.h"
+#include "monitor/watchpoint.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -25,7 +26,7 @@ void monitor_statistic() {
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
   if (nemu_state == NEMU_END || nemu_state == NEMU_ABORT) {
-    printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
+    printf("[\033[1;36mCPU\033[0m] Program execution has ended. To restart the program, exit NEMU and run again.\n");
     return;
   }
   nemu_state = NEMU_RUNNING;
@@ -39,8 +40,10 @@ void cpu_exec(uint64_t n) {
     nr_guest_instr_add(1);
 
 #ifdef DEBUG
-    /* TODO: check watchpoints here. */
-
+	if (check_wp()) {
+		nemu_state = NEMU_STOP;
+		printf("[\033[1;36mCPU\033[0m] Program has stopped due to some change of watchpoints.\n");
+	}
 #endif
 
 #ifdef HAS_IOE
