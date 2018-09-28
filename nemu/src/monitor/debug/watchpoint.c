@@ -61,7 +61,11 @@ void free_wp(WP *wp) {
 }
 
 void list_wp() {
-	for (WP *iter = head; iter != NULL; iter = iter->next) {
-		printf("#%02d: 0x%8x = \"%s\"\n", iter->NO, iter->val, iter->expr);
+	if (head == NULL) {
+		printf("No watchpoint to show.\n");
+	} else {
+		for (WP *iter = head; iter != NULL; iter = iter->next) {
+			printf("#%02d: 0x%08x = \"%s\"\n", iter->NO, iter->val, iter->expr);
+		}
 	}
 }
