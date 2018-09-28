@@ -172,28 +172,33 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
-	char *wp_expr = strtok(NULL, "\0");
-	int expr_len = strlen(wp_expr);
-	if (expr_len > 63) {
-		printf("[\033[1;31mError\033[00m] The expression is too long (>63 characters).\n");
-		return 0;
-	}
-
-	bool success = false, overflow = false;
-	uint32_t wp_val = expr(wp_expr, &success, &overflow);
-	if (success) {
-		if (overflow) { 
-			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
-		}
-	} else {
-		printf("[\033[1;31mError\033[0m] Calculation failed.\n");
-		return 0;
-	}
 	WP *wp = new_wp();
-  strcpy(wp->expr, wp_expr);	
-	wp->val = wp_val;
-	printf("[\033[1;33mSuccess\033[0m] Added watchpoint #%02d: 0x%08xH = \"%s\".\n", wp->NO, wp->val, wp->expr);
-	return 0;
+	if (wp == NULL) {
+		printf("[\033[1;31mError\033[0m] No free watchpoint in pool.\n");
+		return 0;
+	} else {
+	 	char *wp_expr = strtok(NULL, "\0");
+		int expr_len = strlen(wp_expr);
+		if (expr_len > 63) {
+			printf("[\033[1;31mError\033[00m] The expression is too long (>63 characters).\n");
+			return 0;
+		}
+	
+		bool success = false, overflow = false;
+		uint32_t wp_val = expr(wp_expr, &success, &overflow);
+		if (success) {
+			if (overflow) { 
+				printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
+			}
+		} else {
+			printf("[\033[1;31mError\033[0m] Calculation failed.\n");
+			return 0;
+		}
+	 strcpy(wp->expr, wp_expr);	
+		wp->val = wp_val;
+		printf("[\033[1;32mSuccess\033[0m] Added watchpoint #%02d: 0x%08xH = \"%s\".\n", wp->NO, wp->val, wp->expr);
+		return 0;
+	}
 }
 
 static int cmd_d(char *args) {
@@ -205,7 +210,7 @@ static int cmd_d(char *args) {
 
 	int wp_NO = (int) strtol(arg, NULL, 0);
 	if (free_wp(wp_NO)) {
-		printf("[\033[1;33mSuccess\033[0m] Deleted watchpoint #%02d.\n", wp_NO);
+		printf("[\033[1;32mSuccess\033[0m] Deleted watchpoint #%02d.\n", wp_NO);
 	}
 	return 0;
 }

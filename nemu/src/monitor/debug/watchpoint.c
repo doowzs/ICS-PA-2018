@@ -19,21 +19,24 @@ void init_wp_pool() {
 }
 
 WP* new_wp() {
-	Assert(free_ != NULL, "Watchpoint pool is empty.");
-	WP *ret = free_;
-	free_ = ret->next;
-	if (head == NULL || head->NO >= ret->NO) {
-		ret->next = head;
-		head = ret;
-	} else {
-		WP *iter = head;
-		while (iter->next != NULL && iter->next->NO < ret->NO) {
-			iter = iter->next;
+  if (free_ == NULL) {
+		return NULL;
+	} else {	
+		WP *ret = free_;
+		free_ = ret->next;
+		if (head == NULL || head->NO >= ret->NO) {
+			ret->next = head;
+			head = ret;
+		} else {
+			WP *iter = head;
+			while (iter->next != NULL && iter->next->NO < ret->NO) {
+				iter = iter->next;
+			}
+			ret->next = iter->next;
+			iter->next = ret;
 		}
-		ret->next = iter->next;
-		iter->next = ret;
+		return ret;
 	}
-	return ret;
 }
 
 bool free_wp(int wp_NO) {
