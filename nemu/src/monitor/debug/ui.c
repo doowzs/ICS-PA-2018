@@ -212,7 +212,7 @@ static int cmd_d(char *args) {
 
 static void cmd_wrong_parameter(char *args) {
 	/* input a prompt message and abort running the command */
-	printf("[\033[1;31mError\033[0m] Wrong parameter \'%s\'. Please check your input. Type 'help' for usage.\n", args);
+	printf("[\033[1;36mCMD\033[0m] Wrong parameter \'%s\'. Please check your input. Type 'help' for usage.\n", args);
 }
 
 void ui_mainloop(int is_batch_mode) {
@@ -250,6 +250,6 @@ void ui_mainloop(int is_batch_mode) {
       }
     }
 
-    if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+    if (i == NR_CMD) { printf("[\033[1;36mCMD\033[0m] Unknown command '%s'. Type 'help' for usage.\n", cmd); }
   }
 }
