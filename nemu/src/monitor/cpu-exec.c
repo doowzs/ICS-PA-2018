@@ -42,7 +42,6 @@ void cpu_exec(uint64_t n) {
 #ifdef DEBUG
 		if (check_wp()) {
 			nemu_state = NEMU_STOP;
-			printf("[\033[1;36mCPU\033[0m] Program has stopped due to some change of watchpoints.\n");
 		}
 #endif
 
@@ -53,7 +52,7 @@ void cpu_exec(uint64_t n) {
 
     if (nemu_state != NEMU_RUNNING) {
       if (nemu_state == NEMU_END) {
-        printflog("[\033[1;36mCPU\033[0m] \33[1;31mnemu: HIT %s TRAP\33[0m at eip = 0x%08x\n\n",
+        printflog("[\033[1;36mCPU\033[0m] \33[1;31mHIT %s TRAP\33[0m at eip = 0x%08x\n\n",
             (cpu.eax == 0 ? "GOOD" : "BAD"), cpu.eip - 1);
         monitor_statistic();
       }
@@ -61,7 +60,7 @@ void cpu_exec(uint64_t n) {
         printflog("[\033[1;36mCPU\033[0m] \33[1;31mABORT\33[0m at eip = 0x%08x\n\n", cpu.eip);
       } 
 			else if (nemu_state == NEMU_STOP) {
-				printflog("[\033[1;36mCPU\033[0m] Program has stopped due to some change of watchpoints.\n");
+				printflog("[\033[1;36mCPU\033[0m] Stopped due to \33[1;31mWP\33[0m change.\n");
 			}
 			return;
     }
