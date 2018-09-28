@@ -181,6 +181,7 @@ static int cmd_w(char *args) {
 		int expr_len = strlen(wp_expr);
 		if (expr_len > 63) {
 			printf("[\033[1;31mError\033[00m] The expression is too long (>63 characters).\n");
+			free_wp(wp->NO);
 			return 0;
 		}
 	
@@ -192,6 +193,7 @@ static int cmd_w(char *args) {
 			}
 		} else {
 			printf("[\033[1;31mError\033[0m] Calculation failed.\n");
+			free_wp(wp->NO);
 			return 0;
 		}
 	 strcpy(wp->expr, wp_expr);	
