@@ -113,15 +113,10 @@ static int cmd_info(char *args) {
 	if (arg == NULL || strcmp(arg, "r") == 0) {
 		/* r-mode (default), print all registers */
 		printf("[\033[1;31mInfo\033[0m] Printing all registers.\n");
-		printf("eax = 0x%08xH = %10dD\n", cpu.eax, cpu.eax);
-		printf("ecx = 0x%08xH = %10dD\n", cpu.ecx, cpu.ecx);
-		printf("edx = 0x%08xH = %10dD\n", cpu.edx, cpu.edx);
-		printf("ebx = 0x%08xH = %10dD\n", cpu.ebx, cpu.ebx);
-		printf("esp = 0x%08xH = %10dD\n", cpu.esp, cpu.esp);
-		printf("ebp = 0x%08xH = %10dD\n", cpu.ebp, cpu.ebp);
-		printf("esi = 0x%08xH = %10dD\n", cpu.esi, cpu.esi);
-		printf("edi = 0x%08xH = %10dD\n", cpu.edi, cpu.edi);
-		printf("eip = 0x%08xH = %10dD\n", cpu.eip, cpu.eip);
+		for (int i = 0; i < 8; ++i) {
+			printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", regsl[i], reg_l(i), reg_l(i), reg_l(i));
+		}
+		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
 	} else if (strcmp(arg, "w") == 0) {
 		/* w-mode, list all watchnodes */
 		printf("[\033[1;31mInfo\033[0m] Printing all watchpoints.\n");

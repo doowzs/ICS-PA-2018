@@ -273,9 +273,13 @@ static int read_reg(int pos, bool *success) {
 			return reg_b(i);
 		}
 	}
-	*success = false;
-	print_prompt(pos, true, "Not a valid register name.");
-	return 0;
+	if (strcmp(name, "eip") == 0) {
+		return cpu.eip;
+	} else {
+		*success = false;
+		print_prompt(pos, true, "Not a valid register name.");
+		return 0;
+	}
 }
 
 /* Calculate the value of expression [p,q]. */
