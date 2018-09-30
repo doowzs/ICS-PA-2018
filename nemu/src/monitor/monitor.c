@@ -26,12 +26,17 @@ static inline void init_log() {
 static inline void welcome() {
 #ifdef DEBUG
   Log("Debug: \33[1;32m%s\33[0m", "ON");
-  Log("If debug mode is on, A log file will be generated to record every instruction NEMU executes. "
-      "This may lead to a large log file. "
-      "If it is not necessary, you can turn it off in include/common.h.");
 #else
   Log("Debug: \33[1;32m%s\33[0m", "OFF");
 #endif
+#ifdef EXPR_DEBUG
+  Log("EXPR_Debug: \33[1;32m%s\33[0m", "ON");
+#else
+  Log("EXPR_Debug: \33[1;32m%s\33[0m", "OFF");
+#endif
+Log("If debug mode is on, A log file will be generated to record every instruction NEMU executes. "
+    "This may lead to a large log file. "
+    "If it is not necessary, you can turn it off in include/common.h.");
 
   Log("Build time: %s, %s", __TIME__, __DATE__);
   printf("Welcome to NEMU!\n");

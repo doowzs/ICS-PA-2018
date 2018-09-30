@@ -26,7 +26,7 @@ extern FILE* log_fp;
   } while (0)
 
 #define Log(format, ...) \
-    printflog("\33[1;34m[%s,%d,%s] " format "\33[0m\n", \
+    printflog("\33[0m[\33[1;35mLog\33[0m]\33[1;34m[%s,%d,%s] " format "\33[0m\n", \
         __FILE__, __LINE__, __func__, ## __VA_ARGS__)
 
 #define Assert(cond, ...) \
