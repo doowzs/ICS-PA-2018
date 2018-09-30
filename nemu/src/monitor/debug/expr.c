@@ -372,9 +372,10 @@ static int eval(int p, int q, bool *success, bool *overflow) {
 				case TK_NEGA:
 				case TK_MINUS:
 					res = val1 - val2;
-					if ((int) res < 0) {
+					if (((val1 >= 0) == (-val2 >= 0)) &&
+							((val1 >= 0) != (res >= 0))) {
 						*overflow = true;
-						print_prompt(op, false, "MINUS result is negative.");
+						print_prompt(op, false, "MINUS overflow.");
 					}
 					break;
 				case TK_MUL:
