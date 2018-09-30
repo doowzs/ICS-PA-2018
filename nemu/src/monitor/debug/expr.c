@@ -338,7 +338,7 @@ static int eval(int p, int q, bool *success, bool *overflow) {
 			int op = find_main_operator(p, q, success);
 			if (op < 0) {
 				*success = false;
-				print_prompt(p, true, "Main operator not found.");
+				print_prompt(p, true, "Main operator not found or parentheses check failed.");
 				return 0;
 			}
 			#ifdef EXPR_DEBUG
