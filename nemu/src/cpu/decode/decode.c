@@ -324,6 +324,12 @@ make_DHelper(out_a2dx) {
 #endif
 }
 
+make_DHelper(call_J) {
+  decode_op_SI(eip, id_dest, false);
+  // the target address can be computed in the decode stage
+  decoding.jmp_eip = id_dest->simm + *eip;
+}
+
 void operand_write(Operand *op, rtlreg_t* src) {
   if (op->type == OP_TYPE_REG) { rtl_sr(op->reg, src, op->width); }
   else if (op->type == OP_TYPE_MEM) { rtl_sm(&op->addr, src, op->width); }
