@@ -14,11 +14,11 @@ make_EHelper(and) {
 }
 
 make_EHelper(xor) {
-	rtl_xor(&id_dest->addr, &id_src->val, &id_dest->val);
 	printf("XOR");
 	printf(" &addr = %d", id_dest->addr);
 	printf(" &dest = %d",  id_dest->val);
 	printf(" &src = %d\n", id_src->val);
+	rtl_xor(&id_dest->addr, &id_src->val, &id_dest->val);
 	//TODO: update CFZFSFOF...
   print_asm_template2(xor);
 }
