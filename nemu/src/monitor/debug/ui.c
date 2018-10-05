@@ -135,7 +135,7 @@ static int cmd_p(char *args) {
 		if (overflow) { 
 			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
 		}
-		printf("The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
+		printf("[\033[1;36mPrint\033[0m] The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
 	} else {
 		printf("[\033[1;31mError\033[0m] Calculation failed.\n");
 	}
@@ -196,7 +196,7 @@ static int cmd_w(char *args) {
 			free_wp(wp->NO);
 			return 0;
 		}
-	 strcpy(wp->expr, wp_expr);	
+	  strcpy(wp->expr, wp_expr);	
 		wp->val = wp_val;
 		printf("[\033[1;32mSuccess\033[0m] Added watchpoint #%02d: 0x%08xH = \"%s\".\n", wp->NO, wp->val, wp->expr);
 		return 0;
