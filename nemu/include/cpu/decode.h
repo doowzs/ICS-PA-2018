@@ -62,7 +62,6 @@ typedef union {
 void load_addr(vaddr_t *, ModR_M *, Operand *);
 void read_ModR_M(vaddr_t *, Operand *, bool, Operand *, bool);
 
-void operand_write(Operand *, rtlreg_t *);
 
 /* shared by all helper functions */
 extern DecodeInfo decoding;
@@ -70,6 +69,7 @@ extern DecodeInfo decoding;
 #define id_src (&decoding.src)
 #define id_src2 (&decoding.src2)
 #define id_dest (&decoding.dest)
+void operand_write(Operand *, rtlreg_t *);
 
 #define make_DHelper(name) void concat(decode_, name) (vaddr_t *eip)
 typedef void (*DHelper) (vaddr_t *);
