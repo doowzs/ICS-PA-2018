@@ -214,8 +214,3 @@ make_EHelper(idiv) {
 
   print_asm_template1(idiv);
 }
-
-make_EHelper(xor) {
-	rtl_xor(&id_dest->val, &id_src->val, &id_dest->val);
-	//TODO: update ZFCFSFOF...
-}
