@@ -13,3 +13,4 @@ make_EHelper(pop);  //->id_dest
 
 make_EHelper(add);
 make_EHelper(sub);
+make_EHelper(xor);
