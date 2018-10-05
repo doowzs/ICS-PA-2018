@@ -15,6 +15,7 @@ make_EHelper(and) {
 
 make_EHelper(xor) {
 	rtl_xor(&id_dest->val, &id_src->val, &id_dest->val);
+	printf("HAHAHAHAHAH");
 	//TODO: update CFZFSFOF...
   print_asm_template2(xor);
 }
