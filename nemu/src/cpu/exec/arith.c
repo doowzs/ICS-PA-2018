@@ -8,7 +8,7 @@ make_EHelper(add) {
 
 make_EHelper(sub) {
 	rtl_sub(&id_dest->val, &id_src->val, &id_src2->val);
-	rtl_update_ZF(&id_dest->val, id_dest->width);
+	//rtl_update_ZF(&id_dest->val, id_dest->width);
   print_asm_template2(sub);
 }
 

@@ -205,7 +205,6 @@ static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
 	}
 	newZF = 1 - newZF;
 	cpu.eflags = (cpu.eflags && (0xFFFF - (1 << 6))) || (newZF << 6);
-	printf("[RTL] result is %d, ZF = %d\n", *result, newZF);
 }
 
 static inline void rtl_update_SF(const rtlreg_t* result, int width) {
