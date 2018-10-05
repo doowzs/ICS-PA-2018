@@ -168,7 +168,7 @@ static inline void rtl_push(const rtlreg_t* src1) {
 static inline void rtl_pop(rtlreg_t* dest) {
   // dest <- M[esp]
   // esp <- esp + 4
-	rtl_lm(dest, &cpu.esp, 4);
+	rtl_lm(dest, &cpu.esp,  4);
 	rtl_addi(&cpu.esp, &cpu.esp, 4);
 }
 
