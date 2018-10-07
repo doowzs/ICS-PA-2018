@@ -180,12 +180,12 @@ static inline void rtl_setrelopi(uint32_t relop, rtlreg_t *dest,
 
 static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- src1[width * 8 - 1]
-  TODO();
+	*dest = ((*(uint8_t *) src1) >> 7) & 1;
 }
 
 #define make_rtl_setget_eflags(f) \
   static inline void concat(rtl_set_, f) (const rtlreg_t* src) { \
-    cpu.eflags.f = (bool) *src; \
+    cpu.eflags.f = (uint8_t) *src; \
   } \
   static inline void concat(rtl_get_, f) (rtlreg_t* dest) { \
     *dest = cpu.eflags.f; \
@@ -195,20 +195,45 @@ make_rtl_setget_eflags(CF)
 make_rtl_setget_eflags(OF)
 make_rtl_setget_eflags(ZF)
 make_rtl_setget_eflags(SF)
+make_rtl_setget_eflags(PF)
+make_rtl_setget_eflags(AF)
 
 static inline void rtl_update_ZF(const rtlreg_t* result, int width) {
   // eflags.ZF <- is_zero(result[width * 8 - 1 .. 0])
-	TODO();
+	uint8_t* bres = (uint8_t *) result;
+	bool is_zero = false;
+	for (int i = 0; i < width; ++i) {
+		is_zero = is_zero || *(bres + i);
+	}
+	rtl_li(&at, !is_zero);
+	rtl_set_ZF(&at);
 }
 
 static inline void rtl_update_SF(const rtlreg_t* result, int width) {
   // eflags.SF <- is_sign(result[width * 8 - 1 .. 0])
-  TODO();
+	rtl_msb(&at, result, width);
+	rtl_set_SF(&at);
+}
+
+static inline void rtl_update_PF(const rtlreg_t* result, int width) {
+	uint8_t parity_src = *(((char *) result) + width - 1);
+	bool parity = true;
+	for (int i = 0; i < 8; ++i) {
+		parity ^= (parity_src & 1);
+		parity >>= 1;
+	}
+	rtl_li(&at, parity);
+	rtl_set_PF(&at);
 }
 
 static inline void rtl_update_ZFSF(const rtlreg_t* result, int width) {
   rtl_update_ZF(result, width);
   rtl_update_SF(result, width);
+}
+
+static inline void rtl_update_ZFSFPF(const rtlreg_t* result, int width) {
+	rtl_update_ZFSF(result, width);
+	rtl_update_PF(result, width);
 }
 
 #endif

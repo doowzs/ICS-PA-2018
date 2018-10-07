@@ -9,7 +9,8 @@ make_EHelper(add) {
 make_EHelper(sub) {
 	rtl_sub(&id_dest->val, &id_dest->val, &id_src->val);
 	operand_write(id_dest, &id_dest->val);
-	//TODO: rtl_update_ZFSF(&id_dest->val, id_dest->width);
+	//TODO: update CF OF
+	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
   print_asm_template2(sub);
 }
 
