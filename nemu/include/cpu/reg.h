@@ -41,9 +41,6 @@ typedef struct {
 		struct {
 			rtlreg_t CF:1, :1, PF:1, :1, AF:1, :1, ZF:1, SF:1, :3, OF:1, :20;
 		} eflags;
-		struct {
-			rtlreg_t data:1;
-		} gpe[32];
 	};
 
 } CPU_state;
@@ -58,7 +55,6 @@ static inline int check_reg_index(int index) {
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
-#define reg_e(index) (cpu.gpe[index])
 
 extern const char* regsl[];
 extern const char* regsw[];
