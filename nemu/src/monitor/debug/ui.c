@@ -118,11 +118,11 @@ static int cmd_info(char *args) {
 		}
 		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
 		printf("EFLAGS = ");
-		for (int i = 1; i < 6; ++i) {
+		for (int i = 0; i < 6; ++i) {
 			if ((cpu.eflags32 >> regse_index[i]) & 1) {
-			  printf("\033[1;33m%s\033[0m ", regse[i]);
+			  printf("\033[1;33m%s\033[0m ", regse_upper[i]);
 			} else {
-				printf("%s", regse[i]);
+				printf("%s ", regse_upper[i]);
 			}
 		}
 		printf("\n");	
