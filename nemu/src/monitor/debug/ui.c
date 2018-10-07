@@ -120,9 +120,9 @@ static int cmd_info(char *args) {
 		printf("EFLAGS = ");
 		for (int i = 0; i < 6; ++i) {
 			if ((cpu.eflags32 >> regse_index[i]) & 1) {
-			  printf("\033[1;33m%s\033[0m ", regse_upper[i]);
+			  printf("[\033[1;32m%s\033[0m] ", regse_upper[i]);
 			} else {
-				printf("%s ", regse_upper[i]);
+				printf(" %s  ", regse_upper[i]);
 			}
 		}
 		printf("\n");	
