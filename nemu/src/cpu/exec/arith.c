@@ -7,9 +7,22 @@ make_EHelper(add) {
 }
 
 make_EHelper(sub) {
-	rtl_sub(&id_dest->val, &id_dest->val, &id_src->val);
+	int width = id_src->width;
+	int result = id_dest->val - id_src->val;
+	rtlreg_t sign_dst, sign_src, sign_res;
+
+	rtl_li(&at, (id_dest->val < id_src->val));
+	rtl_set_CF(&at);
+
+	rtl_msb(&sign_dst, &id_dest->val, width);
+	rtl_msb(&sign_src, &id_src->val, width);
+	
+	rtl_li(&id_dest->val, result);
 	operand_write(id_dest, &id_dest->val);
-	//TODO: update CF OF
+
+	rtl_msb(&sign_res, &id_dest->val, width);
+	rtl_li(&at, (sign_dst != sign_src && sign_src == sign_res));
+	rtl_set_OF(&at);
 	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
   print_asm_template2(sub);
 }
