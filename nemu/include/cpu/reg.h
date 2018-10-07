@@ -6,6 +6,7 @@
 enum { R_EAX, R_ECX, R_EDX, R_EBX, R_ESP, R_EBP, R_ESI, R_EDI };
 enum { R_AX, R_CX, R_DX, R_BX, R_SP, R_BP, R_SI, R_DI };
 enum { R_AL, R_CL, R_DL, R_BL, R_AH, R_CH, R_DH, R_BH };
+enum { R_E_CF=0, R_E_PF=2, R_E_AF=4, R_E_ZF=6, R_E_SF=7, R_E_OF=11 };
 
 /* Re-organized the `CPU_state' structure to match the register
  * encoding scheme in i386 instruction format. For example, if we
@@ -41,6 +42,8 @@ typedef struct {
 		struct {
 			bool CF, _E1, PF, _E3, AF, _E5, ZF, SF, _E8_10[3], OF, _E12_31[20];
 		};
+
+		bool gpe[32];
 	} eflags;
 
 } CPU_state;
@@ -55,10 +58,13 @@ static inline int check_reg_index(int index) {
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
+#define reg_e(index) (cpu.eflags.gpe[index])
 
 extern const char* regsl[];
 extern const char* regsw[];
 extern const char* regsb[];
+extern const char* regse[];
+extern const int regse_index[];
 
 static inline const char* reg_name(int index, int width) {
   assert(index >= 0 && index < 8);

@@ -258,6 +258,13 @@ static int find_main_operator(int p, int q, bool *success) {
 /* Read the value of a given REG token. */
 static int read_reg(int pos, bool *success) {
 	char *name = tokens[pos].str + 1; // 0 is '$'
+	// transform to lower case
+	for (int i = 0; i < strlen(name); ++i) {
+		if (name[i] >= 'A' && name[i] <= 'Z') {
+			name[i] -= 32;
+		}
+	}
+
 	for (int i = 0; i < 8; ++i) {
 		if (strcmp(name, regsl[i]) == 0) {
 			return reg_l(i);
@@ -273,8 +280,15 @@ static int read_reg(int pos, bool *success) {
 			return reg_b(i);
 		}
 	}
+	for (int i = 0; i < 6; ++i) {
+		if (strcmp(name, regse[i]) == 0) {
+			return reg_e(regse_index[i]);
+		}
+	}
 	if (strcmp(name, "eip") == 0) {
 		return cpu.eip;
+	} else if (strcmp(name, "eflags") == 0) {
+		return cpu.eflags._e32;
 	} else {
 		*success = false;
 		print_prompt(pos, true, "Not a valid register name.");
