@@ -39,9 +39,11 @@ typedef struct {
 	union {
 		rtlreg_t eflags32;
 		struct {
-			bool CF, _E1, PF, _E3, AF, _E5, ZF, SF, _E8_10[3], OF, _E12_31[20];
+			rtlreg_t CF:1, :1, PF:1, :1, AF:1, :1, ZF:1, SF:1, :3, OF:1, :20;
 		} eflags;
-		bool gpe[32];
+		struct {
+			bool data:1;
+		} gpe[32];
 	};
 
 } CPU_state;
