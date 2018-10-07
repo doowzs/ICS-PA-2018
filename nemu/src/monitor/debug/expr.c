@@ -288,6 +288,7 @@ static int read_reg(int pos, bool *success) {
 	if (strcmp(name, "eip") == 0) {
 		return cpu.eip;
 	} else if (strcmp(name, "eflags") == 0) {
+		printf("EFLAGS32 = %d\nGPE = %d\n", cpu.eflags32, *(int *)cpu.gpe);
 		return cpu.eflags32;
 	} else {
 		*success = false;
