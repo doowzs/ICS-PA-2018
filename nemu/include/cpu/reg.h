@@ -42,7 +42,7 @@ typedef struct {
 			rtlreg_t CF:1, :1, PF:1, :1, AF:1, :1, ZF:1, SF:1, :3, OF:1, :20;
 		} eflags;
 		struct {
-			bool data:1;
+			rtlreg_t data:1;
 		} gpe[32];
 	};
 
