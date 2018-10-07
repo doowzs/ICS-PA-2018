@@ -288,9 +288,15 @@ static int read_reg(int pos, bool *success) {
 	if (strcmp(name, "eip") == 0) {
 		return cpu.eip;
 	} else if (strcmp(name, "eflags") == 0) {
-		int ret = 0;
-		for (int i = 0; i < 32; ++i) ret += cpu.gpe[i];
-		return ret;
+		int eflags32 = cpu.eflags32;
+		for (int i = 0; i < 32; ++i) printf("%1d", cpu.gpe[i]);
+		printf("\n");
+		for (int i = 0; i < 32; ++i) {
+			printf("%1d", (eflags32 & 1) ? 1 : 0);
+			eflags32 >>= 1;
+		}
+		printf("\n");
+		printf("EFLAGS=%d\n", cpu.eflags32);
 		return cpu.eflags32;
 	} else {
 		*success = false;
