@@ -35,7 +35,13 @@ typedef struct {
 
   vaddr_t eip;
 
-	rtlreg_t eflags;
+	union {
+		rtlreg_t _e32;
+		
+		struct {
+			bool CF, _E1, PF, _E3, AF, _E5, ZF, SF, _E8_10[3], OF, _E12_31[20];
+		};
+	} eflags;
 
 } CPU_state;
 

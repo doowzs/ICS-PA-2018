@@ -17,6 +17,9 @@ make_EHelper(xor) {
 	rtl_xor(&id_dest->val, &id_dest->val, &id_src->val);
 	operand_write(id_dest, &id_dest->val);
 	//TODO: update CFZFSFOF...
+	rtl_li(&at, 0);
+	rtl_set_ZF(&at);
+	printf("EFLAGS: %x\n", cpu.eflags._e32);
   print_asm_template2(xor);
 }
 
