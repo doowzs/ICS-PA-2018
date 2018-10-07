@@ -288,7 +288,7 @@ static int read_reg(int pos, bool *success) {
 	if (strcmp(name, "eip") == 0) {
 		return cpu.eip;
 	} else if (strcmp(name, "eflags") == 0) {
-		return cpu.eflags._e32;
+		return cpu.eflags32;
 	} else {
 		*success = false;
 		print_prompt(pos, true, "Not a valid register name.");
