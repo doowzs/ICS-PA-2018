@@ -290,7 +290,7 @@ static int read_reg(int pos, bool *success) {
 	} else if (strcmp(name, "eflags") == 0) {
 		int eflags32 = cpu.eflags32;
 		for (int i = 0; i < 32; ++i) printf("%1d", cpu.gpe[i]);
-		printf("\n");
+		printf("\n %ld \n", sizeof(bool));
 		for (int i = 0; i < 32; ++i) {
 			printf("%1d", (eflags32 & 1) ? 1 : 0);
 			eflags32 >>= 1;
