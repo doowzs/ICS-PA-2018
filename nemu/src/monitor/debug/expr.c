@@ -261,7 +261,7 @@ static int read_reg(int pos, bool *success) {
 	// transform to lower case
 	for (int i = 0; i < strlen(name); ++i) {
 		if (name[i] >= 'A' && name[i] <= 'Z') {
-			name[i] -= 32;
+			name[i] += 32;
 		}
 	}
 
