@@ -288,8 +288,9 @@ static int read_reg(int pos, bool *success) {
 	if (strcmp(name, "eip") == 0) {
 		return cpu.eip;
 	} else if (strcmp(name, "eflags") == 0) {
-		printf("EFLAGS32 = %d\nGPE = %d\n", cpu.eflags32, *(int *)cpu.gpe);
-		printf("HEADARRESS: %lx %lx %lx\n",(int64_t) &cpu.eflags32,(int64_t) &cpu.eflags.CF, (int64_t) cpu.gpe);
+		int ret = 0;
+		for (int i = 0; i < 32; ++i) ret += cpu.gpe[i];
+		return ret;
 		return cpu.eflags32;
 	} else {
 		*success = false;
