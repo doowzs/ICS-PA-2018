@@ -80,9 +80,6 @@ make_EHelper(dec) {
 	rtl_li(&at, (t2 != 0 && at == 0));
 	rtl_set_OF(&at);
 	rtl_update_ZFSFPF(&t1, t0);
-
-  TODO();
-
   print_asm_template1(dec);
 }
 
