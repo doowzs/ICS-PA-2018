@@ -60,7 +60,7 @@ void cpu_exec(uint64_t n) {
         printflog("[\033[1;36mCPU\033[0m] \33[1;31mABORT\33[0m at eip = 0x%08x\n\n", cpu.eip);
       } 
 			else if (nemu_state == NEMU_STOP) {
-				printflog("[\033[1;36mCPU\033[0m] \33[1;31mWP CHANGED\33[0m at eip = 0x%08x\n\n", cpu.eip);
+				printflog("[\033[1;36mCPU\033[0m] \33[1;31mWP CHANGED\33[0m\n\n");
 			}
 			return;
     }
