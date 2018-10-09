@@ -181,6 +181,10 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_w(char *args) {
+	if (args == NULL) {
+		cmd_wrong_parameter(args);
+		return 0;
+	}
 	WP *wp = new_wp();
 	if (wp == NULL) {
 		printf("[\033[1;31mError\033[0m] No free watchpoint in pool.\n");
