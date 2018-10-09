@@ -2,31 +2,31 @@
 #include "cpu/cc.h"
 
 make_EHelper(test) {
-	rtl_and(&at, &id_dest->val, &id_src->val);
-	rtl_update_ZFSFPF(&at, id_dest->width);
+	rtl_and(&id_dest->val, &id_dest->val, &id_src->val);
 	rtl_li(&at, 0);
 	rtl_set_CF(&at);
 	rtl_set_OF(&at);
+	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
   print_asm_template2(test);
 }
 
 make_EHelper(and) {
-	rtl_and(&at, &id_dest->val, &id_src->val);
-	rtl_update_ZFSFPF(&at, id_dest->width);
-	operand_write(id_dest, &at);
+	rtl_and(&id_dest->val, &id_dest->val, &id_src->val);
+	operand_write(id_dest, &id_dest->val);
 	rtl_li(&at, 0);
 	rtl_set_CF(&at);
 	rtl_set_OF(&at);
+	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
   print_asm_template2(and);
 }
 
 make_EHelper(xor) {
-	rtl_xor(&at, &id_dest->val, &id_src->val);
-	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
-	operand_write(id_dest, &at);
+	rtl_xor(&id_dest->val, &id_dest->val, &id_src->val);
+	operand_write(id_dest, &id_dest->val);
 	rtl_li(&at, 0);
 	rtl_set_CF(&at);
 	rtl_set_OF(&at);
+	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
   print_asm_template2(xor);
 }
 
