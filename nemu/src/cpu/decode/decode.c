@@ -39,7 +39,7 @@ static inline make_DopHelper(SI) {
 
 	/* sign extension */
 	if (op->width == 1) {
-		op->simm |= ((op->simm & 0x80) << 24) >> 24;
+		op->simm = ((op->simm & 0x80) << 24) >> 24;
 	}
   rtl_li(&op->val, op->simm);
 #ifdef DEBUG
