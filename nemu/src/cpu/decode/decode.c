@@ -37,11 +37,9 @@ static inline make_DopHelper(SI) {
   op->type = OP_TYPE_IMM;
 	op->simm = instr_fetch(eip, op->width);
 
-	/* sign extension */
-	if (op->width == 1) {
-		op->simm = ((op->simm) << 24) >> 24;
-	}
-  rtl_li(&op->val, op->simm);
+	rtl_li(&t0, op->simm);
+	rtl_sext(&at, &t0, op->width);
+  rtl_li(&op->val, at);
 #ifdef DEBUG
   snprintf(op->str, OP_STR_SIZE, "$0x%x", op->simm);
 #endif
