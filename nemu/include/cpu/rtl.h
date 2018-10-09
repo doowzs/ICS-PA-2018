@@ -155,6 +155,7 @@ static inline void rtl_not(rtlreg_t *dest, const rtlreg_t* src1) {
 
 static inline void rtl_sext(rtlreg_t* dest, const rtlreg_t* src1, int width) {
   // dest <- signext(src1[(width * 8 - 1) .. 0])
+	printf("LENGTH IS %d\n", width);
 	switch (width) {
 		case 4: *dest = *src1; return;
 		case 1: *dest = (rtlreg_t) (((*(int32_t *) src1) << 24) >> 24); return;
