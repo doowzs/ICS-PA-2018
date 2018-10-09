@@ -71,7 +71,7 @@ make_EHelper(cwtl) {
 make_EHelper(movsx) {
   id_dest->width = decoding.is_operand_size_16 ? 2 : 4;
 	assert(id_dest->width >= id_src->width);
-	printf("1 = 0x%08x\n", id_src->width);
+	printf("1 = 0x%08x\n", id_src->val);
 	rtl_li(&t0, id_src->val);
 	rtl_li(&t1, id_dest->width - id_src->width);
 	rtl_sar(&t2, &t0, &t1);
