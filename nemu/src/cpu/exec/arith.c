@@ -29,7 +29,7 @@ make_EHelper(sub) {
 
 	operand_write(id_dest, &t1);
 	rtl_msb(&at, &t1, t0);
-	rtl_li(&at, (t2 != t3 && t3 == at));
+	rtl_li(&at, (t2 != t3 && at == t3));
 	rtl_set_OF(&at);
 	rtl_update_ZFSFPF(&t1, t0);
   print_asm_template2(sub);
@@ -84,8 +84,19 @@ make_EHelper(dec) {
 }
 
 make_EHelper(neg) {
-  TODO();
+	rtl_li(&t0, id_dest->width);
+	rtl_li(&at, 0);
+  rtl_sub(&t1, &at, &id_dest->val);
+	operand_write(id_dest, &t1);
 
+	rtl_li(&at, id_dest->val != 0);
+	rtl_set_CF(&at);
+
+	rtl_msb(&t2, &id_dest->val, t0);
+	rtl_msb(&at, &t1, t0);
+	rtl_li(&at, (t2 != 0 && at == 0));
+	rtl_set_OF(&at);
+	rtl_update_ZFSFPF(&t1, t0);
   print_asm_template1(neg);
 }
 
