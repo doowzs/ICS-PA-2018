@@ -286,14 +286,6 @@ make_DHelper(push_SI) {
   decode_op_SI(eip, id_src, true);
 }
 
-make_DHelper(push_r) {
-	decode_op_r(eip, id_src, true);
-}
-
-make_DHelper(pop_r) {
-	decode_op_r(eip, id_dest, true);
-}
-
 make_DHelper(in_I2a) {
   id_src->width = 1;
   decode_op_I(eip, id_src, true);
