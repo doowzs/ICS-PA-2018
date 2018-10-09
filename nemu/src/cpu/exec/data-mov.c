@@ -73,6 +73,8 @@ make_EHelper(movsx) {
 	printf("SRC=0x%08x\n", id_src->val);
 	if (id_dest->width == 2) {
 		rtl_li(&t0, id_src->val & 0xffff);
+	} else {
+		rtl_li(&t0, id_src->val);
 	}
 	printf("BEFORE=0x%08x\n", t0);
 	rtl_sext(&at, &t0, id_src->width);
