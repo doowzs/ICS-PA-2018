@@ -31,8 +31,12 @@ make_EHelper(xor) {
 }
 
 make_EHelper(or) {
-  TODO();
-
+	rtl_or(&t2, &id_dest->val, &id_src->val);
+	operand_write(id_dest, &t2);
+	rtl_li(&at, 0);
+	rtl_set_CF(&at);
+	rtl_set_OF(&at);
+	rtl_update_ZFSFPF(&id_dest->val, t2);
   print_asm_template2(or);
 }
 
@@ -67,7 +71,8 @@ make_EHelper(setcc) {
 }
 
 make_EHelper(not) {
-  TODO();
-
+	rtl_not(&t2, &id_dest->val);
+	operand_write(id_dest, &t2);
+	/* none affected eflags */
   print_asm_template1(not);
 }
