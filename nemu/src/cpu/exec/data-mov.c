@@ -71,14 +71,19 @@ make_EHelper(cwtl) {
 make_EHelper(movsx) {
   id_dest->width = decoding.is_operand_size_16 ? 2 : 4;
   rtl_sext(&t0, &id_src->val, id_src->width);
-	printf("After SEXT: 0x%10x\n", t0);
-  operand_write(id_dest, &t0);
+	if (id_dest->width == 2) {
+		rtl_li(&at, t0 & 0xffff);
+	}
+  operand_write(id_dest, &at);
   print_asm_template2(movsx);
 }
 
 make_EHelper(movzx) {
   id_dest->width = decoding.is_operand_size_16 ? 2 : 4;
-  operand_write(id_dest, &id_src->val);
+	if (id_dest->width == 2) {
+		rtl_li(&at, id_src->val & 0xffff);
+	}
+  operand_write(id_dest, &at);
   print_asm_template2(movzx);
 }
 
