@@ -70,23 +70,13 @@ make_EHelper(cwtl) {
 
 make_EHelper(movsx) {
   id_dest->width = decoding.is_operand_size_16 ? 2 : 4;
-	assert(id_dest->width >= id_src->width);
-	printf("1 = 0x%08x\n", id_src->val);
-	rtl_li(&t0, id_src->val);
-	rtl_li(&t1, id_dest->width - id_src->width);
-	rtl_sar(&t2, &t0, &t1);
-	printf("2 = 0x%08x\n", t2);
-	rtl_sext(&at, &t2, id_dest->width);
-	printf("3 = 0x%08x\n", at);
-  operand_write(id_dest, &at);
+	rtl_sext(&t0, &id_src->val, id_src->width);
+	operand_write(id_dest, &t0);
   print_asm_template2(movsx);
 }
 
 make_EHelper(movzx) {
   id_dest->width = decoding.is_operand_size_16 ? 2 : 4;
-	if (id_dest->width == 2) {
-		rtl_li(&at, id_src->val & 0xffff);
-	}
   operand_write(id_dest, &at);
   print_asm_template2(movzx);
 }
