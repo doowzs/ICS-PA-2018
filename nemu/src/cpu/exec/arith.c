@@ -1,23 +1,19 @@
 #include "cpu/exec.h"
 
 make_EHelper(add) {
-	unsigned int width = id_src->width;
-	unsigned int result = id_dest->val + id_src->val;
-	rtlreg_t sign_dst, sign_src, sign_res;
-
-	rtl_li(&at, (result < id_dest->val || result < id_src->val));
+	rtl_li(&t0, id_src->width);
+	rtl_add(&t1, &id_dest->val, &id_src->val);
+	rtl_li(&at, (t1 < id_dest->val || t1 < id_src->val));
 	rtl_set_CF(&at);
 
-	rtl_msb(&sign_dst, &id_dest->val, width);
-	rtl_msb(&sign_src, &id_src->val, width);
+	rtl_msb(&t2, &id_dest->val, t0);
+	rtl_msb(&t3, &id_src->val, t0);
 	
-	rtl_li(&id_dest->val, result);
-	operand_write(id_dest, &id_dest->val);
-
-	rtl_msb(&sign_res, &id_dest->val, width);
-	rtl_li(&at, (sign_dst == sign_src && sign_src != sign_res));
+	operand_write(id_dest, &t1);
+	rtl_msb(&at, &t1, t0);
+	rtl_li(&at, (t2 == t3 && at != t2));
 	rtl_set_OF(&at);
-	rtl_update_ZFSFPF(&id_dest->val, width);
+	rtl_update_ZFSFPF(&t1, t0);
   print_asm_template2(add);
 }
 
