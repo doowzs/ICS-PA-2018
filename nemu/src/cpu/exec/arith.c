@@ -1,7 +1,7 @@
 #include "cpu/exec.h"
 
 make_EHelper(add) {
-	rtl_li(&t0, id_src->width);
+	rtl_li(&t0, id_dest->width);
 	rtl_add(&t1, &id_dest->val, &id_src->val);
 	rtl_li(&at, (t1 < id_dest->val || t1 < id_src->val));
 	rtl_set_CF(&at);
@@ -18,7 +18,7 @@ make_EHelper(add) {
 }
 
 make_EHelper(sub) {
-	rtl_li(&t0, id_src->width);
+	rtl_li(&t0, id_dest->width);
   rtl_sub(&t1, &id_dest->val, &id_src->val);
 
 	rtl_li(&at, (id_dest->val < id_src->val));
@@ -36,7 +36,7 @@ make_EHelper(sub) {
 }
 
 make_EHelper(cmp) {
-	rtl_li(&t0, id_src->width);
+	rtl_li(&t0, id_dest->width);
   rtl_sub(&t1, &id_dest->val, &id_src->val);
 
 	rtl_li(&at, (id_dest->val < id_src->val));
@@ -68,7 +68,7 @@ make_EHelper(inc) {
 }
 
 make_EHelper(dec) {
-	rtl_li(&t0, id_src->width);
+	rtl_li(&t0, id_dest->width);
   rtl_subi(&t1, &id_dest->val, 1);
 	rtl_li(&at, (id_dest->val < 1));
 	rtl_set_CF(&at);
@@ -185,7 +185,7 @@ make_EHelper(imul1) {
 
 // imul with two operands
 make_EHelper(imul2) {
-  rtl_sext(&t0, &id_src->val, id_src->width);
+  rtl_sext(&t0, &id_src->val, id_dest->width);
   rtl_sext(&t1, &id_dest->val, id_dest->width);
 
   rtl_imul_lo(&t2, &t1, &t0);
@@ -196,8 +196,8 @@ make_EHelper(imul2) {
 
 // imul with three operands
 make_EHelper(imul3) {
-  rtl_sext(&t0, &id_src->val, id_src->width);
-  rtl_sext(&t1, &id_src2->val, id_src->width);
+  rtl_sext(&t0, &id_src->val, id_dest->width);
+  rtl_sext(&t1, &id_src2->val, id_dest->width);
   rtl_sext(&id_dest->val, &id_dest->val, id_dest->width);
 
   rtl_imul_lo(&t2, &t1, &t0);

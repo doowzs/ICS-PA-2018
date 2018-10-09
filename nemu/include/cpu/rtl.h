@@ -189,7 +189,7 @@ static inline void rtl_msb(rtlreg_t* dest, const rtlreg_t* src1, int width) {
 		case 4: *dest = (*src1 >> 31) & 1; return;
 		case 1: *dest = (*src1 >>  7) & 1; return;
 		case 2: *dest = (*src1 >> 15) & 1; return;
-		default: printf("LEN=%d\n", width); assert(0);
+		default: assert(0);
 	}
 }
 
