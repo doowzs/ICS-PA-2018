@@ -70,15 +70,12 @@ make_EHelper(cwtl) {
 
 make_EHelper(movsx) {
   id_dest->width = decoding.is_operand_size_16 ? 2 : 4;
-	printf("SRC=0x%08x\n", id_src->val);
-	if (id_dest->width == 2) {
-		rtl_li(&t0, id_src->val & 0xffff);
-	} else {
-		rtl_li(&t0, id_src->val);
-	}
-	printf("BEFORE=0x%08x\n", t0);
-	rtl_sext(&at, &t0, id_src->width);
-	printf("AFTER=0x%08x\n", at);
+	assert(id_dest->width >= id_src->width);
+
+	rtl_li(&t0, id_src->val);
+	rtl_li(&t1, id_dest->width - id_src->width);
+	rtl_sar(&t2, &t0, &t1);
+	rtl_sext(&at, &t1, id_dest->width);
   operand_write(id_dest, &at);
   print_asm_template2(movsx);
 }
