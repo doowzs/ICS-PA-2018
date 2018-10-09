@@ -1,11 +1,11 @@
 #include "cpu/exec.h"
 
 make_EHelper(add) {
-	int width = id_src->width;
-	int result = id_dest->val + id_src->val;
+	unsigned int width = id_src->width;
+	unsigned int result = id_dest->val + id_src->val;
 	rtlreg_t sign_dst, sign_src, sign_res;
 
-	rtl_li(&at, ((unsigned) result < (unsigned) id_dest->val || (unsigned) result < (unsigned) id_src->val));
+	rtl_li(&at, (result < id_dest->val || result < id_src->val));
 	rtl_set_CF(&at);
 
 	rtl_msb(&sign_dst, &id_dest->val, width);
@@ -17,13 +17,13 @@ make_EHelper(add) {
 	rtl_msb(&sign_res, &id_dest->val, width);
 	rtl_li(&at, (sign_dst == sign_src && sign_src != sign_res));
 	rtl_set_OF(&at);
-	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
+	rtl_update_ZFSFPF(&id_dest->val, width);
   print_asm_template2(add);
 }
 
 make_EHelper(sub) {
-	int width = id_src->width;
-	int result = id_dest->val - id_src->val;
+	unsigned int width = id_src->width;
+	unsigned int result = id_dest->val - id_src->val;
 	rtlreg_t sign_dst, sign_src, sign_res;
 
 	rtl_li(&at, (id_dest->val < id_src->val));
@@ -38,12 +38,25 @@ make_EHelper(sub) {
 	rtl_msb(&sign_res, &id_dest->val, width);
 	rtl_li(&at, (sign_dst != sign_src && sign_src == sign_res));
 	rtl_set_OF(&at);
-	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
+	rtl_update_ZFSFPF(&id_dest->val, width);
   print_asm_template2(sub);
 }
 
 make_EHelper(cmp) {
-  TODO();
+	unsigned int width = id_src->width;
+	unsigned int result = id_dest->val - id_src->val;
+	rtlreg_t sign_dst, sign_src, sign_res;
+
+	rtl_li(&at, (id_dest->val < id_src->val));
+	rtl_set_CF(&at);
+
+	// dont save the result
+	rtl_msb(&sign_dst, &id_dest->val, width);
+	rtl_msb(&sign_src, &id_src->val, width);
+	rtl_msb(&sign_res, &result, width);
+	rtl_li(&at, (sign_dst != sign_src && sign_src == sign_res));
+	rtl_set_OF(&at);
+	rtl_update_ZFSFPF(&result, width);
 
   print_asm_template2(cmp);
 }
