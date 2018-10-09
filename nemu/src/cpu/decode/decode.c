@@ -280,6 +280,10 @@ make_DHelper(J) {
   decoding.jmp_eip = (int32_t) id_dest->val + *eip;
 }
 
+make_DHelper(push_SI) {
+	decode_op_SI(eip, id_src, true);
+}
+
 make_DHelper(in_I2a) {
   id_src->width = 1;
   decode_op_I(eip, id_src, true);
