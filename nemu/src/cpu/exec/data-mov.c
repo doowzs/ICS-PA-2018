@@ -6,6 +6,10 @@ make_EHelper(mov) {
 }
 
 make_EHelper(push) {
+	// sign extension for imm8. See PA 2.3.html
+	if (id_dest->type == OP_TYPE_IMM && id_dest->width == 1) {
+		rtl_sext(&id_dest->val, &id_dest->val, 1);
+	}
 	rtl_push(&id_dest->val);
   print_asm_template1(push);
 }
@@ -36,10 +40,18 @@ make_EHelper(leave) {
 
 make_EHelper(cltd) {
   if (decoding.is_operand_size_16) {
-    TODO();
+		if ((int16_t) reg_w(0) < 0) {
+			reg_w(3) = 0xffff;
+		} else {
+			reg_w(3) = 0x0000;
+		}
   }
   else {
-    TODO();
+		if ((int32_t) reg_l(0) < 0) {
+			reg_l(3) = 0xffffffff;
+		} else {
+			reg_l(3) = 0x00000000;
+		}
   }
 
   print_asm(decoding.is_operand_size_16 ? "cwtl" : "cltd");
