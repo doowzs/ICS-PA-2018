@@ -8,15 +8,18 @@ make_EHelper(test) {
 }
 
 make_EHelper(and) {
-  TODO();
-
+	rtl_and(&id_dest->val, &id_dest->val, &id_src->val);
+	operand_write(id_dest, &id_dest->val);
+	rtl_li(&at, 0);
+	rtl_set_CF(&at);
+	rtl_set_OF(&at);
+	rtl_update_ZFSFPF(&id_dest->val, id_dest->width);
   print_asm_template2(and);
 }
 
 make_EHelper(xor) {
 	rtl_xor(&id_dest->val, &id_dest->val, &id_src->val);
 	operand_write(id_dest, &id_dest->val);
-	//TODO: update CFZFSFOF...
 	rtl_li(&at, 0);
 	rtl_set_CF(&at);
 	rtl_set_OF(&at);
