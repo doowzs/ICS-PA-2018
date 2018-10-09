@@ -30,5 +30,8 @@ app: $(OBJS) am $(LIBS)
 run: app
 	@bash $(AM_HOME)/am/arch/$(ARCH)/img/run $(BINARY)
 
+gdb: app
+	@bash $(AM_HOME)/am/arch/$(ARCH)/img/gdb $(BINARY)
+
 clean: 
 	rm -rf $(APP_DIR)/build/

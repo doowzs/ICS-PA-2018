@@ -1,4 +1,3 @@
 #!/bin/bash
 
-#TODO: switch gdb backto run
-make -C $NEMU_HOME gdb ARGS="-b -l `dirname $1`/nemu-log.txt $1.bin"
+make -C $NEMU_HOME run ARGS="-b -l `dirname $1`/nemu-log.txt $1.bin"
