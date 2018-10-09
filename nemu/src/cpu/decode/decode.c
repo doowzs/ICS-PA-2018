@@ -39,7 +39,7 @@ static inline make_DopHelper(SI) {
 
 	/* sign extension */
 	if (op->width == 1) {
-		op->simm = ((op->simm & 0x80) << 24) >> 24;
+		op->simm = ((op->simm) << 24) >> 24;
 	}
   rtl_li(&op->val, op->simm);
 #ifdef DEBUG
@@ -280,10 +280,6 @@ make_DHelper(J) {
   decode_op_SI(eip, id_dest, false);
   // the target address can be computed in the decode stage
   decoding.jmp_eip = id_dest->simm + *eip;
-}
-
-make_DHelper(push_SI) {
-  decode_op_SI(eip, id_src, true);
 }
 
 make_DHelper(in_I2a) {
