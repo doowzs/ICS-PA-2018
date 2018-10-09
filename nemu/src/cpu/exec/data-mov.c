@@ -41,16 +41,16 @@ make_EHelper(leave) {
 make_EHelper(cltd) {
   if (decoding.is_operand_size_16) {
 		if ((int16_t) reg_w(0) < 0) {
-			reg_w(3) = 0xffff;
+			reg_w(2) = 0xffff;
 		} else {
-			reg_w(3) = 0x0000;
+			reg_w(2) = 0x0000;
 		}
   }
   else {
 		if ((int32_t) reg_l(0) < 0) {
-			reg_l(3) = 0xffffffff;
+			reg_l(2) = 0xffffffff;
 		} else {
-			reg_l(3) = 0x00000000;
+			reg_l(2) = 0x00000000;
 		}
   }
 
