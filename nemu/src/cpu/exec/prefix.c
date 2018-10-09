@@ -1,5 +1,6 @@
 #include "cpu/exec.h"
 
+// this is implemented in exec.c
 make_EHelper(real);
 
 make_EHelper(operand_size) {
