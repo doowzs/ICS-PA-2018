@@ -37,6 +37,7 @@ static inline make_DopHelper(SI) {
   op->type = OP_TYPE_IMM;
 	op->simm = instr_fetch(eip, op->width);
 
+	// op->simm is not sign extended, op->val is!
 	rtl_sext(&at, (rtlreg_t *) &op->simm, op->width);
   rtl_li(&op->val, at);
 #ifdef DEBUG
@@ -276,7 +277,7 @@ make_DHelper(a2O) {
 make_DHelper(J) {
   decode_op_SI(eip, id_dest, false);
   // the target address can be computed in the decode stage
-  decoding.jmp_eip = id_dest->simm + *eip;
+  decoding.jmp_eip = (int32_t) id_dest->val + *eip;
 }
 
 make_DHelper(in_I2a) {
