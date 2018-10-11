@@ -11,27 +11,27 @@ union arg {
   char *pchararg;
 } uarg;
 
-char buf[64];
+char vbuf[64];
 
-/* print a int to buffer zone 
+/* print a int to vbuffer zone 
  * and return its length */
 int vprintf_int(int src) {
   if (src == 0) {
-    buf[0] = '0';
-    buf[1] = '\0';
+    vbuf[0] = '0';
+    vbuf[1] = '\0';
     return 1;
   } else {
     int i = 0, pos = 63, len = 0;
     while (src) {
-      buf[pos] = (src % 10) - '0';
+      vbuf[pos] = (src % 10) - '0';
       src /= 10;
       pos--;
       len++;
     }
     for (i = 0; i < len; ++i) {
-      buf[i] = buf[pos + i];
+      vbuf[i] = vbuf[pos + i];
     }
-    buf[i] = '\0';
+    vbuf[i] = '\0';
     return len;
   }
 }
@@ -72,7 +72,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           case 'd':
             uarg.intarg = va_arg(ap, int);
             len = vprintf_int(uarg.intarg);
-            strcpy(pout, buf);
+            strcpy(pout, vbuf);
             break;
           default:
             len = 3;
