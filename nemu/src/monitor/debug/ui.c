@@ -173,6 +173,7 @@ static int cmd_x(char *args) {
 	  	for (uint32_t i = 0; i < n; ++i, st += 4) {
         if (st >= PMEM_SIZE) {
           printf("[\033[1;31mError\033[0m] Memory 0x%08x is out of bound.\n", st);
+          return 0;
         }
         res = paddr_read(st, 4);
         printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", st, res, res, res);
