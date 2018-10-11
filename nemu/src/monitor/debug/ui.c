@@ -58,6 +58,7 @@ static struct {
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
+#define PMEM_SIZE (128 * 1024 * 1024)
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -169,9 +170,12 @@ static int cmd_x(char *args) {
 			  printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
 		  }
 			int res = 0;
-	  	for (uint32_t i = 0; i < n; ++i) {
-        res = paddr_read(st + (i << 2), 4);
-        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", (st + (i << 2)), res, res, res);
+	  	for (uint32_t i = 0; i < n; ++i, st += 4) {
+        if (st >= PMEM_SIZE) {
+          printf("[\033[1;31mError\033[0m] Memory 0x%08x is out of bound.\n", st);
+        }
+        res = paddr_read(st, 4);
+        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", st, res, res, res);
 		  }
 	  } else {
 		  printf("[\033[1;31mError\033[0m] Calculation failed.\n");
