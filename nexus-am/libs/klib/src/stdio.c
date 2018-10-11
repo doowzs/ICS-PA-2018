@@ -68,6 +68,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             len = 3;
             strcpy(pout, "WTF");
         }
+        pfmt++;
         ret += len;
         pout += len;
       }
