@@ -425,7 +425,7 @@ static int eval(int p, int q, bool *success, bool *overflow) {
 				case TK_DEREF:
           if (val2 >= PMEM_SIZE) {
             *success = false;
-            print_prompt(p, true, "Memory address is out of bound (128 * 1024 * 1024).");
+            print_prompt(op + 1, true, "Memory address is out of bound (128 * 1024 * 1024).");
             return 0;
           }
 					res = vaddr_read(val2, 4);
