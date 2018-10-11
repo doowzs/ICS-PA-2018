@@ -236,11 +236,10 @@ static void cmd_wrong_parameter(char *args) {
 }
 
 void ui_mainloop(int is_batch_mode) {
-	//FIXME: This shoule be uncommented when submitting. only for debug
-	//if (is_batch_mode) {
-  //  cmd_c(NULL);
-  //  return;
-  //}
+	if (is_batch_mode) {
+    cmd_c(NULL);
+    return;
+  }
 
   while (1) {
     char *str = rl_gets();
