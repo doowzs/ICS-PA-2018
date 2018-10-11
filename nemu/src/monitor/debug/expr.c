@@ -51,6 +51,7 @@ static struct rule {
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
+#define PMEM_SIZE (128 * 1024 * 1024)
 
 static regex_t re[NR_REGEX];
 
@@ -422,6 +423,11 @@ static int eval(int p, int q, bool *success, bool *overflow) {
 					res = (val1 && val2) ? 1 : 0;
 					break;
 				case TK_DEREF:
+          if (val2 >= PMEM_SIZE) {
+            *success = false;
+            print_prompt(p, true, "Memory address is out of bound (128 * 1024 * 1024).");
+            return 0;
+          }
 					res = vaddr_read(val2, 4);
 					break;
 				default:
