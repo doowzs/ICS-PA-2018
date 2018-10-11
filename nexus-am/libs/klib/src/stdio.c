@@ -14,7 +14,7 @@ union arg {
 /* print a int and return its length */
 int vprintf_int(char *pout, int src) {
   int ret = 0;      // length counter
-  char s[20] = {};  // tmp char array
+  char s[20];  // tmp char array
   while (src) {
     s[ret] = (src % 10) - '0';
     src /= 10;
