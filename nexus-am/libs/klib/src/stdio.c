@@ -23,7 +23,7 @@ int vprintf_int(int src) {
   } else {
     int i = 0, pos = 63, len = 0;
     while (src) {
-      vbuf[pos] = (src % 10) - '0';
+      vbuf[pos] = (src % 10) + '0';
       src /= 10;
       pos--;
       len++;
