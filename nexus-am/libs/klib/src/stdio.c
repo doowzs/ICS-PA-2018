@@ -57,14 +57,16 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         switch (*pfmt) {
           case 's':
             uarg.pchararg = va_arg(ap, char*);
-            len = vsprintf(pout, uarg.pchararg, ap);
+            len = strlen(uarg.pchararg);
+            strcpy(pout, uarg.pchararg);
             break;
           case 'd':
             uarg.intarg = va_arg(ap, int);
             len = print_int(pout, uarg.intarg);
             break;
           default:
-            len = vsprintf(pout, "WTF", ap);
+            len = 3;
+            strcpy(pout, "WTF");
         }
         ret += len;
         pout += len;
