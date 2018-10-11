@@ -172,7 +172,7 @@ static int cmd_x(char *args) {
 			int res = 0;
 	  	for (uint32_t i = 0; i < n; ++i, st += 4) {
         if (st >= PMEM_SIZE) {
-          printf("[\033[1;31mError\033[0m] Memory 0x%08x is out of bound.\n", st);
+          printf("[\033[1;31mError\033[0m] Memory 0x%08x is out of bound 0x%08x.\n", st, PMEM_SIZE);
           return 0;
         }
         res = paddr_read(st, 4);
