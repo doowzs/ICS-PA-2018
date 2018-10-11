@@ -55,7 +55,7 @@ int strncmp(const char* s1, const char* s2, size_t n) {
       return s1[i] < s2[i] ? -1 : 1;
     } 
   }
-  return s1[i] == s2[i] ? 0 : (s1[i] < s2[i] ? -1 : 1);
+  return i == n ? 0 : (s1[i] < s2[i] ? -1 : 1);
 }
 
 void* memset(void* v, int c, size_t n) {
