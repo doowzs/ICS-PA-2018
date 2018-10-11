@@ -72,7 +72,8 @@ void* memset(void* v, int c, size_t n) {
 
   loops = (n % sizeof(int32_t));
   for (i = 0; i < loops; ++i) {
-    *pv = (int8_t) c8;
+    *pv = c8;
+    pv++;
   }
   return NULL;
 }
