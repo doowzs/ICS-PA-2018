@@ -54,10 +54,12 @@ $(BINARY): $(OBJS)
 
 run: $(BINARY)
 	$(call git_commit, "run")
+	clear
 	$(NEMU_EXEC)
 
 gdb: $(BINARY)
 	$(call git_commit, "gdb")
+	clear
 	gdb -s $(BINARY) --args $(NEMU_EXEC)
 
 clean: 
