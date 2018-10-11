@@ -25,6 +25,7 @@ int vprintf_int(int src) {
     while (src) {
       buf[pos] = (src % 10) - '0';
       src /= 10;
+      pos--;
       len++;
     }
     for (i = 0; i < len; ++i) {
