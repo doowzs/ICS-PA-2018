@@ -72,24 +72,22 @@ void difftest_step(uint32_t eip) {
   // TODO: Check the registers state with the reference design.
   // Set `nemu_state` to `NEMU_ABORT` if they are not the same.
   bool OK = true;
-  char WA[32] = "";
   for (int i = 0; i < 8; ++i) {
     if (cpu.gpr[i]._32 != ref_r.gpr[i]._32) {
+      printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%08x REFR 0x%08x\n", regsl[i], cpu.gpr[i]._32, ref_r.gpr[i]._32);
       OK = false;
-      strcpy(WA, regsl[i]);
     }  
   }
   if (cpu.eip != ref_r.eip) {
+    printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%08x REFR 0x%08x\n", "eip", cpu.eip, ref_r.eip);
     OK = false;
-    strcpy(WA, "EIP");
   }
   if (cpu.eflags32 != ref_r.eflags32) {
+    printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%08x REFR 0x%08x\n", "EFLAGS", cpu.eflags32, ref_r.eflags32);
     OK = false;
-    strcpy(WA, "EFLAGS");
   }
   
   if (!OK) {
     nemu_state = NEMU_ABORT;
-    printf("Test of %s failed.\n", WA);
   }
 }
