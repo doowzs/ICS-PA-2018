@@ -62,11 +62,13 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             break;
           case 'd':
             uarg.intarg = va_arg(ap, int);
-            len = print_int(pout, uarg.intarg);
+            len = 0;
+            //len = print_int(pout, uarg.intarg);
             break;
           default:
             len = 3;
             strcpy(pout, "WTF");
+            break;
         }
         pfmt++;
         ret += len;
