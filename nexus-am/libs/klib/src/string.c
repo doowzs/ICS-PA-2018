@@ -75,7 +75,7 @@ void* memset(void* v, int c, size_t n) {
     *pv = c8;
     pv++;
   }
-  return NULL;
+  return v;
 }
 
 void* memcpy(void* out, const void* in, size_t n) {
