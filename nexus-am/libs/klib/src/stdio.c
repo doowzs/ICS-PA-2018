@@ -12,7 +12,7 @@ union arg {
 } uarg;
 
 /* print a int and return its length */
-int print_int(char *pout, int src) {
+int vprintf_int(char *pout, int src) {
   int ret = 0;      // length counter
   char s[20] = {};  // tmp char array
   while (src) {
@@ -62,8 +62,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             break;
           case 'd':
             uarg.intarg = va_arg(ap, int);
-            len = 0;
-            //len = print_int(pout, uarg.intarg);
+            len = vprintf_int(pout, uarg.intarg);
             break;
           default:
             len = 3;
