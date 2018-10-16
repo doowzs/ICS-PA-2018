@@ -76,7 +76,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             break;
           default:
             len = 3;
-            strcpy(pout, "WTF");
+            strcpy(pout, "WTF\0");
             break;
         }
         pfmt++;
