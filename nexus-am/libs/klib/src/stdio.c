@@ -2,7 +2,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
-#ifndef __ISA_NATIVE__
+#if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 /* arg register for arguments */
 // TODO: add more types of arguments!
