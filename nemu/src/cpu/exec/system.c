@@ -43,11 +43,11 @@ make_EHelper(iret) {
 }
 
 make_EHelper(in) {
-  switch (id_dest->width) {
+  switch (id_src->width) {
     case 4: pio_read_l(at);
     case 2: pio_read_w(at);
     case 1: pio_read_b(at);
-  default: assert(0);
+    default: assert(0);
   }
   operand_write(id_dest, &at);
 
