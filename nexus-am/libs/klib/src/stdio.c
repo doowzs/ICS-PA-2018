@@ -50,11 +50,12 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   bool done  = false; // done scannning an token 
 
   char *pfmt = (char *) fmt, *pout = out; // pointers
-  *pout = '\0'; // clear the output array
   while (*pfmt != '\0') {
     for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt, ++ret, ++pout) {
       *pout = *pfmt;
     }
+    *pout = '\0'; // mark the end of normal string
+
     if (*pfmt == '\0') {
       break; // done
     } else {
