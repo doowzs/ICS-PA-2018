@@ -43,10 +43,10 @@ make_EHelper(iret) {
 }
 
 make_EHelper(in) {
-  switch (id_src->width) {
-    case 4: pio_read_l(at);
-    case 2: pio_read_w(at);
-    case 1: pio_read_b(at);
+  switch (id_dest->width) {
+    case 4: pio_read_l(at); break;
+    case 2: pio_read_w(at); break;
+    case 1: pio_read_b(at); break;
     default: assert(0);
   }
   operand_write(id_dest, &at);
@@ -60,9 +60,9 @@ make_EHelper(in) {
 
 make_EHelper(out) {
   switch (id_dest->width) {
-    case 4: pio_write_l(id_dest->val, id_src->val);
-    case 2: pio_write_w(id_dest->val, id_src->val);
-    case 1: pio_write_b(id_dest->val, id_src->val);
+    case 4: pio_write_l(id_dest->val, id_src->val); break;
+    case 2: pio_write_w(id_dest->val, id_src->val); break;
+    case 1: pio_write_b(id_dest->val, id_src->val); break;
     default: assert(0);
   }
 
