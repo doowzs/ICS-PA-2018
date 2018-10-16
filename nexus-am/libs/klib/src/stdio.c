@@ -52,9 +52,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char *pfmt = (char *) fmt, *pout = out; // pointers
   *pout = '\0'; // clear the output array
   while (*pfmt != '\0') {
-    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt) {
+    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt, ++ret, ++pout) {
       *pout = *pfmt;
-      ret++;
     }
     if (*pfmt == '\0') {
       break; // done
