@@ -76,8 +76,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             strcat(pout, vbuf);
             break;
           default:
-            len = 3;
-            strcat(pout, "WTF\0");
+            len = 30;
+            strcat(pout, "implement me at vsprintf \0");
             break;
         }
         pfmt++;
