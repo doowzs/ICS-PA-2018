@@ -1,4 +1,5 @@
 #include "cpu/exec.h"
+#include "device/port-io.h"
 
 void difftest_skip_ref();
 void difftest_skip_dut();
@@ -42,7 +43,13 @@ make_EHelper(iret) {
 }
 
 make_EHelper(in) {
-  TODO();
+  switch (id_dest->width) {
+    case 4: pio_read_l(at);
+    case 2: pio_read_w(at);
+    case 1: pio_read_b(at);
+  default: assert(0);
+  }
+  operand_write(id_dest, &at);
 
   print_asm_template2(in);
 
@@ -52,7 +59,12 @@ make_EHelper(in) {
 }
 
 make_EHelper(out) {
-  TODO();
+  switch (id_dest->width) {
+    case 4: pio_write_l(id_dest->val, id_src->val);
+    case 2: pio_write_w(id_dest->val, id_src->val);
+    case 1: pio_write_b(id_dest->val, id_src->val);
+    default: assert(0);
+  }
 
   print_asm_template2(out);
 
