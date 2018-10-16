@@ -29,7 +29,7 @@ int vprintf_int(int src) {
       len++;
     }
     for (i = 0; i < len; ++i) {
-      vbuf[i] = vbuf[pos + i];
+      vbuf[i] = vbuf[pos + i + 1];
     }
     vbuf[i] = '\0';
     return len;
