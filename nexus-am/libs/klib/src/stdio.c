@@ -85,8 +85,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
       _putc('*');
       while (!done) {
-        _putc(*pfmt);
         pfmt++;
+        _putc(*pfmt);
         done = true; // default syntax is one-character long
         switch (*pfmt) {
           case 's':
