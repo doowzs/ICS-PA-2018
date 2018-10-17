@@ -66,8 +66,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
   char *pfmt = (char *) fmt, *pout = out; // pointers
   while (*pfmt != '\0') {
-    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt, ++ret, ++pout) {
+    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt) {
       *pout = *pfmt;
+      ret++;
+      pout++;
     }
     *pout = '\0'; // mark the end of normal string
 
@@ -104,7 +106,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           case '8':
           case '9':
             done = false;
-            width = width * 10 + (*pfmt - '0');
+            width = width * 10 + (int) (*pfmt - '0');
             break;
           case 'd':
             uarg.intarg = va_arg(ap, int);
@@ -116,7 +118,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             }
             bias = vprintf_int(uarg.intarg, width, phchar);
             len = (int) VBUF_MAX_SIZE - bias;
-            if (strcmp(fmt, "[%d:%d]") != 0) printf("[%d:%d]", uarg.intarg, len);
             strcat(pout, vbuf + bias);
             break;
           case '\0':
