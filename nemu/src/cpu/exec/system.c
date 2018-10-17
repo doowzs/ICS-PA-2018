@@ -43,7 +43,7 @@ make_EHelper(iret) {
 }
 
 make_EHelper(in) {
-  switch (id_src->width) {
+  switch (id_dest->width) {
     case 4: rtl_li(&at, pio_read_l(id_src->val)); break;
     case 2: rtl_li(&at, pio_read_w(id_src->val)); break;
     case 1: rtl_li(&at, pio_read_b(id_src->val)); break;
@@ -59,10 +59,10 @@ make_EHelper(in) {
 }
 
 make_EHelper(out) {
-  printf("width = %d ", id_dest->width);
+  printf("width = %d ", id_src->width);
   printf("dest = %4x ", id_dest->val);
   printf("src = %c\n", id_src->val);
-  switch (id_dest->width) {
+  switch (id_src->width) {
     case 4: pio_write_l(id_dest->val, id_src->val); printf("result = %c\n", pio_read_l(id_dest->val)); break;
     case 2: pio_write_w(id_dest->val, id_src->val); break;
     case 1: pio_write_b(id_dest->val, id_src->val); break;
