@@ -3,6 +3,7 @@
 #include <stdbool.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
+#define BUF_MAX_SIZE 1024
 
 /* arg register for arguments */
 // TODO: add more types of arguments!
@@ -12,6 +13,7 @@ union arg {
 } uarg;
 
 char vbuf[64];
+char pbuf[1024];
 
 /* print a int to vbuffer zone 
  * and return its length */
@@ -37,8 +39,17 @@ int vprintf_int(int src) {
 }
 
 int printf(const char *fmt, ...) {
-  assert(0);
-  return 0;
+  int ret = 0;
+  va_list ap;
+
+  va_start(ap, fmt);
+  ret = vsprintf(pbuf, fmt, ap);
+  va_end(ap);
+
+  for (char *s = pbuf; *s; ++s) {
+    _putc(*s);
+  }
+  return ret;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
@@ -101,8 +112,19 @@ int sprintf(char *out, const char *fmt, ...) {
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
-  assert(0);
-  return 0;
+  int ret = 0;
+  va_list ap;
+
+  va_start(ap, fmt);
+  ret = vsprintf(pbuf, fmt, ap);
+  va_end(ap);
+
+  assert(ret < BUF_MAX_SIZE);
+  pbuf[ret] = '\0';
+  for (char *s = pbuf; *s; ++s) {
+    _putc(*s);
+  }
+  return ret;
 }
 
 #endif
