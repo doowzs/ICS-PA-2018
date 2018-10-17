@@ -103,7 +103,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           case '7':
           case '8':
           case '9':
-            return ret;
             done = false;
             width = width * 10 + (int) (*pfmt - '0');
             break;
@@ -128,6 +127,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
       }
       pfmt++; // omit the last syntax
+      _putc(*pfmt);
       ret += len;
       pout += len;  
     }
