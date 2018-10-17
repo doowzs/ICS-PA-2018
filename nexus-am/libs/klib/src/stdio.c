@@ -27,7 +27,7 @@ int vprintf_int(int src, int len, char phchar, const int base) {
     int pos = VBUF_MAX_SIZE - 2, cur = 0;
     for ( ; src != 0 && pos >= 0; src /= base, --pos, --len) {
       cur = src % base;
-      vbuf[pos] = cur + (cur < 10 ? '0' : 'a'); 
+      vbuf[pos] = cur < 10 ? cur + '0' : cur - 10 + 'a'; 
     }
     for ( ; len > 0 && pos >= 0; --pos, --len) {
       vbuf[pos] = phchar;
