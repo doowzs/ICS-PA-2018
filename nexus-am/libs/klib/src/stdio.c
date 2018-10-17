@@ -71,10 +71,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
   char *pfmt = (char *) fmt, *pout = out; // pointers
   while (*pfmt != '\0') {
-    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt) {
+    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt, ++ret, ++pout) {
       *pout = *pfmt;
-      ret++;
-      pout++;
     }
     *pout = '\0'; // mark the end of normal string
 
@@ -124,7 +122,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
               uarg.intarg = -uarg.intarg;
             }
             bias = vprintf_int(uarg.intarg, width, phchar);
-            len = VBUF_MAX_SIZE - bias;
+            len = (int) VBUF_MAX_SIZE - bias;
             strcat(pout, vbuf + bias);
             break;
           case '\0':
