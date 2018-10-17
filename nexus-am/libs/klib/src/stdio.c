@@ -70,7 +70,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       _putc(*pout);
       *pout = *pfmt;
     }
-    _putc('&');
     *pout = '\0'; // mark the end of normal string
 
     if (*pfmt == '\0') {
@@ -105,6 +104,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           case '7':
           case '8':
           case '9':
+            return ret;
             done = false;
             width = width * 10 + (int) (*pfmt - '0');
             break;
