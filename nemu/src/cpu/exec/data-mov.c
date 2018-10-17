@@ -53,11 +53,13 @@ make_EHelper(cltd) {
 
 make_EHelper(cwtl) {
   if (decoding.is_operand_size_16) {
-    rtl_sext(&at, &id_src->val, 1);
+    rtl_lr(&t2, 0, 1);
+    rtl_sext(&at, &t2, 1);
     rtl_sr(0, &at, 2);
   }
   else {
-    rtl_sext(&at, &id_src->val, 2);
+    rtl_lr(&t2, 0, 2);
+    rtl_sext(&at, &t2, 2);
     rtl_sr(0, &at, 4);
   }
 
