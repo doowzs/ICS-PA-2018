@@ -83,7 +83,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       phchar = ' ';
       done = false;
 
+      _putc('*');
       while (!done) {
+        _putc(*pfmt);
         pfmt++;
         done = true; // default syntax is one-character long
         switch (*pfmt) {
