@@ -59,6 +59,7 @@ make_EHelper(in) {
 }
 
 make_EHelper(out) {
+  printf("width = %d\n", id_dest->width);
   switch (id_dest->width) {
     case 4: pio_write_l(id_dest->val, id_src->val); break;
     case 2: pio_write_w(id_dest->val, id_src->val); break;
