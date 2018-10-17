@@ -25,13 +25,13 @@ int vprintf_int(int src, int len, char phchar) {
     return VBUF_MAX_SIZE - 2;
   } else {
     int pos = VBUF_MAX_SIZE - 1;
-    while (src && pos > 0) {
+    while (src && pos >= 0) {
       vbuf[pos] = (src % 10) + '0';
       src /= 10;
       pos--;
       len--;
     }
-    while (len > 0 && pos > 0) {
+    while (len > 0 && pos >= 0) {
       vbuf[pos] = phchar;
       pos--;
       len--;
@@ -73,12 +73,12 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     if (*pfmt == '\0') {
       break; // done
     } else {
-      pfmt++; // omit '%'
       width = 0;
       phchar = ' ';
       done = false;
 
       while (!done) {
+        pfmt++; // omit '%'
         done = true; // default is one-character long
         switch (*pfmt) {
           case 's':
