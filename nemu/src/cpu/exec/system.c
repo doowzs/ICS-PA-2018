@@ -59,7 +59,7 @@ make_EHelper(in) {
 }
 
 make_EHelper(out) {
-  printf("width = %d ", id_dest->width);
+  printf("width = %d ", id_src->width);
   printf("dest = %4x ", id_dest->val);
   printf("src = %c\n", id_src->val);
   switch (id_src->width) {
