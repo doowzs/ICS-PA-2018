@@ -44,9 +44,9 @@ make_EHelper(iret) {
 
 make_EHelper(in) {
   switch (id_dest->width) {
-    case 4: pio_read_l(at); break;
-    case 2: pio_read_w(at); break;
-    case 1: pio_read_b(at); break;
+    case 4: rtl_li(&at, pio_read_l(id_src->val)); break;
+    case 2: rtl_li(&at, pio_read_w(id_src->val)); break;
+    case 1: rtl_li(&at, pio_read_b(id_src->val)); break;
     default: assert(0);
   }
   operand_write(id_dest, &at);
