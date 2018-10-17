@@ -36,11 +36,6 @@ int vprintf_int(int src, int len, char phchar) {
       pos--;
       len--;
     }
-    _putc('[');
-    for (int i = pos+1; i < 128; ++i) {
-      _putc(vbuf[i]);
-    }
-    _putc(']');
     return pos + 1;
   }
 }
@@ -57,7 +52,7 @@ int printf(const char *fmt, ...) {
     _putc(*s);
   }
   _putc('|');
-  if (strcmp(fmt, "%d") != 0) printf("SS%d\n", ret);
+  if (strcmp(fmt, "%d") != 0) printf("%d\n", ret);
   return ret;
 }
 
@@ -84,10 +79,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       phchar = ' ';
       done = false;
 
-      _putc('*');
       while (!done) {
         pfmt++;
-        _putc(*pfmt);
         done = true; // default syntax is one-character long
         switch (*pfmt) {
           case 's':
@@ -162,10 +155,7 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
   va_end(ap);
 
   assert(ret < PBUF_MAX_SIZE);
-  pbuf[ret] = '\0';
-  for (char *s = pbuf; *s; ++s) {
-    _putc(*s);
-  }
+  pbuf[n] = '\0';
   return ret;
 }
 
