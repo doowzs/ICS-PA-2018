@@ -52,7 +52,7 @@ int printf(const char *fmt, ...) {
     _putc(*s);
   }
   _putc('|');
-  if (strcmp(fmt, "%d") != 0) printf("%d\n", ret);
+  if (strcmp(fmt, "%d\n") != 0) printf("%d\n", ret);
   return ret;
 }
 
