@@ -114,7 +114,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
               uarg.intarg = -uarg.intarg;
             }
             bias = vprintf_int(uarg.intarg, width, phchar);
-            len = VBUF_MAX_SIZE - bias - 1;
+            len = VBUF_MAX_SIZE - bias;
             strcat(pout, vbuf + bias);
             break;
           default:
