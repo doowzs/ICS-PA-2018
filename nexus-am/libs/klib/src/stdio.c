@@ -3,7 +3,8 @@
 #include <stdbool.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-#define BUF_MAX_SIZE 1024
+#define VBUF_MAX_SIZE 128
+#define PBUF_MAX_SIZE 1024
 
 /* arg register for arguments */
 // TODO: add more types of arguments!
@@ -12,29 +13,30 @@ union arg {
   char *pchararg;
 } uarg;
 
-char vbuf[64];
-char pbuf[1024];
+char vbuf[VBUF_MAX_SIZE];
+char pbuf[PBUF_MAX_SIZE];
 
 /* print a int to vbuffer zone 
- * and return its length */
-int vprintf_int(int src) {
+ * and return its start bias */
+int vprintf_int(int src, int len, char phchar) {
+  vbuf[VBUF_MAX_SIZE - 1] = '\0';
   if (src == 0) {
-    vbuf[0] = '0';
-    vbuf[1] = '\0';
-    return 1;
+    vbuf[VBUF_MAX_SIZE - 2] = '0';
+    return VBUF_MAX_SIZE - 2;
   } else {
-    int i = 0, pos = 63, len = 0;
-    while (src) {
+    int pos = VBUF_MAX_SIZE - 1;
+    while (src && pos > 0) {
       vbuf[pos] = (src % 10) + '0';
       src /= 10;
       pos--;
-      len++;
+      len--;
     }
-    for (i = 0; i < len; ++i) {
-      vbuf[i] = vbuf[pos + i + 1];
+    while (len > 0 && pos > 0) {
+      vbuf[pos] = phchar;
+      pos--;
+      len--;
     }
-    vbuf[i] = '\0';
-    return len;
+    return pos + 1;
   }
 }
 
@@ -53,12 +55,13 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  int  ret   = 0;     // character counter
-  int  len   = 0;     // length of a signle token
-  //int  width = 0;     // width from format
-  //int  prec  = 0;     // precision from format
-  //char sign  = 0;     // sign prefix
-  bool done  = false; // done scannning an token 
+  int  ret    = 0;     // character counter
+  int  len    = 0;     // length of a signle token
+  int  bias   = 0;     // bias of vbuf array
+  char phchar = ' ';   // place holder character
+  int  width  = 0;     // width from format
+  //int  prec   = 0;     // precision from format
+  bool done   = false; // done scannning an token 
 
   char *pfmt = (char *) fmt, *pout = out; // pointers
   while (*pfmt != '\0') {
@@ -71,6 +74,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       break; // done
     } else {
       pfmt++; // omit '%'
+      width = 0;
+      phchar = ' ';
       done = false;
 
       while (!done) {
@@ -81,10 +86,36 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             len = strlen(uarg.pchararg);
             strcat(pout, uarg.pchararg);
             break;
+          case '0':
+            done = false;
+            if (width == 0) {
+              phchar = '0';
+              break;
+            }
+            // no break if width != 0
+          case '1':
+          case '2':
+          case '3':
+          case '4':
+          case '5':
+          case '6':
+          case '7':
+          case '8':
+          case '9':
+            done = false;
+            width = width * 10 + (*pfmt - '0');
+            break;
           case 'd':
             uarg.intarg = va_arg(ap, int);
-            len = vprintf_int(uarg.intarg);
-            strcat(pout, vbuf);
+            if (uarg.intarg < 0) {
+              strcat(pout, "-");
+              ret++;
+              pout++;
+              uarg.intarg = -uarg.intarg;
+            }
+            bias = vprintf_int(uarg.intarg, width, phchar);
+            len = VBUF_MAX_SIZE - bias - 1;
+            strcat(pout, vbuf + bias);
             break;
           default:
             len = 30;
@@ -119,7 +150,7 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
   ret = vsprintf(pbuf, fmt, ap);
   va_end(ap);
 
-  assert(ret < BUF_MAX_SIZE);
+  assert(ret < PBUF_MAX_SIZE);
   pbuf[ret] = '\0';
   for (char *s = pbuf; *s; ++s) {
     _putc(*s);
