@@ -130,9 +130,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             strcat(pout, "implement me at vsprintf \0");
             break;
         }
-        pfmt++; // omit the last syntax
-        ret += len;
-        pout += len;
+        if (done) {
+          pfmt++; // omit the last syntax
+          ret += len;
+          pout += len;  
+        }
       }
     }
   }
