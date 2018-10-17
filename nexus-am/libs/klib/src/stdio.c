@@ -16,7 +16,7 @@ union arg {
 char vbuf[VBUF_MAX_SIZE];
 char pbuf[PBUF_MAX_SIZE];
 
-/* print a int to vbuffer zone 
+/* print an integer to vbuffer zone 
  * and return its start bias */
 int vprintf_int(int src, int len, char phchar) {
   vbuf[VBUF_MAX_SIZE - 1] = '\0';
@@ -122,7 +122,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             strcat(pout, "implement me at vsprintf \0");
             break;
         }
-        pfmt++;
         ret += len;
         pout += len;
       }
