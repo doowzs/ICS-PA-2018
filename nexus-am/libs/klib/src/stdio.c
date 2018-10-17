@@ -57,6 +57,7 @@ int printf(const char *fmt, ...) {
     _putc(*s);
   }
   _putc('|');
+  if (strcmp(fmt, "%d") != 0) printf("SS%d\n", ret);
   return ret;
 }
 
