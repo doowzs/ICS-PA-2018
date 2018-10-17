@@ -52,7 +52,6 @@ int printf(const char *fmt, ...) {
     _putc(*s);
   }
   _putc('|');
-  if (strcmp(fmt, "%d\n") != 0) printf("%d\n", ret);
   return ret;
 }
 
@@ -117,6 +116,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             }
             bias = vprintf_int(uarg.intarg, width, phchar);
             len = (int) VBUF_MAX_SIZE - bias;
+            printf("[%d:%d]", uarg.intarg, len);
             strcat(pout, vbuf + bias);
             break;
           case '\0':
