@@ -18,23 +18,19 @@ char pbuf[PBUF_MAX_SIZE];
 
 /* print an integer to vbuffer zone 
  * and return its start bias */
-int vprintf_int(int src, int len, char phchar) {
+int vprintf_int(int src, int len, char phchar, const int base) {
   vbuf[VBUF_MAX_SIZE - 1] = '\0';
   if (src == 0) {
     vbuf[VBUF_MAX_SIZE - 2] = '0';
     return VBUF_MAX_SIZE - 2;
   } else {
-    int pos = VBUF_MAX_SIZE - 2;
-    while (src != 0 && pos >= 0) {
-      vbuf[pos] = (src % 10) + '0';
-      src /= 10;
-      pos--;
-      len--;
+    int pos = VBUF_MAX_SIZE - 2, cur = 0;
+    for ( ; src != 0 && pos >= 0; src /= base, --pos, --len) {
+      cur = src % base;
+      vbuf[pos] = cur + (cur < 10 ? '0' : 'a'); 
     }
-    while (len > 0 && pos >= 0) {
+    for ( ; len > 0 && pos >= 0; --pos, --len) {
       vbuf[pos] = phchar;
-      pos--;
-      len--;
     }
     return pos + 1;
   }
@@ -106,6 +102,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             width = width * 10 + (int) (*pfmt - '0');
             break;
           case 'd':
+          case 'x':
             uarg.intarg = va_arg(ap, int);
             if (uarg.intarg < 0) {
               strcat(pout, "-");
@@ -113,7 +110,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
               pout++;
               uarg.intarg = -uarg.intarg;
             }
-            bias = vprintf_int(uarg.intarg, width, phchar);
+            bias = vprintf_int(uarg.intarg, width, phchar, (*pfmt == 'd' ? 10 : 16));
             len = (int) VBUF_MAX_SIZE - bias - 1;
             strcat(pout, vbuf + bias);
             break;
