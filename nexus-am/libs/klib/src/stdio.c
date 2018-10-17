@@ -70,6 +70,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       _putc(*pout);
       *pout = *pfmt;
     }
+    _putc('&');
     *pout = '\0'; // mark the end of normal string
 
     if (*pfmt == '\0') {
