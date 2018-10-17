@@ -24,7 +24,7 @@ int vprintf_int(int src, int len, char phchar) {
     vbuf[VBUF_MAX_SIZE - 2] = '0';
     return VBUF_MAX_SIZE - 2;
   } else {
-    int pos = VBUF_MAX_SIZE - 1;
+    int pos = VBUF_MAX_SIZE - 2;
     while (src != 0 && pos >= 0) {
       vbuf[pos] = (src % 10) + '0';
       src /= 10;
@@ -115,7 +115,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
               uarg.intarg = -uarg.intarg;
             }
             bias = vprintf_int(uarg.intarg, width, phchar);
-            len = (int) VBUF_MAX_SIZE - bias;
+            len = (int) VBUF_MAX_SIZE - bias - 1;
             strcat(pout, vbuf + bias);
             break;
           case '\0':
