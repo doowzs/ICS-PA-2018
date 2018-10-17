@@ -24,7 +24,7 @@ int vprintf_int(int src, int len, char phchar) {
     vbuf[VBUF_MAX_SIZE - 2] = '0';
     return VBUF_MAX_SIZE - 2;
   } else {
-    int pos = VBUF_MAX_SIZE - 1;
+    int pos = VBUF_MAX_SIZE - 2;
     while (src != 0 && pos >= 0) {
       vbuf[pos] = (src % 10) + '0';
       src /= 10;
@@ -127,7 +127,6 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
       }
       pfmt++; // omit the last syntax
-      _putc(*pfmt);
       ret += len;
       pout += len;  
     }
