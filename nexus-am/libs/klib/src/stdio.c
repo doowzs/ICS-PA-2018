@@ -25,7 +25,7 @@ int vprintf_int(int src, int len, char phchar) {
     return VBUF_MAX_SIZE - 2;
   } else {
     int pos = VBUF_MAX_SIZE - 1;
-    while (src && pos >= 0) {
+    while (src != 0 && pos >= 0) {
       vbuf[pos] = (src % 10) + '0';
       src /= 10;
       pos--;
@@ -36,6 +36,11 @@ int vprintf_int(int src, int len, char phchar) {
       pos--;
       len--;
     }
+    _putc('[');
+    for (int i = pos+1; i < 128; ++i) {
+      _putc(vbuf[i]);
+    }
+    _putc(']');
     return pos + 1;
   }
 }
