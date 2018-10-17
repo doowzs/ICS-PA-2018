@@ -24,7 +24,7 @@ int vprintf_int(int src, int len, char phchar) {
     vbuf[VBUF_MAX_SIZE - 2] = '0';
     return VBUF_MAX_SIZE - 2;
   } else {
-    int pos = VBUF_MAX_SIZE - 2;
+    int pos = VBUF_MAX_SIZE - 3;
     while (src != 0 && pos >= 0) {
       vbuf[pos] = (src % 10) + '0';
       src /= 10;
