@@ -78,8 +78,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
       done = false;
 
       while (!done) {
-        pfmt++; // omit '%'
-        done = true; // default is one-character long
+        pfmt++;
+        done = true; // default syntax is one-character long
         switch (*pfmt) {
           case 's':
             uarg.pchararg = va_arg(ap, char*);
@@ -117,11 +117,14 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             len = VBUF_MAX_SIZE - bias;
             strcat(pout, vbuf + bias);
             break;
+          case '\0':
+            assert(0);
           default:
             len = 30;
             strcat(pout, "implement me at vsprintf \0");
             break;
         }
+        pfmt++; // omit the last syntax
         ret += len;
         pout += len;
       }
