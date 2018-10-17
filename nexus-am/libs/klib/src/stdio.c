@@ -51,7 +51,6 @@ int printf(const char *fmt, ...) {
   for (char *s = pbuf; *s; ++s) {
     _putc(*s);
   }
-  _putc('|');
   return ret;
 }
 
