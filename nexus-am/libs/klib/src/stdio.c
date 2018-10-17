@@ -66,10 +66,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
   char *pfmt = (char *) fmt, *pout = out; // pointers
   while (*pfmt != '\0') {
-    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt) {
+    for ( ; *pfmt != '\0' && *pfmt != '%'; ++pfmt, ++ret, ++pout) {
+      _putc(*pout);
       *pout = *pfmt;
-      ret++;
-      pout++;
     }
     *pout = '\0'; // mark the end of normal string
 
