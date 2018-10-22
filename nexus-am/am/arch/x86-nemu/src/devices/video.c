@@ -30,10 +30,7 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
       uint32_t *pfb = fb + ctl->y * SCREEN_W + ctl->x; 
       uint32_t *ppx = ctl->pixels;
       for ( ; cnt < ctl->h; ++cnt, pfb += SCREEN_W, ppx += ctl->w) {
-        //memcpy(pfb, ppx, ctl->w);
-        for (int i = 0; i < ctl->w; ++i) {
-          *(pfb + i) = *(ppx + i);
-        }
+        memcpy(pfb, ppx, ctl->w * sizeof(uint32_t));
       }
       
       if (ctl->sync) {
