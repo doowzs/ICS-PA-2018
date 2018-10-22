@@ -83,7 +83,7 @@ make_EHelper(rol) {
   rtl_li(&t1, id_src->val);
   while (t1) {
     rtl_msb(&t2, &t0, id_dest->width);
-    rtl_shri(&t0, &t0, 1);
+    rtl_shli(&t0, &t0, 1);
     rtl_or(&t0, &t0, &t2);
     rtl_subi(&t1, &t1, 1);
   }
