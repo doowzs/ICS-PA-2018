@@ -35,9 +35,6 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
       uint32_t *ppx = ctl->pixels;
       for ( ; cnt < h && y + cnt < H; ++cnt, pfb += W, ppx += w) {
         memcpy(pfb, ppx, cp_bytes);
-        //for (int i = 0; i < w; ++i) {
-        //  *(pfb + i) = *(ppx + i);
-        //}
       }
       
       if (ctl->sync) {
