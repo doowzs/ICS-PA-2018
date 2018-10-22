@@ -29,7 +29,7 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
       int cnt = 0; 
       uint32_t *pfb = fb + ctl->y * SCREEN_W + ctl->x; 
       uint32_t *ppx = ctl->pixels;
-      for ( ; cnt < ctl->h; cnt++, pfb += SCREEN_W, ppx += SCREEN_W) {
+      for ( ; cnt < ctl->h; cnt++, pfb += SCREEN_W, ppx += ctl->w) {
         memcpy(pfb, ppx, ctl->w);
       }
       
