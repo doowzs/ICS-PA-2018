@@ -79,8 +79,21 @@ make_EHelper(not) {
 }
 
 make_EHelper(rol) {
-  printf("ROL\n");
-  TODO();
+  rtl_li(&t0, id_dest->val);
+  rtl_li(&t1, id_src->val);
+  while (t1) {
+    rtl_msb(&t2, &t0, id_dest->width);
+    rtl_shri(&t0, &t0, 1);
+    rtl_or(&t0, &t0, &t2);
+    rtl_subi(&t1, &t1, 1);
+  }
+  if (id_src->val == 1) {
+    /* update OF */
+    rtl_msb(&t2, &id_dest->val, id_dest->width);
+    rtl_get_CF(&t3);
+    rtl_li(&at, t2 != t3 ? 1 : 0);
+    rtl_set_OF(&at);
+  }
   print_asm_template2(rol);
 }
 
