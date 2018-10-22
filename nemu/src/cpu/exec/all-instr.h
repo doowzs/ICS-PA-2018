@@ -48,6 +48,8 @@ make_EHelper(shl);
 make_EHelper(shr);
 make_EHelper(setcc);
 make_EHelper(not);
+make_EHelper(rol);
+make_EHelper(ror);
 
 /* prefix */
 //make_EHelper(real); duplicate in prefix.c

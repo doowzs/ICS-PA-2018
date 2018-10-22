@@ -77,3 +77,15 @@ make_EHelper(not) {
 	/* no affected eflags */
   print_asm_template1(not);
 }
+
+make_EHelper(rol) {
+  printf("ROL\n");
+  TODO();
+  print_asm_template2(rol);
+}
+
+make_EHelper(ror) {
+  printf("ROR\n");
+  TODO();
+  print_asm_template2(ror);
+}
