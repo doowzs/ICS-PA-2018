@@ -2,14 +2,14 @@
 #include <x86.h>
 #include <amdev.h>
 
-const int RTC_REG_ADDR = 0x48;
+#define RTC_PORT 0x48
 
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
       _UptimeReg *uptime = (_UptimeReg *)buf;
       uptime->hi = 0;
-      uptime->lo = inl(RTC_REG_ADDR);
+      uptime->lo = inl(RTC_PORT);
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
