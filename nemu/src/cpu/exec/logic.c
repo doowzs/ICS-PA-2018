@@ -94,6 +94,7 @@ make_EHelper(rol) {
     rtl_li(&at, t2 != t3 ? 1 : 0);
     rtl_set_OF(&at);
   }
+  operand_write(id_dest, &t0);
   print_asm_template2(rol);
 }
 
