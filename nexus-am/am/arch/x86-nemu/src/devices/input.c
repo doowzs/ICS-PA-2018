@@ -12,7 +12,7 @@ size_t input_read(uintptr_t reg, void *buf, size_t size) {
       _KbdReg *kbd = (_KbdReg *)buf;
       
       int next_keycode = inl(KBD_REG_ADDR);
-      kbd->keydown = (next_keycode == (kbd->keycode | 0x8000) ? 0 : 1);
+      kbd->keydown = (next_keycode & 0x8000) ? 0 : 1;
       kbd->keycode = next_keycode;
       return sizeof(_KbdReg);
     }
