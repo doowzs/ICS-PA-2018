@@ -4,12 +4,15 @@
 
 #define RTC_PORT 0x48
 
+uint32_t boot_time = 0;
+
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
       _UptimeReg *uptime = (_UptimeReg *)buf;
       uptime->hi = 0;
-      uptime->lo = inl(RTC_PORT);
+      //FIXME: the time may overflow!!!
+      uptime->lo = inl(RTC_PORT) - boot_time;
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
@@ -27,4 +30,5 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
 }
 
 void timer_init() {
+  boot_time = inl(RTC_PORT);
 }
