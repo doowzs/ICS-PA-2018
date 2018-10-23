@@ -7,7 +7,6 @@ int main(){
   _ioe_init();
   int sec = uptime() / 1000;
   while (1) {
-    printf("%d\n", uptime());
     while(uptime() < 1000 * sec) ;
     get_timeofday(&rtc);
     printf("%d-%d-%d %02d:%02d:%02d GMT (", rtc.year, rtc.month, rtc.day, rtc.hour, rtc.minute, rtc.second);
