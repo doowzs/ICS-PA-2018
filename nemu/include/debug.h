@@ -6,8 +6,6 @@
 #include <assert.h>
 
 #ifdef DEBUG
-extern FILE* log_fp;
-#	define Log_write(format, ...) \
   do { \
     if (log_fp != NULL) { \
       fprintf(log_fp, format, ## __VA_ARGS__); \
