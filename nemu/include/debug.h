@@ -4,7 +4,7 @@
 #include "common.h"
 #include <stdio.h>
 #include <assert.h>
-
+volatile static int debugdummy;
 #ifdef DEBUG
   do { \
     if (log_fp != NULL) { \
