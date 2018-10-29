@@ -8,6 +8,7 @@ SO_CFLAGS = -fPIC -D_SHARE=1
 SO_LDLAGS = -shared -fPIC
 endif
 
+PRE_DIR ?= $(BUILD_DIR)/pre$(SO)
 OBJ_DIR ?= $(BUILD_DIR)/obj$(SO)
 BINARY ?= $(BUILD_DIR)/$(NAME)$(SO)
 
@@ -18,15 +19,22 @@ include Makefile.git
 # Compilation flags
 CC = gcc
 LD = gcc
+PR = gcc
 INCLUDES  = $(addprefix -I, $(INC_DIR))
 CFLAGS   += -O2 -MMD -Wall -Werror -ggdb3 $(INCLUDES) -fomit-frame-pointer
 CFLAGS   += -DDIFF_TEST_QEMU
 
 # Files to be compiled
 SRCS = $(shell find src/ -name "*.c")
+PRES = $(SRCS:src/%.c=$(PRE_DIR)/%.c)
 OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
+$(PRE_DIR)/%.c: src/%.c
+	@echo + PR $<
+	@mkdir -p $(dir $@)
+	@$(PR) $(CFLAGS) $(SO_CFLAGS) -E -c -o $@ $<
+
 $(OBJ_DIR)/%.o: src/%.c
 	@echo + CC $<
 	@mkdir -p $(dir $@)
@@ -46,6 +54,9 @@ override ARGS += -d $(NEMU_HOME)/tools/qemu-diff/build/qemu-so
 
 # Command to execute NEMU
 NEMU_EXEC := $(BINARY) $(ARGS)
+
+pre: $(PRES)
+	@echo "Done pre-compilation."
 
 $(BINARY): $(OBJS)
 	$(call git_commit, "compile")

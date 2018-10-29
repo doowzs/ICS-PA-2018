@@ -1,6 +1,7 @@
 *.*
 *
 !*/
+build/
 !Makefile*
 !*.[cSh]
 !.gitignore
