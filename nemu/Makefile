@@ -42,6 +42,7 @@ $(OBJ_DIR)/%.o: src/%.c
 
 
 # Depencies
+-include $(PRES:.c=.d)
 -include $(OBJS:.o=.d)
 
 # Some convinient rules
