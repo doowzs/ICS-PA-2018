@@ -13,8 +13,8 @@ make_EHelper(add) {
 	operand_write(id_dest, &t1);
 	rtl_msb(&at, &t1, id_dest->width);
   rtl_xor(&t3, &t2, &t3);
+  rtl_not(&t3, &t3);
   rtl_xor(&t2, &at, &t2);
-  rtl_not(&t2, &t2);
   rtl_and(&at, &t2, &t3);
 	rtl_set_OF(&at);
 	rtl_update_ZFSFPF(&t1, id_dest->width);
