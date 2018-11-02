@@ -115,14 +115,16 @@ make_EHelper(neg) {
 
 make_EHelper(adc) {
   rtl_get_CF(&at);
-  rtl_add(&t0, &id_dest->val, &id_src->val);
-  rtl_add(&t0, &t0, &at);
-  
-  rtl_setrelop(RELOP_LTU, &t1, &t0, &id_dest->val);
-  rtl_setrelop(RELOP_LTU, &t2, &t0, &id_src->val);
-  rtl_setrelop(RELOP_LTU, &t3, &t0, &at);
+  rtl_add(&t3, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t1, &t3, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t2, &t3, &id_dest->val);
   rtl_or(&t1, &t1, &t2);
-  rtl_or(&t1, &t1, &t3);
+
+  rtl_add(&t0, &t3, &at);
+  rtl_setrelop(RELOP_LTU, &t2, &t0, &t3);
+  rtl_setrelop(RELOP_LTU, &t3, &t0, &at);
+  rtl_or(&t2, &t2, &t3);
+  rtl_or(&t1, &t1, &t2);
 	rtl_set_CF(&t1);
 
   rtl_msb(&t1, &id_src->val, id_dest->width);
