@@ -68,16 +68,17 @@ make_EHelper(inc) {
 }
 
 make_EHelper(dec) {
-	rtl_li(&t0, id_dest->width);
-  rtl_subi(&t1, &id_dest->val, 1);
-	rtl_li(&at, (id_dest->val < 1));
+	rtl_li(&t0, 1);
+  rtl_sub(&t1, &id_dest->val, &t0);
+  rtl_setrelop(RELOP_LT, &at, &id_dest->val, &t0);
 	rtl_set_CF(&at);
 
-	rtl_msb(&t2, &id_dest->val, t0);
+	rtl_msb(&t2, &id_dest->val, id_dest->width);
 	operand_write(id_dest, &t1);
 
-	rtl_msb(&at, &t1, t0);
-	rtl_li(&at, (t2 != 0 && at == 0));
+	rtl_msb(&at, &t1, id_dest->width);
+  rtl_not(&t2, &t2);
+  rtl_and(&at, &t2, &at);
 	rtl_set_OF(&at);
 	rtl_update_ZFSFPF(&t1, t0);
   print_asm_template1(dec);
