@@ -20,8 +20,7 @@ make_EHelper(add) {
 make_EHelper(sub) {
   rtl_sub(&t1, &id_dest->val, &id_src->val);
 
-	rtl_li(&at, (id_dest->val < id_src->val));
-  rtl_setrelop(RELOP_LT, &at, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &at, &id_dest->val, &id_src->val);
 	rtl_set_CF(&at);
 
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
@@ -41,7 +40,7 @@ make_EHelper(sub) {
 make_EHelper(cmp) {
   rtl_sub(&t1, &id_dest->val, &id_src->val);
 
-  rtl_setrelop(RELOP_LT, &at, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &at, &id_dest->val, &id_src->val);
 	rtl_set_CF(&at);
 
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
@@ -59,8 +58,8 @@ make_EHelper(cmp) {
 make_EHelper(inc) {
   rtl_li(&t0, 1);
 	rtl_add(&t1, &id_dest->val, &t0);
-  rtl_setrelop(RELOP_LT, &t2, &t1, &id_dest->val);
-  rtl_setrelop(RELOP_LT, &t3, &t1, &t0);
+  rtl_setrelop(RELOP_LTU, &t2, &t1, &id_dest->val);
+  rtl_setrelop(RELOP_LTU, &t3, &t1, &t0);
   rtl_or(&at, &t2, &t3);
 	rtl_set_CF(&at);
 
@@ -78,7 +77,7 @@ make_EHelper(inc) {
 make_EHelper(dec) {
 	rtl_li(&t0, 1);
   rtl_sub(&t1, &id_dest->val, &t0);
-  rtl_setrelop(RELOP_LT, &at, &id_dest->val, &t0);
+  rtl_setrelop(RELOP_LTU, &at, &id_dest->val, &t0);
 	rtl_set_CF(&at);
 
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
