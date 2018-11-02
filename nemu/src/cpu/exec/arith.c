@@ -3,7 +3,7 @@
 make_EHelper(add) {
 	rtl_add(&t1, &id_dest->val, &id_src->val);
   rtl_setrelop(RELOP_LTU, &t2, &t1, &id_dest->val);
-  rtl_setrelop(RELOP_LTU, &t2, &t1, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t3, &t1, &id_src->val);
   rtl_or(&at, &t2, &t3);
 	rtl_set_CF(&at);
 
