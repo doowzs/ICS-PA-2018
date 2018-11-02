@@ -43,7 +43,7 @@ make_EHelper(cmp) {
 
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
 	rtl_msb(&t3, &id_src->val, id_dest->width);
-	rtl_msb(&at, &t1, t0);
+	rtl_msb(&at, &t1, id_dest->width);
   rtl_xor(&t2, &t2, &t3);
   rtl_xor(&t3, &t3, &at);
   rtl_not(&t3, &t3);
