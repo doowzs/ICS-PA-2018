@@ -111,13 +111,10 @@ make_EHelper(neg) {
 }
 
 make_EHelper(adc) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
-
   rtl_add(&t2, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t0, &t2, &id_src->val);
   rtl_setrelop(RELOP_LTU, &t3, &t2, &id_dest->val);
+  rtl_or(&t3, &t0, &t3);
   rtl_get_CF(&t1);
   rtl_add(&t2, &t2, &t1);
   operand_write(id_dest, &t2);
