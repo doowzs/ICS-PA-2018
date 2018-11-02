@@ -52,7 +52,7 @@ make_EHelper(cmp) {
 }
 
 make_EHelper(inc) {
-  rtl_li(&t0, 1);
+  rtl_li(&t0, 2);
 	rtl_add(&t1, &id_dest->val, &t0);
   rtl_setrelop(RELOP_LT, &t2, &t1, &id_dest->val);
   rtl_setrelop(RELOP_LT, &t3, &t1, &t0);
