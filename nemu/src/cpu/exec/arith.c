@@ -131,11 +131,11 @@ make_EHelper(adc) {
 	rtl_msb(&t3, &t0, id_dest->width);
 	
 	operand_write(id_dest, &t0);
-  /* OF = (s1 >= 0) && (s2 >= 0) && (t < 0) */
+  /* OF = (s1 >? 0) == (s2 >? 0) != (t >? 0) */
   printf("%10x %10x %10x\n", id_src->val, id_dest->val, t0);
   rtl_or(&t1, &t1, &t2);
   rtl_not(&t1, &t1);
-  rtl_and(&t1, &t1, &t3);
+  rtl_xor(&t1, &t1, &t3);
 	rtl_set_OF(&t1);
 
 	rtl_update_ZFSFPF(&t0, id_dest->width);
