@@ -82,9 +82,10 @@ void difftest_step(uint32_t eip) {
     printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%08x REFR 0x%08x\n", "eip", cpu.eip, ref_r.eip);
     OK = false;
   }
+
   for (int i = 0; i < EFLAGS_SIZE; ++i) {
-    uint32_t cpuef = (cpu.eflags32 >> regse_index[i]) & 1;
-    uint32_t refef = (cpu.eflags32 >> regse_index[i]) & 1;
+    uint32_t cpuef = (cpu.eflags32   >> regse_index[i]) & 1;
+    uint32_t refef = (ref_r.eflags32 >> regse_index[i]) & 1;
     if (cpuef != refef) {
       printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%01x REFR 0x%01x\n", regse_upper[i], cpuef, refef);
       OK = false;
