@@ -137,7 +137,7 @@ make_EHelper(adc) {
   rtl_and(&t1, &t1, &t2);
   rtl_and(&t1, &t1, &t3);
 	rtl_set_OF(&t1);
-  printf("%10x\n", t1);
+  printf("%10x\n", at);
 	rtl_update_ZFSFPF(&at, id_dest->width);
   print_asm_template2(adc);
 }
