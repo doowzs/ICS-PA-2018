@@ -122,8 +122,8 @@ make_EHelper(adc) {
   printf("%10x+%10x->%10x\n", id_dest->val, id_src->val, t2);
   rtl_update_ZFSF(&t2, id_dest->width);
 
-  rtl_setrelop(RELOP_LTU, &t1, &t1, &t0);
-  rtl_setrelop(RELOP_LTU, &t0, &t2, &id_dest->val);
+  rtl_setrelop(RELOP_LTU, &t0, &t2, &t0);
+  rtl_setrelop(RELOP_LTU, &t1, &t2, &t1);
   rtl_or(&t0, &t0, &t1);
   rtl_or(&t0, &t0, &t3);
   rtl_set_CF(&t0);
