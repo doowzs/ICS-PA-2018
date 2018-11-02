@@ -160,10 +160,6 @@ make_EHelper(sbb) {
 }
 
 make_EHelper(mul) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
   rtl_lr(&t0, R_EAX, id_dest->width);
   rtl_mul_lo(&t1, &id_dest->val, &t0);
 
@@ -189,10 +185,6 @@ make_EHelper(mul) {
 
 // imul with one operand
 make_EHelper(imul1) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
   rtl_lr(&t0, R_EAX, id_dest->width);
   rtl_imul_lo(&t1, &id_dest->val, &t0);
 
@@ -218,10 +210,6 @@ make_EHelper(imul1) {
 
 // imul with two operands
 make_EHelper(imul2) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
   rtl_sext(&t0, &id_src->val, id_dest->width);
   rtl_sext(&t1, &id_dest->val, id_dest->width);
 
@@ -233,10 +221,6 @@ make_EHelper(imul2) {
 
 // imul with three operands
 make_EHelper(imul3) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
   rtl_sext(&t0, &id_src->val, id_dest->width);
   rtl_sext(&t1, &id_src2->val, id_dest->width);
   rtl_sext(&id_dest->val, &id_dest->val, id_dest->width);
@@ -248,10 +232,6 @@ make_EHelper(imul3) {
 }
 
 make_EHelper(div) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
   switch (id_dest->width) {
     case 1:
       rtl_lr(&t0, R_AX, 2);
@@ -283,10 +263,6 @@ make_EHelper(div) {
 }
 
 make_EHelper(idiv) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
   switch (id_dest->width) {
     case 1:
       rtl_lr(&t0, R_AX, 2);
