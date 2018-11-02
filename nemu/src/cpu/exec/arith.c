@@ -131,11 +131,11 @@ make_EHelper(adc) {
 	
 	operand_write(id_dest, &t0);
   printf("%10x %10x %10x\n", id_src->val, id_dest->val, t0);
-  rtl_xor(&t1, &t1, &t2);
-  rtl_not(&t1, &t1);
+  rtl_xor(&at, &t1, &t2);
+  rtl_not(&at, &at);
   rtl_xor(&t2, &t1, &t3);
-  rtl_and(&t1, &t1, &t2);
-	rtl_set_OF(&t1);
+  rtl_and(&at, &at, &t2);
+	rtl_set_OF(&at);
 
 	rtl_update_ZFSFPF(&t0, id_dest->width);
   print_asm_template2(adc);
