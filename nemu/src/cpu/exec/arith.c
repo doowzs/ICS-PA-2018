@@ -82,8 +82,6 @@ make_EHelper(inc) {
 make_EHelper(dec) {
 	rtl_li(&t0, 1);
   rtl_sub(&t1, &id_dest->val, &t0);
-  rtl_setrelop(RELOP_LTU, &at, &id_dest->val, &t0);
-	rtl_set_CF(&at);
 
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
 	operand_write(id_dest, &t1);
