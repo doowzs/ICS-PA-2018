@@ -114,36 +114,38 @@ make_EHelper(neg) {
 }
 
 make_EHelper(adc) {
-  rtl_get_CF(&at);
-  rtl_add(&t3, &id_dest->val, &id_src->val);
-  rtl_setrelop(RELOP_LTU, &t1, &t3, &id_src->val);
-  rtl_setrelop(RELOP_LTU, &t2, &t3, &id_dest->val);
-  rtl_or(&t1, &t1, &t2);
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
 
-  rtl_add(&t0, &t3, &at);
-  rtl_setrelop(RELOP_LTU, &t2, &t0, &t3);
-  rtl_setrelop(RELOP_LTU, &t3, &t0, &at);
-  rtl_or(&t2, &t2, &t3);
-  rtl_or(&t1, &t1, &t2);
-	rtl_set_CF(&t1);
+  rtl_add(&t2, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t3, &t2, &id_dest->val);
+  rtl_get_CF(&t1);
+  rtl_add(&t2, &t2, &t1);
+  operand_write(id_dest, &t2);
 
-  rtl_msb(&t1, &id_src->val, id_dest->width);
-	rtl_msb(&t2, &id_dest->val, id_dest->width);
-	rtl_msb(&t3, &t0, id_dest->width);
-	
-	operand_write(id_dest, &t0);
-  printf("%10x %10x %10x\n", id_src->val, id_dest->val, t0);
-  rtl_xor(&at, &t1, &t2);
-  rtl_not(&at, &at);
-  rtl_xor(&t2, &t1, &t3);
-  rtl_and(&at, &at, &t2);
-	rtl_set_OF(&at);
+  rtl_update_ZFSF(&t2, id_dest->width);
 
-	rtl_update_ZFSFPF(&t0, id_dest->width);
+  rtl_setrelop(RELOP_LTU, &t0, &t2, &id_dest->val);
+  rtl_or(&t0, &t3, &t0);
+  rtl_set_CF(&t0);
+
+  rtl_xor(&t0, &id_dest->val, &id_src->val);
+  rtl_not(&t0, &t0);
+  rtl_xor(&t1, &id_dest->val, &t2);
+  rtl_and(&t0, &t0, &t1);
+  rtl_msb(&t0, &t0, id_dest->width);
+  rtl_set_OF(&t0);
+
   print_asm_template2(adc);
 }
 
 make_EHelper(sbb) {
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
   rtl_sub(&t2, &id_dest->val, &id_src->val);
   rtl_setrelop(RELOP_LTU, &t3, &id_dest->val, &t2);
   rtl_get_CF(&t1);
@@ -166,6 +168,10 @@ make_EHelper(sbb) {
 }
 
 make_EHelper(mul) {
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
   rtl_lr(&t0, R_EAX, id_dest->width);
   rtl_mul_lo(&t1, &id_dest->val, &t0);
 
@@ -191,6 +197,10 @@ make_EHelper(mul) {
 
 // imul with one operand
 make_EHelper(imul1) {
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
   rtl_lr(&t0, R_EAX, id_dest->width);
   rtl_imul_lo(&t1, &id_dest->val, &t0);
 
@@ -216,6 +226,10 @@ make_EHelper(imul1) {
 
 // imul with two operands
 make_EHelper(imul2) {
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
   rtl_sext(&t0, &id_src->val, id_dest->width);
   rtl_sext(&t1, &id_dest->val, id_dest->width);
 
@@ -227,6 +241,10 @@ make_EHelper(imul2) {
 
 // imul with three operands
 make_EHelper(imul3) {
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
   rtl_sext(&t0, &id_src->val, id_dest->width);
   rtl_sext(&t1, &id_src2->val, id_dest->width);
   rtl_sext(&id_dest->val, &id_dest->val, id_dest->width);
@@ -238,6 +256,10 @@ make_EHelper(imul3) {
 }
 
 make_EHelper(div) {
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
   switch (id_dest->width) {
     case 1:
       rtl_lr(&t0, R_AX, 2);
@@ -269,6 +291,10 @@ make_EHelper(div) {
 }
 
 make_EHelper(idiv) {
+#if defined(DIFF_TEST)
+  void difftest_skip_flg();
+  difftest_skip_flg();
+#endif
   switch (id_dest->width) {
     case 1:
       rtl_lr(&t0, R_AX, 2);

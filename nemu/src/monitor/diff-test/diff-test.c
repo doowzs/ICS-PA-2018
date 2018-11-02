@@ -11,9 +11,11 @@ static void (*ref_difftest_exec)(uint64_t n);
 
 static bool is_skip_ref;
 static bool is_skip_dut;
+static bool is_skip_flg;
 
 void difftest_skip_ref() { is_skip_ref = true; }
 void difftest_skip_dut() { is_skip_dut = true; }
+void difftest_skip_flg() { is_skip_flg = true; }
 
 void init_difftest(char *ref_so_file, long img_size) {
 #ifndef DIFF_TEST
@@ -83,12 +85,14 @@ void difftest_step(uint32_t eip) {
     OK = false;
   }
 
-  for (int i = 0; i < EFLAGS_SIZE; ++i) {
-    uint32_t cpuef = (cpu.eflags32   >> regse_index[i]) & 1;
-    uint32_t refef = (ref_r.eflags32 >> regse_index[i]) & 1;
-    if (cpuef != refef) {
-      printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%01x REFR 0x%01x\n", regse_upper[i], cpuef, refef);
-      OK = false;
+  if (!is_skip_flg) {
+    for (int i = 0; i < EFLAGS_SIZE; ++i) {
+      uint32_t cpuef = (cpu.eflags32   >> regse_index[i]) & 1;
+      uint32_t refef = (ref_r.eflags32 >> regse_index[i]) & 1;
+      if (cpuef != refef) {
+        printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%01x REFR 0x%01x\n", regse_upper[i], cpuef, refef);
+        OK = false;
+      }
     }
   }
   
