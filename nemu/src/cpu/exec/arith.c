@@ -138,10 +138,6 @@ make_EHelper(adc) {
 }
 
 make_EHelper(sbb) {
-#if defined(DIFF_TEST)
-  void difftest_skip_flg();
-  difftest_skip_flg();
-#endif
   rtl_sub(&t2, &id_dest->val, &id_src->val);
   rtl_setrelop(RELOP_LTU, &t3, &id_dest->val, &t2);
   rtl_get_CF(&t1);
