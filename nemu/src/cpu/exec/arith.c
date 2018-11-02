@@ -130,7 +130,7 @@ make_EHelper(adc) {
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
 	rtl_msb(&t3, &t0, id_dest->width);
 	
-	operand_write(id_dest, &at);
+	operand_write(id_dest, &t0);
   /* OF = (s1 >= 0) && (s2 >= 0) && (t < 0) */
   rtl_not(&t1, &t1);
   rtl_not(&t2, &t2);
