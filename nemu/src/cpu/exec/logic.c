@@ -63,6 +63,8 @@ make_EHelper(shl) {
   rtl_msb(&t2, &t1, id_dest->width);
   rtl_set_CF(&t2);
 
+  printf("(%10x) ", t1);
+
   rtl_shli(&t1, &t1, 1);
   rtl_update_ZFSFPF(&t1, id_dest->width);
 	operand_write(id_dest, &t1);
