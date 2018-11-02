@@ -139,7 +139,7 @@ make_EHelper(adc) {
 
 make_EHelper(sbb) {
   rtl_sub(&t1, &id_dest->val, &id_src->val);
-  rtl_setrelop(RELOP_LTU, &t0, &id_dest->val, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t3, &id_dest->val, &id_src->val);
   rtl_get_CF(&t0);
   rtl_sub(&t2, &t1, &t0);
 
