@@ -132,9 +132,8 @@ make_EHelper(adc) {
 	
 	operand_write(id_dest, &t0);
   /* OF = (s1 >= 0) && (s2 >= 0) && (t < 0) */
+  rtl_or(&t1, &t1, &t2);
   rtl_not(&t1, &t1);
-  rtl_not(&t2, &t2);
-  rtl_and(&t1, &t1, &t2);
   rtl_and(&t1, &t1, &t3);
 	rtl_set_OF(&t1);
 
