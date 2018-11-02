@@ -56,17 +56,16 @@ make_EHelper(shl) {
 }
 
 make_EHelper(shr) {
+  if (id_src->val == 1) {
+    rtl_msb(&t2, &id_dest->val, id_dest->width);
+    rtl_set_OF(&t2);
+  }
   rtl_subi(&t0, &id_src->val, 1);
 	rtl_shr(&t1, &id_dest->val, &t0);
-  rtl_msb(&t2, &t1, id_dest->width);
+  rtl_andi(&t2, &t1, 1);
   rtl_set_CF(&t2);
 
   rtl_shri(&t1, &t1, 1);
-  if (id_src->val == 1) {
-    rtl_msb(&t3, &t1, id_dest->width);
-    rtl_xor(&t3, &t2, &t3);
-    rtl_set_OF(&t3);
-  }
   rtl_update_ZFSFPF(&t1, id_dest->width);
 	operand_write(id_dest, &t1);
   print_asm_template2(shr);
