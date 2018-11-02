@@ -114,18 +114,18 @@ make_EHelper(neg) {
 }
 
 make_EHelper(adc) {
-  rtl_get_CF(&t1);
-  rtl_add(&t1, &t1, &id_src->val);
-  rtl_add(&t1, &t1, &id_dest->val);
+  rtl_get_CF(&t0);
+  rtl_add(&t0, &t0, &id_src->val);
+  rtl_add(&t1, &t0, &id_dest->val);
   
   /* CF = (t < s1) || (t < s2) */
   rtl_setrelop(RELOP_LTU, &t2, &t1, &id_dest->val);
-  rtl_setrelop(RELOP_LTU, &t3, &t1, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t3, &t1, &t0);
   rtl_or(&at, &t2, &t3);
 	rtl_set_CF(&at);
 
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
-	rtl_msb(&t3, &id_src->val, id_dest->width);
+	rtl_msb(&t3, &t0, id_dest->width);
 	
 	operand_write(id_dest, &t1);
   /* OF = (s1 >? 0 == s2 >? 0) && (s1 >? 0 != t >? 0) */
