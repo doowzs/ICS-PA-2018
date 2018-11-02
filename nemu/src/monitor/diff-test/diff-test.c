@@ -69,7 +69,7 @@ void difftest_step(uint32_t eip) {
   ref_difftest_exec(1);
   ref_difftest_getregs(&ref_r);
 
-  // TODO: Check the registers state with the reference design.
+  // Check the registers state with the reference design.
   // Set `nemu_state` to `NEMU_ABORT` if they are not the same.
   bool OK = true;
   for (int i = 0; i < 8; ++i) {
@@ -83,8 +83,8 @@ void difftest_step(uint32_t eip) {
     OK = false;
   }
   for (int i = 0; i < EFLAGS_SIZE; ++i) {
-    uint32_t cpuef = (cpu.eflags32 >> i) & 1;
-    uint32_t refef = (cpu.eflags32 >> i) & 1;
+    uint32_t cpuef = (cpu.eflags32 >> regse_index[i]) & 1;
+    uint32_t refef = (cpu.eflags32 >> regse_index[i]) & 1;
     if (cpuef != refef) {
       printf("[\33[1;36mDIFF\33[0m] \33[1;31mFAIL\33[0m on %s: NEMU 0x%01x REFR 0x%01x\n", regse_upper[i], cpuef, refef);
       OK = false;
