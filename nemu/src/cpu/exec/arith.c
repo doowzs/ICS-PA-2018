@@ -112,18 +112,14 @@ make_EHelper(neg) {
 
 make_EHelper(adc) {
   rtl_add(&t1, &id_dest->val, &id_src->val);
-  rtl_setrelop(RELOP_LTU, &t0, &t1, &id_src->val);
-  rtl_setrelop(RELOP_LTU, &t3, &t1, &id_dest->val);
-  rtl_or(&t3, &t0, &t3);
+  rtl_setrelop(RELOP_LTU, &t3, &id_dest->val, &id_src->val);
   rtl_get_CF(&t0);
   rtl_add(&t2, &t1, &t0);
 
   operand_write(id_dest, &t2);
   rtl_update_ZFSFPF(&t2, id_dest->width);
 
-  rtl_setrelop(RELOP_LTU, &t0, &t2, &t0);
-  rtl_setrelop(RELOP_LTU, &t1, &t2, &t1);
-  rtl_or(&t0, &t0, &t1);
+  rtl_setrelop(RELOP_LTU, &t0, &t1, &t0);
   rtl_or(&t0, &t0, &t3);
   rtl_set_CF(&t0);
 
