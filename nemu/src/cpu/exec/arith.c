@@ -115,7 +115,7 @@ make_EHelper(neg) {
 
 make_EHelper(adc) {
   rtl_get_CF(&t0);
-  printf("%10x + %10x + %10x", id_src->val, id_dest->val, t0);
+  printf("%10x + %10x + %10x\n", id_src->val, id_dest->val, t0);
   rtl_add(&t0, &t0, &id_src->val);
   rtl_add(&t1, &t0, &id_dest->val);
   
