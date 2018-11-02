@@ -115,28 +115,29 @@ make_EHelper(neg) {
 
 make_EHelper(adc) {
   rtl_get_CF(&t0);
-  printf("%10x + %10x + %10x\n", id_src->val, id_dest->val, t0);
-  rtl_add(&t0, &t0, &id_src->val);
-  rtl_add(&t1, &t0, &id_dest->val);
+  rtl_add(&at, &id_dest->val, &id_src->val);
+  rtl_add(&at, &t0, &at);
   
-  /* CF = (t < s1) || (t < s2) */
-  rtl_setrelop(RELOP_LTU, &t2, &t1, &id_dest->val);
-  rtl_setrelop(RELOP_LTU, &t3, &t1, &t0);
-  rtl_or(&at, &t2, &t3);
-	rtl_set_CF(&at);
+  /* CF = (t < s1) || (t < s2) || (t < CF) */
+  rtl_setrelop(RELOP_LTU, &t1, &at, &id_dest->val);
+  rtl_setrelop(RELOP_LTU, &t2, &at, &id_src->val);
+  rtl_setrelop(RELOP_LTU, &t3, &at, &t0);
+  rtl_or(&t1, &t1, &t2);
+  rtl_or(&t1, &t1, &t3);
+	rtl_set_CF(&t1);
 
+  rtl_msb(&t1, &id_src->val, id_dest->width);
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
-	rtl_msb(&t3, &t0, id_dest->width);
+	rtl_msb(&t3, &at, id_dest->width);
 	
-	operand_write(id_dest, &t1);
-  /* OF = (s1 >? 0 == s2 >? 0) && (s1 >? 0 != t >? 0) */
-	rtl_msb(&at, &t1, id_dest->width);
-  rtl_xor(&t3, &t2, &t3);
-  rtl_not(&t3, &t3);
-  rtl_xor(&t2, &at, &t2);
-  rtl_and(&at, &t2, &t3);
-	rtl_set_OF(&at);
-	rtl_update_ZFSFPF(&t1, id_dest->width);
+	operand_write(id_dest, &at);
+  /* OF = (s1 >= 0) && (s2 >= 0) && (t < 0) */
+  rtl_not(&t1, &t1);
+  rtl_not(&t2, &t2);
+  rtl_and(&t1, &t1, &t2);
+  rtl_and(&t1, &t1, &t3);
+	rtl_set_OF(&t1);
+	rtl_update_ZFSFPF(&at, id_dest->width);
   print_asm_template2(adc);
 }
 
