@@ -103,9 +103,9 @@ make_EHelper(neg) {
 
 	rtl_msb(&t2, &id_dest->val, id_dest->width);
 	rtl_msb(&t3, &t1, id_dest->width);
+  rtl_xor(&t2, &t2, &t3);
   rtl_not(&t2, &t2);
-  rtl_and(&at, &t2, &t3);
-	rtl_set_OF(&at);
+	rtl_set_OF(&t2);
 	rtl_update_ZFSFPF(&t1, id_dest->width);
   print_asm_template1(neg);
 }
