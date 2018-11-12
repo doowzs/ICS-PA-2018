@@ -6,7 +6,12 @@ void difftest_skip_ref();
 void difftest_skip_dut();
 
 make_EHelper(lidt) {
-  TODO();
+  if (decoding.is_operand_size_16) {
+    rtl_andi(&id_dest->val, &id_dest->val, 0x00FFFFFF);
+    rtl_sm(&cpu.IDTR.val, &id_dest->val, 8);
+  } else {
+    rtl_sm(&cpu.IDTR.val, &id_dest->val, 8);
+  }
 
   print_asm_template1(lidt);
 }

@@ -101,9 +101,10 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             done = false;
             width = width * 10 + (int) (*pfmt - '0');
             break;
-          case 'd':
+          case 'p': // pointer, continue to 'x'&'d'
+            width = 8;
           case 'x':
-          case 'p':
+          case 'd':
             uarg.intarg = va_arg(ap, int);
             if (uarg.intarg < 0) {
               strcat(pout, "-");

@@ -91,6 +91,8 @@ static inline long load_img() {
 static inline void restart() {
   /* Set the initial instruction pointer. */
   cpu.eip = ENTRY_START;
+  cpu.eflags32 = 0x2;
+  cpu.CS = 0x8; // required for diff-test in PA3
 }
 
 static inline void parse_args(int argc, char *argv[]) {

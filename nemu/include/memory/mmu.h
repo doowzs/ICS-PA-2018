@@ -9,7 +9,6 @@
 #define NR_PTE						1024
 #define PAGE_MASK					(4096 - 1)
 #define PT_SIZE						((NR_PTE) * (PAGE_SIZE))
-#define NR_IRQ            256 // IDT
 
 /* the Control Register 0 */
 typedef union CR0 {
@@ -79,7 +78,5 @@ typedef union GateDescriptor {
   };
   uint32_t val;
 } GateDesc;
-
-static GateDesc idt[NR_IRQ];
 
 #endif
