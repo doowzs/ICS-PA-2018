@@ -6,13 +6,11 @@ void difftest_skip_ref();
 void difftest_skip_dut();
 
 make_EHelper(lidt) {
-  printf("LIDT: id_dest=0x%08x, id_src=0x%08x\n", id_dest->val, id_src->val);
-  if (decoding.is_operand_size_16) {
-    rtl_andi(&id_dest->val, &id_dest->val, 0x00FFFFFF);
-    rtl_sm(&cpu.IDTR.base, &id_dest->val, 4);
-  } else {
-    rtl_sm(&cpu.IDTR.base, &id_dest->val, 4);
-  }
+  rtl_lm(&at, &id_src->val, 2);
+  cpu.IDTR.limit = at;
+  rtl_sm(&cpu.IDTR.base, &id_dest->val, 4);
+  
+  printf("LIDT loaded: base 0x%08x, limit %d\n", cpu.IDTR.base, cpu.IDTR.limit);
 
   print_asm_template1(lidt);
 }
