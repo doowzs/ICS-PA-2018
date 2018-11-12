@@ -45,12 +45,9 @@ typedef struct {
 
   rtlreg_t CS;
 
-  union {
-    struct {
-      int16_t limit;
-      vaddr_t base :16;
-    };
-    rtlreg_t val;
+  struct {
+    int16_t limit;
+    vaddr_t base;
   } IDTR;
 
 } CPU_state;
