@@ -9,9 +9,9 @@ make_EHelper(lidt) {
   printf("LIDT: id_dest=0x%08x\n", id_dest->val);
   if (decoding.is_operand_size_16) {
     rtl_andi(&id_dest->val, &id_dest->val, 0x00FFFFFF);
-    rtl_sm(&cpu.IDTR.val, &id_dest->val, 8);
+    rtl_sm(&cpu.IDTR.val, &id_dest->val, 4);
   } else {
-    rtl_sm(&cpu.IDTR.val, &id_dest->val, 8);
+    rtl_sm(&cpu.IDTR.val, &id_dest->val, 4);
   }
 
   print_asm_template1(lidt);
