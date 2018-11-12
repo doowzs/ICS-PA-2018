@@ -113,10 +113,12 @@ static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL || strcmp(arg, "r") == 0) {
 		/* r-mode (default), print all registers */
+    /* -- GPR+EIP -- */
 		printf("[\033[1;36mInfo\033[0m] Printing all registers.\n");
 		for (int i = 0; i < 8; ++i) {
 			printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", regsl[i], reg_l(i), reg_l(i), reg_l(i));
 		}
+    /* -- EFLAGS -- */
 		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
 		printf("EFLAGS = ");
 		for (int i = 0; i < EFLAGS_SIZE; ++i) {
@@ -126,7 +128,10 @@ static int cmd_info(char *args) {
 				printf(" %s  ", regse_upper[i]);
 			}
 		}
-		printf("\n");	
+		printf("\n");
+    /* -- IDTR -- */
+    printf("IDTR limit \033[1;32m%d\033[0m\n", cpu.IDTR.limit);
+    printf("     base  \033[1;32m0x%08x\033[0m\n", cpu.IDTR.base);
 	} else if (strcmp(arg, "w") == 0) {
 		/* w-mode, list all watchnodes */
 		printf("[\033[1;36mInfo\033[0m] Printing all watchpoints.\n");
