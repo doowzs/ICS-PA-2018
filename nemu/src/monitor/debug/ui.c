@@ -130,8 +130,7 @@ static int cmd_info(char *args) {
 		}
 		printf("\n");
     /* -- IDTR -- */
-    printf("IDTR limit \033[1;32m%d\033[0m\n", cpu.IDTR.limit);
-    printf("     base  \033[1;32m0x%08x\033[0m\n", cpu.IDTR.base);
+    printf("IDTR base \033[1;33m0x%08x\033[0m limit \033[1;33m%d\033[0m\n", cpu.IDTR.base, cpu.IDTR.limit);
 	} else if (strcmp(arg, "w") == 0) {
 		/* w-mode, list all watchnodes */
 		printf("[\033[1;36mInfo\033[0m] Printing all watchpoints.\n");
