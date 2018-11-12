@@ -7,8 +7,8 @@ void difftest_skip_dut();
 
 make_EHelper(lidt) {
   rtl_lm(&at, &id_src->val, 2);
-  cpu.IDTR.limit = at;
-  rtl_sm(&cpu.IDTR.base, &id_dest->val, 4);
+  cpu.IDTR.limit = at; 
+  cpu.IDTR.base = id_dest->val;
   
   printf("LIDT loaded: base 0x%08x, limit %d\n", cpu.IDTR.base, cpu.IDTR.limit);
 
