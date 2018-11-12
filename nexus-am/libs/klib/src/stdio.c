@@ -103,6 +103,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             break;
           case 'd':
           case 'x':
+          case 'p':
             uarg.intarg = va_arg(ap, int);
             if (uarg.intarg < 0) {
               strcat(pout, "-");
