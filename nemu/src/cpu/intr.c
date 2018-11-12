@@ -9,7 +9,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   offset_15_0 = vaddr_read(cpu.IDTR.base + (NO << 6), 2);
   printf("base is %04x\n", cpu.IDTR.base);
   printf("offset1 is %04x\n", offset_15_0);
-  panic("AT INT 0x%x", NO);
+  panic("AT INT 0x%x, eip = 0x%0x\n", NO, cpu.eip);
   rtl_j(offset_15_0 | (offset_31_16 << 16));
 }
 
