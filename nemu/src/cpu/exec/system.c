@@ -1,6 +1,7 @@
 #include "cpu/exec.h"
 #include "device/port-io.h"
 
+void raise_intr(uint8_t, vaddr_t);
 void difftest_skip_ref();
 void difftest_skip_dut();
 
@@ -27,7 +28,10 @@ make_EHelper(mov_cr2r) {
 }
 
 make_EHelper(int) {
-  TODO();
+  rtl_push(&cpu.eflags32);
+  rtl_push(&cpu.CS);
+  rtl_push(&cpu.eip);
+  raise_intr(id_dest->val, decoding.seq_eip);
 
   print_asm("int %s", id_dest->str);
 
