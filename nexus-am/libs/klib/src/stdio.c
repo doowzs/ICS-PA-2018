@@ -102,6 +102,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             width = width * 10 + (int) (*pfmt - '0');
             break;
           case 'p': // pointer, continue to 'x'&'d'
+            phchar = '0';
             width = 8;
           case 'x':
           case 'd':
