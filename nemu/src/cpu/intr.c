@@ -7,6 +7,8 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
    */
   uint16_t offset_15_0 = 0, offset_31_16 = 0; 
   offset_15_0 = vaddr_read(cpu.IDTR.base + (NO << 6), 2);
+  offset_31_16 = vaddr_read(cpu.IDTR.base + (NO << 6) + 48, 2);
+  printf("OFFSETs are: 0x%04x 0x%04x", offset_31_16, offset_15_0);
   rtl_j(offset_15_0 | (offset_31_16 << 16));
 }
 
