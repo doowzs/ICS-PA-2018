@@ -44,7 +44,14 @@ make_EHelper(int) {
 }
 
 make_EHelper(iret) {
-  TODO();
+  if (decoding.is_operand_size_16) {
+    printf("16-bit iret is not implemented!\n");
+    TODO();
+  } else {
+    rtl_pop(&cpu.eip);
+    rtl_pop(&cpu.CS);
+    rtl_pop(&cpu.eflags32);
+  }
 
   print_asm("iret");
 }
