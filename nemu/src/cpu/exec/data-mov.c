@@ -27,7 +27,7 @@ make_EHelper(pusha) {
       if (i == 4) {
         rtl_push(&t0);
       } else {
-        rtl_push(&cpu.gpr[i]._32);
+        rtl_push((rtlreg_t *) &cpu.gpr[i]._16);
       }
     }
   } else {
