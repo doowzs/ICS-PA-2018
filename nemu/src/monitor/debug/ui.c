@@ -128,7 +128,7 @@ static int cmd_info(char *args) {
 				printf(" %s  ", regse_upper[i]);
 			}
 		}
-		printf(" [\033[1;32m0x%08d\033[0m]\n", cpu.eflags32);
+		printf(" [\033[1;33m0x%08d\033[0m]\n", cpu.eflags32);
     /* -- IDTR -- */
     printf("IDTR base \033[1;33m0x%08x\033[0m limit \033[1;33m%d\033[0m\n", cpu.IDTR.base, cpu.IDTR.limit);
 	} else if (strcmp(arg, "w") == 0) {
