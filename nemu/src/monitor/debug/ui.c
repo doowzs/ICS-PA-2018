@@ -116,10 +116,10 @@ static int cmd_info(char *args) {
     /* -- GPR+EIP -- */
 		printf("[\033[1;36mInfo\033[0m] Printing all registers.\n");
 		for (int i = 0; i < 8; ++i) {
-			printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", regsl[i], reg_l(i), reg_l(i), reg_l(i));
+			printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", regsl[i], reg_l(i), reg_l(i), reg_l(i));
 		}
     /* -- EFLAGS -- */
-		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
+		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
 		printf("EFLAGS = ");
 		for (int i = 0; i < EFLAGS_SIZE; ++i) {
 			if ((cpu.eflags32 >> regse_index[i]) & 1) {
@@ -128,7 +128,7 @@ static int cmd_info(char *args) {
 				printf(" %s  ", regse_upper[i]);
 			}
 		}
-		printf("\n");
+		printf(" [\033[1;32m0x%08d\033[0m]\n", cpu.eflags32);
     /* -- IDTR -- */
     printf("IDTR base \033[1;33m0x%08x\033[0m limit \033[1;33m%d\033[0m\n", cpu.IDTR.base, cpu.IDTR.limit);
 	} else if (strcmp(arg, "w") == 0) {
@@ -149,7 +149,7 @@ static int cmd_p(char *args) {
 		if (overflow) { 
 			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
 		}
-		printf("[\033[1;36mPrint\033[0m] The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
+		printf("[\033[1;36mPrint\033[0m] The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", res, res, res);
 	} else {
 		printf("[\033[1;31mError\033[0m] Calculation failed.\n");
 	}
@@ -180,7 +180,7 @@ static int cmd_x(char *args) {
           return 0;
         }
         res = paddr_read(st, 4);
-        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", st, res, res, res);
+        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", st, res, res, res);
 		  }
 	  } else {
 		  printf("[\033[1;31mError\033[0m] Calculation failed.\n");
