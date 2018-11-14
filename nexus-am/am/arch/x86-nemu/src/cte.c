@@ -9,7 +9,7 @@ void vecnull();
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
-  printf("_CONTEXT ADDR AT %p", tf);
+  printf("_CONTEXT ADDR AT %p\n", tf);
   if (user_handler) {
     _Event ev;
     switch (tf->irq) {
