@@ -6,14 +6,9 @@ void difftest_skip_ref();
 void difftest_skip_dut();
 
 make_EHelper(lidt) {
-  if (decoding.is_operand_size_16) {
-    rtl_lm(&at, &id_src->val, 2);
-    cpu.IDTR.limit = at; 
-    cpu.IDTR.base = id_dest->val;
-  } else {
-    printf("LIDT for 32bit is not implemented!");
-    TODO();
-  }
+  rtl_lm(&at, &id_src->val, 2);
+  cpu.IDTR.limit = at; 
+  cpu.IDTR.base = id_dest->val;
 
   print_asm_template1(lidt);
 }
