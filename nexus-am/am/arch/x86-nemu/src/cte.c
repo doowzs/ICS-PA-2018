@@ -9,7 +9,7 @@ void vecnull();
 
 void print_tf(_Context *tf) {
   printf("_CONTEXT ADDR AT %p\n", tf);
-  //printf("ESI:    0x%08x\n", tf->esi);
+  printf("ESI:    0x%08x\n", tf->esi);
   printf("EBP:    0x%08x\n", tf->ebp);
   printf("EDI:    0x%08x\n", tf->edi);
   printf("EAX:    0x%08x\n", tf->eax);
