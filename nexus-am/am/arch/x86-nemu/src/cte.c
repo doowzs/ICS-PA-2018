@@ -9,12 +9,20 @@ void vecnull();
 
 void print_tf(_Context *tf) {
   printf("_CONTEXT ADDR AT %p\n", tf);
+  printf("*PROT:  0x%p\n", tf->prot);
+  printf("EDI:    0x%08x\n", tf->edi);
   printf("ESI:    0x%08x\n", tf->esi);
   printf("EBP:    0x%08x\n", tf->ebp);
-  printf("EDI:    0x%08x\n", tf->edi);
+  printf("ESP:    0x%08x\n", tf->esp);
+  printf("EBX:    0x%08x\n", tf->ebx);
+  printf("EDX:    0x%08x\n", tf->edx);
+  printf("ECX:    0x%08x\n", tf->ecx);
   printf("EAX:    0x%08x\n", tf->eax);
-  printf("EFLAGS: 0x%08x\n", tf->eflags);
+  printf("IRQ:    0x%08x\n", tf->irq);
   printf("ERR:    0x%08x\n", tf->err);
+  printf("EIP:    0x%08x\n", tf->eip);
+  printf("CS:     0x%08x\n", tf->cs);
+  printf("EFLAGS: 0x%08x\n", tf->eflags);
   printf("CHECK WITH CPU.\n");
 }
 
