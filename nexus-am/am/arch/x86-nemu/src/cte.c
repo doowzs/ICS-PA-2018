@@ -24,13 +24,13 @@ void print_tf(_Context *tf) {
   printf("CS:     0x%08x\n", tf->cs);
   /* NO EFLAGS COMPARISON
    * because qemu has more flags. */
-  //printf("EFLAGS: 0x%08x\n", tf->eflags);
+  // printf("EFLAGS: 0x%08x\n", tf->eflags);
   printf("Context structure OK. (w/o EFLAGS.)\n");
 }
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
-  print_tf(tf);
+  // print_tf(tf);
   if (user_handler) {
     _Event ev;
     switch (tf->irq) {
