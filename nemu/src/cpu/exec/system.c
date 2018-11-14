@@ -32,8 +32,9 @@ make_EHelper(mov_cr2r) {
 make_EHelper(int) {
   rtl_push(&cpu.eflags32);
   rtl_push(&cpu.CS);
-  rtl_push(&cpu.eip);
-  raise_intr(id_dest->val, decoding.seq_eip);
+  rtl_push(&decoding.seq_eip);
+  //FIXME FIXME FIXME
+  raise_intr(id_dest->val, 0x0);
 
   print_asm("int %s", id_dest->str);
 
