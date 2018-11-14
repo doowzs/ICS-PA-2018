@@ -2,7 +2,7 @@
 
 static _Context* do_event(_Event e, _Context* c) {
   switch (e.event) {
-    case 0x81:
+    case _EVENT_YIELD:
       printf("This is do_event in nanos/src/irq.c.\n");
       printf("You are seeing this message because a NO.0x81 yield event occurred.\n");
       break;
