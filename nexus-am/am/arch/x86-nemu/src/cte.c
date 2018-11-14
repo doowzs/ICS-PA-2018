@@ -22,8 +22,10 @@ void print_tf(_Context *tf) {
   printf("ERR:    0x%08x\n", tf->err);
   printf("EIP:    0x%08x\n", tf->eip);
   printf("CS:     0x%08x\n", tf->cs);
-  printf("EFLAGS: 0x%08x\n", tf->eflags);
-  printf("CHECK WITH CPU.\n");
+  /* NO EFLAGS COMPARISON
+   * because qemu has more flags. */
+  //printf("EFLAGS: 0x%08x\n", tf->eflags);
+  printf("Context structure OK. (w/o EFLAGS.)\n");
 }
 
 _Context* irq_handle(_Context *tf) {
