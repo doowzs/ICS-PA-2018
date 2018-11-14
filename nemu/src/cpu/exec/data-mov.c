@@ -21,15 +21,25 @@ make_EHelper(pop) {
 }
 
 make_EHelper(pusha) {
-  rtl_li(&t0, cpu.esp);
-  rtl_push(&cpu.eax);
-  rtl_push(&cpu.ecx);
-  rtl_push(&cpu.edx);
-  rtl_push(&cpu.ebx);
-  rtl_push(&t0);
-  rtl_push(&cpu.ebp);
-  rtl_push(&cpu.esi);
-  rtl_push(&cpu.edi);
+  if (decoding.is_operand_size_16) {
+    rtl_li(&t0, cpu.gpr[4]._16);
+    for (int i = 0; i < 8; ++i) {
+      if (i == 4) {
+        rtl_push(&t0);
+      } else {
+        rtl_push(&cpu.gpr[i]._32);
+      }
+    }
+  } else {
+    rtl_li(&t0, cpu.gpr[4]._32);
+    for (int i = 0; i < 8; ++i) {
+      if (i == 4) {
+        rtl_push(&t0);
+      } else {
+        rtl_push(&cpu.gpr[i]._32);
+      }
+    }
+  }
 
   print_asm("pusha");
 }
