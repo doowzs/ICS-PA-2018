@@ -1,6 +1,7 @@
 NAME = nanos-lite
 SRCS = $(shell find -L ./src/ -name "*.c" -o -name "*.cpp" -o -name "*.S")
 LIBS = klib
+ARCH ?= x86-nemu
 include $(AM_HOME)/Makefile.app
 
 ifeq ($(ARCH),native)
