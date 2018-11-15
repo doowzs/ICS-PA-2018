@@ -6,7 +6,7 @@ _Context* do_syscall(_Context *c) {
   a[0] = c->GPR1;
 
   switch (a[0]) {
-    default: panic("Unhandled syscall ID = %d", a[0]);
+    default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
   }
 
   return NULL;

@@ -10,7 +10,7 @@ void* new_page(size_t nr_page) {
 }
 
 void free_page(void *p) {
-  panic("not implement yet");
+  panic("not implement yet, fix in nanos/src/mm.c");
 }
 
 /* The brk() system call handler. */

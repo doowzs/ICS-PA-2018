@@ -14,7 +14,7 @@ typedef struct {
 enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
-  panic("should not reach here");
+  panic("should not reach here, fix in nanos/irq/fs.c");
   return 0;
 }
 
