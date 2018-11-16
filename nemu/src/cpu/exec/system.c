@@ -48,8 +48,8 @@ make_EHelper(iret) {
     printf("16-bit iret is not implemented!\n");
     TODO();
   } else {
-    panic("1");
     rtl_pop(&decoding.seq_eip);
+    panic("2");
     rtl_pop(&cpu.CS);
     rtl_pop(&cpu.eflags32);
   }
