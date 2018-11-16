@@ -45,10 +45,6 @@ _Context* do_syscall(_Context *c) {
 
     case SYS_brk: // 9
       _end = (void *) a[1];
-      char brkbuf[128];
-      sprintf(brkbuf, "Break changed to 0x%08d\n", _end);
-      pbuf = brkbuf;
-      while (*pbuf != '\0') _putc(*pbuf);
       syscall_ret(c, 0);
       break;
 
