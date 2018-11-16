@@ -51,7 +51,7 @@ make_EHelper(iret) {
     rtl_pop(&decoding.seq_eip);
     rtl_pop(&cpu.CS);
     rtl_pop(&cpu.eflags32);
-    panic("4");
+    printf("Next EIP will be 0x%08x\n", decoding.seq_eip);
   }
 
   print_asm("iret");
