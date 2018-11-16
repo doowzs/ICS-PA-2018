@@ -10,7 +10,10 @@ _Context* do_syscall(_Context *c) {
   a[0] = c->GPR1;
 
   switch (a[0]) {
-    case SYS_yield:
+    case SYS_exit:  // 0
+      _halt(0);
+      break;
+    case SYS_yield: // 1
       _yield();
       syscall_ret(c, 0);
       break;
