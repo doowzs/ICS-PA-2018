@@ -10,6 +10,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   gd.val[0] = vaddr_read(gd_addr + 0, 4);
   gd.val[1] = vaddr_read(gd_addr + 4, 4);
   if (gd.present) {
+    rtl_push(&ret_addr);
     rtl_j((gd.offset_31_16 << 16) | gd.offset_15_0);
   } else {
     panic("Gate is not present!\n");

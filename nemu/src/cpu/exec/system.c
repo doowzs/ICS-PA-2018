@@ -34,10 +34,7 @@ make_EHelper(mov_cr2r) {
 make_EHelper(int) {
   rtl_push(&cpu.eflags32);
   rtl_push(&cpu.CS);
-  rtl_push(&decoding.seq_eip);
-  printf("NEXT EIP OF INT IS 0x%08x", decoding.seq_eip);
-  //FIXME FIXME FIXME
-  raise_intr(id_dest->val, 0x0);
+  raise_intr(id_dest->val, cpu.eip + 2);
 
   print_asm("int %s", id_dest->str);
 
