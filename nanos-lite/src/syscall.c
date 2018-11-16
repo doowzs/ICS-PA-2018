@@ -26,6 +26,7 @@ _Context* do_syscall(_Context *c) {
       switch (a[1]) {
         case 1:
         case 2:
+          Log("SYS_write");
           pbuf = (char *) a[2];
           for (int i = 0; i < a[3]; ++i) {
             _putc(*pbuf);
