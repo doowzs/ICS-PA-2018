@@ -16,10 +16,10 @@ struct _Context {
 };
 
 #define GPR1 eax
-#define GPR2 eip
-#define GPR3 eip
-#define GPR4 eip
-#define GPRx eip
+#define GPR2 esi
+#define GPR3 edx
+#define GPR4 ecx
+#define GPRx eax
 
 #ifdef __cplusplus
 extern "C" {
