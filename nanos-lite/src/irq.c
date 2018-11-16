@@ -1,5 +1,7 @@
 #include "common.h"
 
+_Context* do_syscall(_Context* c);
+
 static _Context* do_event(_Event e, _Context* c) {
   switch (e.event) {
     case _EVENT_YIELD:
@@ -7,7 +9,7 @@ static _Context* do_event(_Event e, _Context* c) {
       printf("You are seeing this message because a NO.0x81 yield event occurred.\n");
       break;
     case _EVENT_SYSCALL:
-      panic("A system call is detected in irq.c.");
+      do_syscall(c);
       break;
     default: panic("Unhandled event ID = %d, fix in nanos/src/irq.c", e.event);
   }
