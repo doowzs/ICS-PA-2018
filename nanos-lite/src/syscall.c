@@ -11,7 +11,7 @@ _Context* do_syscall(_Context *c) {
 
   switch (a[0]) {
     case SYS_yield:
-      //_yield();
+      _yield();
       syscall_ret(c, 0);
       break;
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
