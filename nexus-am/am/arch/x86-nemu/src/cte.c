@@ -30,7 +30,7 @@ void print_tf(_Context *tf) {
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
-  // print_tf(tf);
+  print_tf(tf);
   if (user_handler) {
     _Event ev;
     switch (tf->irq) {
