@@ -30,7 +30,6 @@ _Context* do_syscall(_Context *c) {
       switch (a[1]) {
         case 1:
         case 2:
-          Log("SYS_write");
           pbuf = (char *) a[2];
           for (int i = 0; i < a[3]; ++i) {
             _putc(*pbuf);
@@ -39,7 +38,7 @@ _Context* do_syscall(_Context *c) {
           syscall_ret(c, a[3]);
           break;
         default:
-          panic("fd is not supported by SYS_write, fix in nanos/src/syscall.c");
+          panic("fd %d is not supported by SYS_write, fix in nanos/src/syscall.c", a[1]);
       }
       break;
 
