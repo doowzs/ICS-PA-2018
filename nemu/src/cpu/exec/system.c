@@ -49,9 +49,9 @@ make_EHelper(iret) {
     TODO();
   } else {
     rtl_pop(&decoding.seq_eip);
-    panic("2");
     rtl_pop(&cpu.CS);
     rtl_pop(&cpu.eflags32);
+    panic("4");
   }
 
   print_asm("iret");
