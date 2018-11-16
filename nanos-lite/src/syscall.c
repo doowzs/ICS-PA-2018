@@ -1,6 +1,8 @@
 #include "common.h"
 #include "syscall.h"
 
+extern void *_end;
+
 void syscall_ret(_Context *c, int val) {
   c->GPRx = val;
 }
@@ -18,10 +20,12 @@ _Context* do_syscall(_Context *c) {
     case SYS_exit:  // 0
       _halt(0);
       break;
+
     case SYS_yield: // 1
       _yield();
       syscall_ret(c, 0);
       break;
+
     case SYS_write: // 4
       switch (a[1]) {
         case 1:
@@ -38,6 +42,16 @@ _Context* do_syscall(_Context *c) {
           panic("fd is not supported by SYS_write, fix in nanos/src/syscall.c");
       }
       break;
+
+    case SYS_brk: // 9
+      _end = (void *) a[1];
+      char brkbuf[128];
+      sprintf(brkbuf, "Break changed to 0x%08d\n", _end);
+      pbuf = brkbuf;
+      while (*pbuf != '\0') _putc(*pbuf);
+      syscall_ret(c, 0);
+      break;
+
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
   }
 
