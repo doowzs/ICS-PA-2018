@@ -1,9 +1,9 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
-//#define DEBUG
+#define DEBUG
 //#define EXPR_DEBUG
-//#define DIFF_TEST
+#define DIFF_TEST
 
 #if _SHARE
 // do not enable these features while building a reference design
