@@ -6,21 +6,23 @@
 int main() {
   printf("test start!\n");
   FILE *fp = fopen("/share/texts/num", "r+");
-  printf("file opened!, fp=%p\n", fp);
+  printf("file opened\n");
   assert(fp);
   pass(1);
 
   fseek(fp, 0, SEEK_END);
   printf("fseek done\n");
   long size = ftell(fp);
-  printf("size of fp is %d\n", size);
+  printf("fp(size) is %ld\n", size);
   assert(size == 5000);
   pass(2);
 
   fseek(fp, 500 * 5, SEEK_SET);
+  printf("fp is now %ld\n", fp);
   int i, n;
   for (i = 500; i < 1000; i ++) {
     fscanf(fp, "%d", &n);
+    printf("read %d-th number %d\n", i, n);
     assert(n == i + 1);
   }
   pass(3);
