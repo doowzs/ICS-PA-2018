@@ -29,8 +29,8 @@ static Finfo file_table[] __attribute__((used)) = {
 #define NR_DISP  NR_FILES - 1
 
 void init_fs() {
-  // TODO: initialize the size of /dev/fb
-  size_t fb_size = 300 * 400 * 4;
+  // FIXME: initialize the size of /dev/fb
+  size_t fb_size = screen_width() * screen_height() * 4;
   size_t fb_offset = file_table[NR_LAST].disk_offset + file_table[NR_LAST - 2].size;
   file_table[NR_FB].size = fb_size;
   file_table[NR_FB].disk_offset = fb_offset;
