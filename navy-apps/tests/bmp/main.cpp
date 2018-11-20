@@ -8,7 +8,7 @@ int main() {
   a[0] = 0;
   a[1] = 1;
   assert(!a);
-PASS(0);
+  printf("*a = %p\n", a);
 
   NDL_Bitmap *bmp = (NDL_Bitmap*)malloc(sizeof(NDL_Bitmap));
   printf("*bmp = %p\n", bmp);
