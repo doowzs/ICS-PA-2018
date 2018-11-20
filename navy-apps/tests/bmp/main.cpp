@@ -9,6 +9,7 @@ int main() {
   NDL_LoadBitmap(bmp, "/share/pictures/projectn.bmp");
   printf("bmp loaded!\n");
   assert(bmp->pixels);
+  printf("assert ok!\n");
   NDL_OpenDisplay(bmp->w, bmp->h);
   printf("display opened!\n");
   NDL_DrawRect(bmp->pixels, 0, 0, bmp->w, bmp->h);
