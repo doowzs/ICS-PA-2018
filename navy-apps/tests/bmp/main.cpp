@@ -5,9 +5,12 @@
 int main() {
   NDL_Bitmap *bmp = (NDL_Bitmap*)malloc(sizeof(NDL_Bitmap));
   NDL_LoadBitmap(bmp, "/share/pictures/projectn.bmp");
+  printf("bmp loaded!\n");
   assert(bmp->pixels);
   NDL_OpenDisplay(bmp->w, bmp->h);
+  printf("display opened!\n");
   NDL_DrawRect(bmp->pixels, 0, 0, bmp->w, bmp->h);
+  printf("rectangle drawed!\n");
   NDL_Render();
   NDL_CloseDisplay();
   while (1);
