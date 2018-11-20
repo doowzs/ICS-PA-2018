@@ -1,6 +1,8 @@
 #include "fs.h"
 #include "ramdisk.h"
 
+size_t serial_write(const void *, size_t, size_t);
+
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here, fix in nanos/irq/fs.c\n READ: buf=%p, offset=%d, len=%d", buf, offset, len);
   return 0;
@@ -14,8 +16,8 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0, 0, 0, invalid_read, invalid_write},
-  {"stdout", 0, 0, 0, invalid_read, invalid_write},
-  {"stderr", 0, 0, 0, invalid_read, invalid_write},
+  {"stdout", 0, 0, 0, invalid_read, serial_write},
+  {"stderr", 0, 0, 0, invalid_read, serial_write},
 #include "files.h"
 };
 
@@ -69,18 +71,12 @@ size_t fs_read(int fd, void *buf, size_t len) {
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
-  char *pchar;
   switch (fd) {
     case FD_STDIN:
       panic("cannot write to STDIN. see nanos/src/fs.c");
     case FD_STDOUT:
     case FD_STDERR:
-      pchar = (char *) buf;
-      for (int i = 0; i < len; ++i) {
-        _putc(*pchar);
-        ++pchar;
-      }
-      return len;
+      return file_table[fd].write(buf, 0, len);
     default:
       assert(fd > 2 && fd < NR_FILES);
       size_t ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
