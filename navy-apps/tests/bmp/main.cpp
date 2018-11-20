@@ -4,6 +4,7 @@
 
 int main() {
   NDL_Bitmap *bmp = (NDL_Bitmap*)malloc(sizeof(NDL_Bitmap));
+  printf("malloc ok!\n");
   NDL_LoadBitmap(bmp, "/share/pictures/projectn.bmp");
   printf("bmp loaded!\n");
   assert(bmp->pixels);
