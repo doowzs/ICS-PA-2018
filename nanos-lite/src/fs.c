@@ -61,8 +61,9 @@ size_t fs_read(int fd, void *buf, size_t len) {
     panic("cannot read from STDOUT/STDERR. see nanos/src/fs.c");
    default:
     assert(fd > 2 && fd < NR_FILES);
+    size_t ret = ramdisk_read(buf, file_table[fd].disk_offset+ file_table[fd].open_offset, len);
     file_table[fd].open_offset += len;
-    return ramdisk_read(buf, file_table[fd].disk_offset, len);
+    return ret;
   }
   return -1;
 }
@@ -82,8 +83,9 @@ size_t fs_write(int fd, const void *buf, size_t len) {
       return len;
     default:
       assert(fd > 2 && fd < NR_FILES);
+      size_t ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
       file_table[fd].open_offset += len;
-      return ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].open_offset, len);
+      return ret;
   }
   return -1;
 }
