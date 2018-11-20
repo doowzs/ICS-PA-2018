@@ -13,7 +13,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 #ifdef SYS_DEBUG
   Log("loading file %s to %p, fd=%d, sz=%d", filename, buf, fd, sz);
 #endif
-  fs_read(fd, buf, fs_filesz(fd));
+  fs_read(fd, buf, sz);
   return (intptr_t) buf;
 }
 
