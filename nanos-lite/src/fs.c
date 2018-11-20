@@ -53,21 +53,11 @@ size_t fs_filesz(int fd) {
 }
 
 size_t fs_read(int fd, void *buf, size_t len) {
-  switch (fd) {
-   case FD_STDIN:
-    /* do nothing in nemu */
-    panic("read from STDIN is not tested! see nanos/src/fs.c");
-    return 0;
-   case FD_STDOUT:
-   case FD_STDERR:
-    panic("cannot read from STDOUT/STDERR. see nanos/src/fs.c");
-   default:
-    assert(fd > 2 && fd < NR_FILES);
-    size_t ret = ramdisk_read(buf, file_table[fd].disk_offset+ file_table[fd].open_offset, len);
-    file_table[fd].open_offset += len;
-    return ret;
-  }
-  return -1;
+  assert(fd >= 0 && fd < NR_FILES);
+  size_t offset = file_table[fd].disk_offset + file_table[fd].open_offset;
+  size_t delta = file_table[fd].read(buf, offset, len);
+  file_table[fd].open_offset += delta;
+  return delta;
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
