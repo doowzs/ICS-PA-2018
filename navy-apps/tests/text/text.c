@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define pass(i) printf("passed %d", i)
+#define pass(i) printf("passed %d!\n", i)
 
 int main() {
   FILE *fp = fopen("/share/texts/num", "r+");
+  printf("file opened!, fp=%p\n", fp);
   assert(fp);
   pass(1);
 
