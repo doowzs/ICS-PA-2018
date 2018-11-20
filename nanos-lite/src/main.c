@@ -29,7 +29,6 @@ int main() {
 
   init_fs();
 
-  assert(0);
   init_proc("/bin/bmptest");
 
 #ifdef HAS_CTE
