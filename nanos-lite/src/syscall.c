@@ -55,9 +55,9 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_open:  
 #ifdef SYS_DEBUG
-      Log("SYS_open(name=%s, mode=%d, fd=%d)", a[0], a[1], a[2]);
+      Log("SYS_open(name=%s, mode=%d, fd=%d)", a[1], a[2], a[3]);
 #endif
-      syscall_ret(c, fs_open((const char *) a[0], a[1], a[2]));
+      syscall_ret(c, fs_open((const char *) a[1], a[2], a[3]));
       break;
 
     /**
@@ -70,9 +70,9 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_read:
 #ifdef SYS_DEBUG
-      Log("SYS_read(fd=%d, *buf=%p, len=%d)", a[0], a[1], a[2]);
+      Log("SYS_read(fd=%d, *buf=%p, len=%d)", a[1], a[2], a[3]);
 #endif
-      syscall_ret(c, fs_read(a[0], (void *) a[1], a[2]));
+      syscall_ret(c, fs_read(a[1], (void *) a[2], a[3]));
       break;
 
     /**
@@ -85,9 +85,9 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_write:
 #ifdef SYS_DEBUG
-      Log("SYS_write(fd=%d, *buf=%p, len=%d)", a[0], a[1], a[2]);
+      Log("SYS_write(fd=%d, *buf=%p, len=%d)", a[1], a[2], a[3]);
 #endif
-      syscall_ret(c, fs_write(a[0], (const void *) a[1], a[2]));
+      syscall_ret(c, fs_write(a[1], (const void *) a[2], a[3]));
       break;
 
     /**
@@ -99,9 +99,9 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_close:
 #ifdef SYS_DEBUG
-      Log("SYS_close(fd=%d)", a[0]);
+      Log("SYS_close(fd=%d)", a[1]);
 #endif
-      syscall_ret(c, fs_close(a[0]));
+      syscall_ret(c, fs_close(a[1]));
       break;
 
     /**
@@ -115,9 +115,9 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_lseek:
 #ifdef SYS_DEBUG
-      Log("SYS_lseek(fd=%d, offset=%d, whence=%d)", a[0], a[1], a[2]);
+      Log("SYS_lseek(fd=%d, offset=%d, whence=%d)", a[1], a[2], a[3]);
 #endif
-      syscall_ret(c, fs_lseek(a[0], (size_t) a[1], a[2]));
+      syscall_ret(c, fs_lseek(a[1], (size_t) a[2], a[3]));
       break;
 
     /**
