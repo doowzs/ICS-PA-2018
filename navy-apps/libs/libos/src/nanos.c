@@ -51,6 +51,7 @@ void *_sbrk(intptr_t increment){
     break_addr_old = break_addr_new;
     return break_addr_ret;
   } else {
+    assert(0); 
     return (void *)-1;
   }
 }
