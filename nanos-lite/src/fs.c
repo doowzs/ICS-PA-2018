@@ -2,6 +2,8 @@
 #include "ramdisk.h"
 
 size_t serial_write(const void *, size_t, size_t);
+size_t fb_write(const void *, size_t, size_t);
+size_t dispinfo_read(void *, size_t, size_t);
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here, fix in nanos/irq/fs.c\n READ: buf=%p, offset=%d, len=%d", buf, offset, len);
@@ -18,22 +20,18 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stdin", 0, 0, 0, invalid_read, invalid_write},
   {"stdout", 0, 0, 0, invalid_read, serial_write},
   {"stderr", 0, 0, 0, invalid_read, serial_write},
+  {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
+  {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
-  {"/dev/fb", 0, 0, 0, ramdisk_read, ramdisk_write},
-  {"/proc/dispinfo", 0, 0, 0, ramdisk_read, ramdisk_write}
 };
 
 #define NR_FILES sizeof(file_table) / sizeof(file_table[0])
-#define NR_LAST  NR_FILES - 3
-#define NR_FB    NR_FILES - 2
-#define NR_DISP  NR_FILES - 1
+#define NR_FB    3
+#define NR_DISP  4
 
 void init_fs() {
-  // FIXME: initialize the size of /dev/fb
-  size_t fb_size = screen_width() * screen_height() * 4;
-  size_t fb_offset = file_table[NR_LAST].disk_offset + file_table[NR_LAST - 2].size;
-  file_table[NR_FB].size = fb_size;
-  file_table[NR_FB].disk_offset = fb_offset;
+  /* initialize the frame buffer */
+  file_table[NR_FB].size = screen_width() * screen_height() * sizeof(uint32_t);
 
   Log("Initializing filesystem... %d files loaded.", NR_FILES);
 }
