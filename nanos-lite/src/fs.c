@@ -99,6 +99,9 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
       break;
     case SEEK_END:
       file_table[fd].open_offset = file_table[fd].disk_offset + file_table[fd].size + offset;
+      break;
+    default:
+      panic("%d is not a valid whence! see nanos/src/fs.c", whence);
   }
   return file_table[fd].open_offset;
 }
