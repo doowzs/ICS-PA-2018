@@ -38,7 +38,7 @@ int _open(const char *path, int flags, mode_t mode) {
 }
 
 int _write(int fd, void *buf, size_t count){
-  printf("this is _write, fd = %d", fd);
+  assert(fd != 4);
   int ret = _syscall_(SYS_write, fd, (intptr_t) buf, count);
   return ret;
 }
