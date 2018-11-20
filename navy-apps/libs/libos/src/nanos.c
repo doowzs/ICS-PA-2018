@@ -45,7 +45,6 @@ int _write(int fd, void *buf, size_t count){
 void *_sbrk(intptr_t increment){
   break_addr_new = break_addr_old + increment;
   int ret = _syscall_(SYS_brk, (intptr_t) break_addr_new, 0, 0);
-  brk(break_addr_new);
   if (ret == 0) {
     break_addr_ret = break_addr_old;
     break_addr_old = break_addr_new;
