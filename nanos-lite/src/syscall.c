@@ -21,12 +21,13 @@ _Context* do_syscall(_Context *c) {
     /**
      * SYS_exit(0):
      *   exit program.
+     * @params int
      */
     case SYS_exit:
 #ifdef SYS_DEBUG
-      Log("SYS_exit");
+      Log("SYS_exit(code=%d)", a[1]);
 #endif
-      _halt(0);
+      _halt(a[1]);
       break;
 
     /**
