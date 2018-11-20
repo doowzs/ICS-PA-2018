@@ -4,7 +4,7 @@
 #define pass(i) printf("passed %d!\n", i)
 
 int main() {
-  printf("test start!");
+  printf("test start!\n");
   FILE *fp = fopen("/share/texts/num", "r+");
   printf("file opened!, fp=%p\n", fp);
   assert(fp);
