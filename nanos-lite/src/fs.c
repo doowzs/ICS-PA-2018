@@ -31,7 +31,6 @@ int fs_open(const char *pathname, int flags, int mode){
   // flags and mode are not used in nemu
   for (int i = 0; i < NR_FILES; ++i) {
     if (strcmp(pathname, file_table[i].name) == 0) {
-      file_table[i].open_offset = 0;
       return i;
     }
   }
@@ -103,6 +102,5 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
     default:
       panic("%d is not a valid whence! see nanos/src/fs.c", whence);
   }
-  printf("new offset is %d", file_table[fd].open_offset);
   return file_table[fd].open_offset;
 }

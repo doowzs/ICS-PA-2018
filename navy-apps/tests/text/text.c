@@ -18,7 +18,7 @@ int main() {
   int i, n;
   for (i = 500; i < 1000; i ++) {
     fscanf(fp, "%d", &n);
-    printf("read %d-th number %d", i, n);
+    printf("read %d-th number %d\n", i, n);
     assert(n == i + 1);
   }
   pass(3);
