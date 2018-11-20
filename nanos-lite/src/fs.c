@@ -103,5 +103,6 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
     default:
       panic("%d is not a valid whence! see nanos/src/fs.c", whence);
   }
+  printf("new offset is %d", file_table[fd].open_offset);
   return file_table[fd].open_offset;
 }
