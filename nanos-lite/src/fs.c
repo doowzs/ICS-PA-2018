@@ -71,7 +71,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
-  assert(fd > 2 && fd < NR_FILES);
+  assert(fd >= 0 && fd < NR_FILES);
   size_t offset = file_table[fd].disk_offset + file_table[fd].open_offset;
   size_t delta = file_table[fd].write(buf, offset, len);
   file_table[fd].open_offset += delta;
