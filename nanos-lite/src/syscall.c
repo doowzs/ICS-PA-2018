@@ -149,7 +149,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_brk(%p->%p)", _end, a[1]);
 #endif
-      //_end = (void *) a[1];
+      _end = (void *) a[1];
       syscall_ret(c, 0);
       break;
 
