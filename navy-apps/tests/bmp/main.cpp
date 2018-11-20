@@ -8,6 +8,7 @@ int main() {
   printf("malloc ok!\n");
   NDL_LoadBitmap(bmp, "/share/pictures/projectn.bmp");
   printf("bmp loaded!\n");
+  printf("bmp->pixels is %d\n", bmp->pixels);
   assert(bmp->pixels);
   printf("assert ok!\n");
   NDL_OpenDisplay(bmp->w, bmp->h);
