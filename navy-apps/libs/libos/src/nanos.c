@@ -88,6 +88,6 @@ int _kill(int pid, int sig) {
 }
 
 pid_t _getpid() {
-  _exit(-SYS_getpid);
-  return 1;
+  pid_t ret = _syscall_(SYS_getpid, 0, 0, 0);
+  return ret;
 }

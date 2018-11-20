@@ -90,6 +90,19 @@ _Context* do_syscall(_Context *c) {
 #endif
       syscall_ret(c, fs_write(a[1], (const void *) a[2], a[3]));
       break;
+    
+    /**
+     * SYS_getpid(6):
+     *   return the process ID.
+     * @return pid_t
+     */
+    case SYS_getpid:
+#ifdef SYS_DEBUG
+      Log("SYS_getpid");
+#endif
+      // FIXME: how to do this???
+      syscall_ret(c, 0);
+      break;
 
     /**
      * SYS_close(7):
