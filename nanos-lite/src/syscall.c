@@ -12,9 +12,6 @@ void syscall_ret(_Context *c, int val) {
 _Context* do_syscall(_Context *c) {
   uintptr_t a[4];
 
-  int i;
-  char *pchar;
-
   a[0] = c->GPR1;
   a[1] = c->ebx;
   a[2] = c->ecx;
@@ -60,18 +57,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_open(name=%s, mode=%d, fd=%d)", a[0], a[1], a[2]);
 #endif
-      pchar = (char *) a[0];
-      for (i = 0; i < file_table_size; ++i) {
-        if (strcmp(pchar, file_table[i].name) == 0) {
-          file_table[i].open_offset = 0;
-          syscall_ret(c, i);
-          break;
-        }
-      }
-      if (i == file_table_size) {
-        /* no match, trigger panic */
-        panic("File to be opened not found.");
-      }
+      syscall_ret(c, fs_open((const char *) a[0], a[1], a[2]));
       break;
 
     /**
@@ -86,20 +72,8 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_read(fd=%d, *buf=%p, len=%d)", a[0], a[1], a[2]);
 #endif
-      switch (a[1]) {
-        case FD_STDIN:  // 0
-          /* do nothing in nemu */
-          break;
-        case FD_STDOUT: // 1
-        case FD_STDERR: // 2
-          panic("cannot write to STDIN. see nanos/src/syscall.c");
-        default:
-          assert(a[0] >= 0 && a[0] < file_table_size);
-          syscall_ret(c, ramdisk_read((void *)a[1], file_table[a[0]].disk_offset, a[2]));
-          break;
-      }
+      syscall_ret(c, fs_read(a[0], (void *) a[1], a[2]));
       break;
-
 
     /**
      * SYS_write(4):
@@ -113,23 +87,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_write(fd=%d, *buf=%p, len=%d)", a[0], a[1], a[2]);
 #endif
-      switch (a[1]) {
-        case FD_STDIN:  // 0
-          panic("cannot write to STDIN. see nanos/src/syscall.c");
-        case FD_STDOUT: // 1
-        case FD_STDERR: // 2
-          pchar = (char *) a[2];
-          for (int i = 0; i < a[3]; ++i) {
-            _putc(*pchar);
-            ++pchar;
-          }
-          syscall_ret(c, a[3]);
-          break;
-        default:
-          assert(a[0] >= 0 && a[0] < file_table_size);
-          syscall_ret(c, ramdisk_write((const void*) a[1], file_table[a[0]].disk_offset, a[2]));
-          break;
-      }
+      syscall_ret(c, fs_write(a[1], (const void *) a[1], a[2]));
       break;
 
     /**
@@ -143,7 +101,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_close(fd=%d)", a[0]);
 #endif
-      syscall_ret(c, 0);
+      syscall_ret(c, fs_close(a[0]));
       break;
 
     /**
@@ -159,9 +117,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_lseek(fd=%d, offset=%d, whence=%d)", a[0], a[1], a[2]);
 #endif
-      assert(a[0] >= 0 && a[0] < file_table_size);
-      file_table[a[0]].open_offset = (size_t) a[1];
-      syscall_ret(c, a[1]);
+      syscall_ret(c, fs_lseek(a[0], (size_t) a[1], a[2]));
       break;
 
     /**
