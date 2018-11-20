@@ -24,6 +24,9 @@ static Finfo file_table[] __attribute__((used)) = {
 void init_fs() {
   // TODO: initialize the size of /dev/fb
   
+  for (int i = 0; i < NR_FILES; ++i) {
+    file_table[i].open_offset = 0;
+  }
   Log("Initializing filesystem... %d files loaded.", NR_FILES);
 }
 
