@@ -21,9 +21,9 @@ void hello_fun(void *arg) {
   }
 }
 
-void init_proc() {
+void init_proc(const char *filename) {
   Log("Initializing process...");
-  naive_uload(NULL, NULL);
+  naive_uload(NULL, filename);
 }
 
 _Context* schedule(_Context *prev) {
