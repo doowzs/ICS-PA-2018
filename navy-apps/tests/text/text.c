@@ -13,7 +13,7 @@ int main() {
   fseek(fp, 0, SEEK_END);
   printf("fseek done\n");
   long size = ftell(fp);
-  printf("size of fp is %d", size);
+  printf("size of fp is %d\n", size);
   assert(size == 5000);
   pass(2);
 
