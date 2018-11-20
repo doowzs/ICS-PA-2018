@@ -87,7 +87,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_write(fd=%d, *buf=%p, len=%d)", a[0], a[1], a[2]);
 #endif
-      syscall_ret(c, fs_write(a[1], (const void *) a[1], a[2]));
+      syscall_ret(c, fs_write(a[0], (const void *) a[1], a[2]));
       break;
 
     /**
