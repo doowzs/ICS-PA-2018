@@ -3,6 +3,8 @@
 #include "ramdisk.h"
 #include "syscall.h"
 
+#define SYS_DEBUG
+
 extern void *_end;
 
 void syscall_ret(_Context *c, int val) {
@@ -51,6 +53,9 @@ _Context* do_syscall(_Context *c) {
      * @throws exception (not found)
      */
     case SYS_open:  
+#ifdef SYS_DEBUG
+      Log("SYS_open(name=%s, mode=%d, fd=%d)", a[0], a[1], a[2]);
+#endif
       pchar = (char *) a[0];
       for (i = 0; i < file_table_size; ++i) {
         if (strcmp(pchar, file_table[i].name) == 0) {
@@ -74,6 +79,9 @@ _Context* do_syscall(_Context *c) {
      * @return size_t
      */
     case SYS_read:
+#ifdef SYS_DEBUG
+      Log("SYS_read(fd=%d, *buf=%p, len=%d)", a[0], a[1], a[2]);
+#endif
       switch (a[1]) {
         case FD_STDIN:  // 0
           /* do nothing in nemu */
@@ -98,6 +106,9 @@ _Context* do_syscall(_Context *c) {
      * @return size_t
      */
     case SYS_write:
+#ifdef SYS_DEBUG
+      Log("SYS_write(fd=%d, *buf=%p, len=%d)", a[0], a[1], a[2]);
+#endif
       switch (a[1]) {
         case FD_STDIN:  // 0
           panic("cannot write to STDIN. see nanos/src/syscall.c");
@@ -125,6 +136,9 @@ _Context* do_syscall(_Context *c) {
      * @return int
      */
     case SYS_close:
+#ifdef SYS_DEBUG
+      Log("SYS_close(fd=%d)", a[0]);
+#endif
       syscall_ret(c, 0);
       break;
 
@@ -138,6 +152,9 @@ _Context* do_syscall(_Context *c) {
      * @return size_t
      */
     case SYS_lseek:
+#ifdef SYS_DEBUG
+      Log("SYS_lseek(fd=%d, offset=%d, whence=%d)", a[0], a[1], a[2]);
+#endif
       assert(a[0] >= 0 && a[0] < file_table_size);
       file_table[a[0]].open_offset = (size_t) a[1];
       syscall_ret(c, a[1]);
