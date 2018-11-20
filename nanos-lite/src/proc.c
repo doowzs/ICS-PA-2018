@@ -22,7 +22,7 @@ void hello_fun(void *arg) {
 }
 
 void init_proc(const char *filename) {
-  Log("Initializing process...");
+  Log("Initializing process of %s...", filename);
   naive_uload(NULL, filename);
 }
 

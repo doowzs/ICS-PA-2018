@@ -3,8 +3,6 @@
 #include "ramdisk.h"
 #include "syscall.h"
 
-#define SYS_DEBUG
-
 extern void *_end;
 
 void syscall_ret(_Context *c, int val) {
@@ -28,6 +26,9 @@ _Context* do_syscall(_Context *c) {
      *   exit program.
      */
     case SYS_exit:
+#ifdef SYS_DEBUG
+      Log("SYS_exit");
+#endif
       _halt(0);
       break;
 
@@ -37,6 +38,9 @@ _Context* do_syscall(_Context *c) {
      * @return int 0
      */
     case SYS_yield:
+#ifdef SYS_DEBUG
+      Log("SYS_yield");
+#endif
       _yield();
       syscall_ret(c, 0);
       break;
@@ -169,6 +173,9 @@ _Context* do_syscall(_Context *c) {
      * @return int
      */
     case SYS_brk:
+#ifdef SYS_DEBUG
+      Log("SYS_brk(brk=%p)", a[1]);
+#endif
       _end = (void *) a[1];
       syscall_ret(c, 0);
       break;

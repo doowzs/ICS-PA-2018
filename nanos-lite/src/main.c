@@ -15,6 +15,10 @@ int main() {
   Log("'Hello World!' from Nanos-lite");
   Log("Build time: %s, %s", __TIME__, __DATE__);
 
+#ifdef SYS_DEBUG
+  Log("SYS_DEBUG is on. You can turn it off in nanos/include/common.h.");
+#endif
+
   init_ramdisk();
 
   init_device();
