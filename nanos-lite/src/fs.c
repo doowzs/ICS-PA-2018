@@ -82,7 +82,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
       return len;
     default:
       assert(fd > 2 && fd < NR_FILES);
-      file_table[fd].open_offset = len;
+      file_table[fd].open_offset += len;
       return ramdisk_write(buf, file_table[fd].disk_offset, len);
   }
   return -1;
