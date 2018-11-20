@@ -112,6 +112,9 @@ _Context* do_syscall(_Context *c) {
      * @params int fd
      * @params size_t offset
      * @params int whence
+     *   SEEK_SET: set to offset bytes
+     *   SEEK_CUR: current location + offset
+     *   SEEK_END: size of the file + offset
      * @return size_t
      */
     case SYS_lseek:
