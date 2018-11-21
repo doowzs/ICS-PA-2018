@@ -3,8 +3,6 @@
 #include "ramdisk.h"
 #include "syscall.h"
 
-int mm_brk(intptr_t);
-
 void syscall_ret(_Context *c, int val) {
   c->GPRx = val;
 }
@@ -147,9 +145,10 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_brk:
 #ifdef SYS_DEBUG
-      Log("SYS_brk(%p)", a[1]);
+      Log("SYS_brk(%p->%p)", break_addr, a[1]);
 #endif
-      syscall_ret(c, mm_brk(a[1]));
+      break_addr = (void *) a[1];
+      syscall_ret(c, 0);
       break;
 
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
