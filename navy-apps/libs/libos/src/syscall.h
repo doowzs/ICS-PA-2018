@@ -3,6 +3,7 @@
 
 extern void *_end;
 static void *break_addr = &(_end);
+static void *break_addr_old __attribute__((used));
 
 enum {
   SYS_exit,
