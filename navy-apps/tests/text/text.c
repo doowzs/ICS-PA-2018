@@ -6,7 +6,7 @@
 int main() {
   printf("test start!\n");
 
-  int *a = (int *) malloc (sizeof(int));
+  int *a = (int *) malloc (sizeof(int) * 5);
   assert(a != NULL);
   pass(0);
 
