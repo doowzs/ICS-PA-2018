@@ -5,7 +5,7 @@
 
 int main() {
   int *a = (int *)malloc(sizeof(int)*5);
-  assert(!a);
+  assert(a);
   printf("*a = %p\n", a);
 
   NDL_Bitmap *bmp = (NDL_Bitmap*)malloc(sizeof(NDL_Bitmap));
