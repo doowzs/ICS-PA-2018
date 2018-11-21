@@ -5,6 +5,11 @@
 
 int main() {
   printf("test start!\n");
+
+  int *a = (int *) malloc (sizeof(int));
+  assert(a != NULL);
+  pass(0);
+
   FILE *fp = fopen("/share/texts/num", "r+");
   assert(fp);
   pass(1);
