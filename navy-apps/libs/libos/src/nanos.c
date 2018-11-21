@@ -45,7 +45,7 @@ void *_sbrk(intptr_t increment){
   brk_new = brk_old + increment;
   int ret = _syscall_(SYS_brk, (uintptr_t) brk_new, 0, 0);
   if (ret == 0) {
-    char *brk_ret = brk_old;
+    void *brk_ret = brk_old;
     brk_old = brk_new;
     return brk_ret;
   } else {
