@@ -4,6 +4,7 @@
 #include "syscall.h"
 
 extern void *_end;
+static void *pbrk;
 
 void syscall_ret(_Context *c, uintptr_t val) {
   c->GPRx = val;
@@ -149,8 +150,11 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_brk(%p)", a[1]);
 #endif
-      syscall_ret(c, (uintptr_t) _end);
-      _end = (void *) a[1];
+      if (a[1] == 0) {
+        syscall_ret(c, (uintptr_t) pbrk);
+      } else {
+      pbrk = (void *) a[1];
+      syscall_ret(c, 0);}
       break;
 
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
