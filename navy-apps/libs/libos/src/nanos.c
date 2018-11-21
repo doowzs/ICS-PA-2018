@@ -9,6 +9,7 @@
 extern void *_end;
 static void *break_addr = &(_end);
 static void *break_addr_old = NULL;
+static void *break_addr_new = NULL;
 
 #if defined(__ISA_X86__)
 intptr_t _syscall_(int type, intptr_t a0, intptr_t a1, intptr_t a2){
@@ -43,8 +44,11 @@ int _write(int fd, void *buf, size_t count){
 
 void *_sbrk(intptr_t increment){
   break_addr_old = break_addr;
-  int ret = _syscall_(SYS_brk, (intptr_t) break_addr + increment, 0, 0);
+  break_addr_new = break_addr + increment;
+  int ret = _syscall_(SYS_brk, (intptr_t) break_addr_new, 0, 0);
   if (ret == 0) {
+    break_addr = break_addr_new;
+    printf("OK, new addr is %p->%p", _end, break_addr);
     return break_addr_old;
   } else {
     return (void *)-1;
