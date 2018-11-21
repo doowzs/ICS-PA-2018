@@ -6,11 +6,6 @@
 #include <time.h>
 #include "syscall.h"
 
-extern void *_end;
-static void *break_addr = &(_end);
-static void *break_addr_old = NULL;
-static void *break_addr_new = NULL;
-
 #if defined(__ISA_X86__)
 intptr_t _syscall_(int type, intptr_t a0, intptr_t a1, intptr_t a2){
   int ret = -1;
@@ -33,29 +28,27 @@ void _exit(int status) {
 }
 
 int _open(const char *path, int flags, mode_t mode) {
-  int ret = _syscall_(SYS_open, (intptr_t) path, flags, (intptr_t) mode);
+  int ret = _syscall_(SYS_open, (uintptr_t) path, flags, (uintptr_t) mode);
   return ret;
 }
 
 int _write(int fd, void *buf, size_t count){
-  int ret = _syscall_(SYS_write, fd, (intptr_t) buf, count);
+  int ret = _syscall_(SYS_write, fd, (uintptr_t) buf, count);
   return ret;
 }
 
 void *_sbrk(intptr_t increment){
-  break_addr_old = break_addr;
-  break_addr_new = break_addr + increment;
-  int ret = _syscall_(SYS_brk, (intptr_t) break_addr_new, 0, 0);
-  if (ret == 0) {
-    break_addr = break_addr_new;
-    return break_addr_old;
+  void *br_old = (void *) _syscall_(SYS_brk, 0, 0, 0);
+  void *br_new = (void *) _syscall_(SYS_brk, (uintptr_t) br_old + increment, 0, 0);
+  if ((uintptr_t) br_new == (uintptr_t) br_old + increment) {
+    return br_old;
   } else {
-    return (void *)-1;
+    return (void *) -1;
   }
 }
 
 int _read(int fd, void *buf, size_t count) {
-  int ret = _syscall_(SYS_read, fd, (intptr_t) buf, count);
+  int ret = _syscall_(SYS_read, fd, (uintptr_t) buf, count);
   return ret;
 }
 
@@ -65,7 +58,7 @@ int _close(int fd) {
 }
 
 off_t _lseek(int fd, off_t offset, int whence) {
-  int ret = _syscall_(SYS_lseek, fd, (intptr_t) offset, whence);
+  int ret = _syscall_(SYS_lseek, fd, (uintptr_t) offset, whence);
   return ret;
 }
 
