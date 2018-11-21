@@ -4,6 +4,7 @@
 #include <sys/time.h>
 #include <assert.h>
 #include <time.h>
+#include <stdio.h>
 #include "syscall.h"
 
 #if defined(__ISA_X86__)
@@ -38,12 +39,14 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
+  char buf[128];
   void *br_old = (void *) _syscall_(SYS_brk, 0, 0, 0);
   void *br_new = (void *) _syscall_(SYS_brk, (uintptr_t) br_old + increment, 0, 0);
   if ((uintptr_t) br_new == (uintptr_t) br_old + increment) {
+    sprintf(buf, "returning %p\n", br_old);
+    _write(1, buf, 30);
     return br_old;
   } else {
-    assert(0);
     return (void *) -1;
   }
 }
