@@ -48,7 +48,6 @@ void *_sbrk(intptr_t increment){
   int ret = _syscall_(SYS_brk, (intptr_t) break_addr_new, 0, 0);
   if (ret == 0) {
     break_addr = break_addr_new;
-    printf("OK, new addr is %p->%p", _end, break_addr);
     return break_addr_old;
   } else {
     return (void *)-1;
