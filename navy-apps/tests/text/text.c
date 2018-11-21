@@ -8,10 +8,10 @@ int main() {
   printf("test start!\n");
 
   int *a = (int *) malloc (sizeof(int) * 5);
-  assert(!a);
+  assert(a);
   pass(-1);
   double *b = (double *) malloc (sizeof(double) * 10);
-  assert(!b);
+  assert(b);
   pass(0);
 
   FILE *fp = fopen("/share/texts/num", "r+");
