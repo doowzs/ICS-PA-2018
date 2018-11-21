@@ -8,7 +8,7 @@ int main() {
 
   int *a = (int *) malloc (sizeof(int) * 5);
   assert(!a);
-  double *b = (double *) malloc (sizeof(double) * 10086);
+  double *b = (double *) malloc (sizeof(double) * 10);
   assert(!b);
   pass(0);
 
