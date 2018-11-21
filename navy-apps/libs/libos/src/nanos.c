@@ -6,8 +6,7 @@
 #include <time.h>
 #include "syscall.h"
 
-extern void *_end;
-static void *brk_old = &(_end);
+static void *brk_old = brk_addr;
 static void *brk_new = NULL;
 
 #if defined(__ISA_X86__)

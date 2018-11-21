@@ -3,9 +3,6 @@
 #include "ramdisk.h"
 #include "syscall.h"
 
-extern void *_end;
-static void *brk = &(_end);
-
 void syscall_ret(_Context *c, int val) {
   c->GPRx = val;
 }
@@ -148,9 +145,9 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_brk:
 #ifdef SYS_DEBUG
-      Log("SYS_brk(%p->%p)", brk, a[1]);
+      Log("SYS_brk(%p->%p)", brk_addr, a[1]);
 #endif
-      brk = (void *) a[1];
+      brk_addr = (void *) a[1];
       syscall_ret(c, 0);
       break;
 
