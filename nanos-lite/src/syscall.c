@@ -146,9 +146,6 @@ _Context* do_syscall(_Context *c) {
      * @return int
      */
     case SYS_brk:
-#ifdef SYS_DEBUG
-      Log("SYS_brk(%p->%p)", _end, a[1]);
-#endif
       _end = (void *) a[1];
       syscall_ret(c, 0);
       break;
