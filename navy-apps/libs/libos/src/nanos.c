@@ -43,6 +43,7 @@ void *_sbrk(intptr_t increment){
   if ((uintptr_t) br_new == (uintptr_t) br_old + increment) {
     return br_old;
   } else {
+    assert(0);
     return (void *) -1;
   }
 }
