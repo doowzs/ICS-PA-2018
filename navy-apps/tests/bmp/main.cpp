@@ -5,8 +5,6 @@
 
 int main() {
   int *a = (int *)malloc(sizeof(int)*5);
-  a[0] = 0;
-  a[1] = 1;
   assert(!a);
   printf("*a = %p\n", a);
 
