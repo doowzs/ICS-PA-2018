@@ -1,10 +1,6 @@
 #ifndef __SYSCALL_H__
 #define __SYSCALL_H__
 
-extern void *_end;
-static void *break_addr = &(_end);
-static void *break_addr_old __attribute__((used));
-
 enum {
   SYS_exit,
   SYS_yield,
