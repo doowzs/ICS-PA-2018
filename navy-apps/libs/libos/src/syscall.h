@@ -2,7 +2,7 @@
 #define __SYSCALL_H__
 
 extern void *_end;
-static void *brk_addr = &(_end);
+static const void *brk_init = &(_end);
 
 enum {
   SYS_exit,
