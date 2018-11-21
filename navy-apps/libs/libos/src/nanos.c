@@ -45,8 +45,13 @@ void *_sbrk(intptr_t increment){
   // syscall
   void *brk_ret = brk_old;
   brk_new = brk_old + increment;
-  brk_old = brk_new;
-  return brk_old;
+  int ret = _syscall_(SYS_brk, (uintptr_t) brk_new, 0, 0);
+  if (ret == 0) {
+    brk_old = brk_new;
+    return brk_ret;
+  } else {
+    return (void *) -1;
+  }
 }
 
 int _read(int fd, void *buf, size_t count) {
