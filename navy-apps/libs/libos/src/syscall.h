@@ -1,9 +1,6 @@
 #ifndef __SYSCALL_H__
 #define __SYSCALL_H__
 
-extern void *_end;
-static const void *brk_init = &(_end);
-
 enum {
   SYS_exit,
   SYS_yield,

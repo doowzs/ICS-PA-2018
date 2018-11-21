@@ -6,7 +6,8 @@
 #include <time.h>
 #include "syscall.h"
 
-static void *brk_old = NULL;
+extern void *end;
+static void *brk_old = &(end);
 static void *brk_new = NULL;
 
 #if defined(__ISA_X86__)
@@ -41,16 +42,11 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  if (brk_old == NULL) brk_old = (void *) brk_init;
+  // syscall
+  void *brk_ret = brk_old;
   brk_new = brk_old + increment;
-  int ret = _syscall_(SYS_brk, (uintptr_t) brk_new, 0, 0);
-  if (ret == 0) {
-    void *brk_ret = brk_old;
-    brk_old = brk_new;
-    return brk_ret;
-  } else {
-    return (void *) -1;
-  }
+  brk_old = brk_new;
+  return brk_old;
 }
 
 int _read(int fd, void *buf, size_t count) {
