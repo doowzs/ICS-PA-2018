@@ -9,7 +9,6 @@ int main() {
   int *a = (int *) malloc (sizeof(int) * 5);
   assert(a != NULL);
   double *b = (double *) malloc (sizeof(double) * 10086);
-  assert(!b);
   pass(0);
 
   FILE *fp = fopen("/share/texts/num", "r+");
