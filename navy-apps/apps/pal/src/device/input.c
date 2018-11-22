@@ -242,7 +242,8 @@ PAL_InitInput(
 --*/
 {
 printf("Test 1\n");
-   memset((void *)&g_InputState, 0, sizeof(g_InputState));
+   void * a = memset((void *)&g_InputState, 0, sizeof(g_InputState));
+printf("Memset of %p success\n", a);
 printf("Test 2\n");
    g_InputState.dir = kDirUnknown;
    g_InputState.prevdir = kDirUnknown;
