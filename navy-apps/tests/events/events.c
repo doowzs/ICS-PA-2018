@@ -6,8 +6,7 @@ int main() {
 printf("start!\n");
   while(1) {
     j ++;
-    if (j == 100000) {
-printf("j == 100000!\n");
+    if (j == 50000) {
       char buf[256];
       char *p = buf, ch;
       while ((ch = fgetc(fp)) != -1) {
