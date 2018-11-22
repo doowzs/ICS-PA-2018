@@ -16,16 +16,22 @@ int NDL_OpenDisplay(int w, int h) {
     NDL_CloseDisplay();
   }
 
+printf("Opending display...\n");
+
   canvas_w = w;
   canvas_h = h;
   canvas = malloc(sizeof(uint32_t) * w * h);
   assert(canvas);
+
+printf("canvas malloc ok\n");
 
   if (getenv("NWM_APP")) {
     has_nwm = 1;
   } else {
     has_nwm = 0;
   }
+
+printf("has_nwm: %d\n", has_nwm);
 
   if (has_nwm) {
     printf("\033[X%d;%ds", w, h); fflush(stdout);
@@ -34,10 +40,13 @@ int NDL_OpenDisplay(int w, int h) {
     get_display_info();
     assert(screen_w >= canvas_w);
     assert(screen_h >= canvas_h);
+printf("displayinfo: screen_w %d screen_h %d\n", screen_w, screen_h);
     pad_x = (screen_w - canvas_w) / 2;
     pad_y = (screen_h - canvas_h) / 2;
     fbdev = fopen("/dev/fb", "w"); assert(fbdev);
+printf("fbdev opened: %p\n", fbdev);
     evtdev = fopen("/dev/events", "r"); assert(evtdev);
+printf("evtdev opened: %p\n", evtdev);
   }
 }
 
