@@ -41,5 +41,5 @@ void init_device() {
   _ioe_init();
 
   /* initialize dispinfo */
-  sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d", screen_width(), screen_height());
+  sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d\0", screen_width(), screen_height());
 }
