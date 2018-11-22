@@ -33,6 +33,8 @@ QUICKREF
 #define UNALIGNED(X)   ((long)X & (LBLOCKSIZE - 1))
 #define TOO_SMALL(LEN) ((LEN) < LBLOCKSIZE)
 
+#include <assert.h>
+
 void *
 __inhibit_loop_to_libcall
 memset (void *m,
@@ -42,6 +44,7 @@ memset (void *m,
   char *s = (char *) m;
 
 #if !defined(PREFER_SIZE_OVER_SPEED) && !defined(__OPTIMIZE_SIZE__)
+  assert(0);
   unsigned int i;
   unsigned long buffer;
   unsigned long *aligned_addr;
