@@ -241,7 +241,9 @@ PAL_InitInput(
 
 --*/
 {
+printf("Test 1\n");
    memset((void *)&g_InputState, 0, sizeof(g_InputState));
+printf("Test 2\n");
    g_InputState.dir = kDirUnknown;
    g_InputState.prevdir = kDirUnknown;
 
@@ -249,6 +251,7 @@ PAL_InitInput(
    // Check for joystick
    //
 #ifdef PAL_HAS_JOYSTICKS
+   printf("HASJOYSTICKS\n");
    if (SDL_NumJoysticks() > 0 && g_fUseJoystick)
    {
       g_pJoy = SDL_JoystickOpen(0);
