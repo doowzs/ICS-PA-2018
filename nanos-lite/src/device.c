@@ -19,9 +19,7 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t offset, size_t len) {
-  Log("reading key\n");
   int key = read_key();
-  Log("key: %d\n", key);
   if (key > 0) {
     if (key & 0x8000) {
       return snprintf(buf, len, "ku %s\n", keyname[key & 0xff]);
