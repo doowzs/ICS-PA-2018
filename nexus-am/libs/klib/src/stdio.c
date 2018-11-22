@@ -152,8 +152,13 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
   ret = vsprintf(pbuf, fmt, ap);
   va_end(ap);
 
+  // move n bytes from pbuf to out
+  // if ret < n, move ret instead
+  if (ret > n) ret = n;
   assert(ret < PBUF_MAX_SIZE);
-  pbuf[n] = '\0';
+  strncpy(out, pbuf, ret);
+  out[ret] = '\0'; 
+
   return ret;
 }
 
