@@ -41,5 +41,6 @@ void init_device() {
   _ioe_init();
 
   /* initialize dispinfo */
+  memset(dispinfo, 0, 128 * sizeof(char));
   sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d", screen_width(), screen_height());
 }
