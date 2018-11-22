@@ -37,6 +37,7 @@ make_EHelper(cwtl);
 make_EHelper(movsx);
 make_EHelper(movzx);
 make_EHelper(lea);
+make_EHelper(stos);
 
 /* logic */
 make_EHelper(test);
