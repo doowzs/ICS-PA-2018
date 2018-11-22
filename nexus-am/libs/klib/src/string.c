@@ -59,7 +59,6 @@ int strncmp(const char* s1, const char* s2, size_t n) {
 }
 
 void* memset(void* v, int c, size_t n) {
-  printf("FUCKYOU");
   int8_t c8 = (int8_t) c & 0xff;
   int32_t c32 = (int32_t) c8 | ((int32_t) c8 << 8) | ((int32_t) c8 << 16) | ((int32_t) c8 << 24);
 
