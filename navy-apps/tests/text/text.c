@@ -9,9 +9,18 @@ int main() {
 
   int *a = (int *) malloc (sizeof(int) * 5);
   assert(a);
-  pass(-1);
+  pass(-5);
+  memset(a, 0, sizeof(a));
+  pass(-4);
+  assert(a[4] == 0);
+  pass(-3);
+
   double *b = (double *) malloc (sizeof(double) * 10);
   assert(b);
+  pass(-2);
+  memset(b, 0, sizeof(b));
+  pass(-1);
+  assert(b[0] == 0);
   pass(0);
 
   FILE *fp = fopen("/share/texts/num", "r+");
