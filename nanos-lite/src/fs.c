@@ -21,7 +21,7 @@ static Finfo file_table[] __attribute__((used)) = {
   {"stdout", 0, 0, 0, invalid_read, serial_write},
   {"stderr", 0, 0, 0, invalid_read, serial_write},
   {"/dev/fb", 0, 0, 0, invalid_read, fb_write},
-  {"/proc/dispinfo", 0, 0, 0, dispinfo_read, invalid_write},
+  {"/proc/dispinfo", 128, 0, 0, dispinfo_read, invalid_write},
 #include "files.h"
 };
 
@@ -61,18 +61,32 @@ size_t fs_filesz(int fd) {
 
 size_t fs_read(int fd, void *buf, size_t len) {
   assert(fd >= 0 && fd < NR_FILES);
-  size_t offset = file_table[fd].disk_offset + file_table[fd].open_offset;
-  size_t delta = file_table[fd].read(buf, offset, len);
-  file_table[fd].open_offset += delta;
-  return delta;
+  if (file_table[fd].open_offset >= file_table[fd].size) {
+    return 0; // EOF
+  } else {
+    if (file_table[fd].open_offset + len > file_table[fd].size) {
+      len = file_table[fd].size - file_table[fd].open_offset;
+    }
+    size_t offset = file_table[fd].disk_offset + file_table[fd].open_offset;
+    size_t delta = file_table[fd].read(buf, offset, len);
+    file_table[fd].open_offset += delta;
+    return delta;
+  }
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
   assert(fd >= 0 && fd < NR_FILES);
-  size_t offset = file_table[fd].disk_offset + file_table[fd].open_offset;
-  size_t delta = file_table[fd].write(buf, offset, len);
-  file_table[fd].open_offset += delta;
-  return delta;
+  if (file_table[fd].open_offset >= file_table[fd].size) {
+    return 0; // Fail
+  } else {
+    if (file_table[fd].open_offset + len > file_table[fd].size) {
+      len = file_table[fd].size - file_table[fd].open_offset;
+    }
+    size_t offset = file_table[fd].disk_offset + file_table[fd].open_offset;
+    size_t delta = file_table[fd].write(buf, offset, len);
+    file_table[fd].open_offset += delta;
+    return delta;
+  }
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
