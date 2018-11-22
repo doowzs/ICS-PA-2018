@@ -31,8 +31,9 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
   int w = len / sizeof(uint32_t), h = 1;
-  int uoff = offset / sizeof(uint32_t);
-  int x = uoff % screen_width(), y = uoff / screen_width();
+  int uint32_offset = offset / sizeof(uint32_t);
+  int x = uint32_offset % screen_width(), 
+      y = uint32_offset / screen_width();
   Log("offset=%d, x=%d, y=%d, w=%d, h=%d\n", offset, x, y, w, h);
   draw_rect((uint32_t *) buf, x, y, w, h);
   return len;
