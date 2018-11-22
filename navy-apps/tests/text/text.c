@@ -15,12 +15,12 @@ int main() {
   assert(a[4] == 0);
   pass(-3);
 
-  double *b = (double *) malloc (sizeof(double) * 10);
+  long *b = (long *) malloc (sizeof(long) * 10);
   assert(b);
   pass(-2);
   memset(b, 0, sizeof(b));
   pass(-1);
-  assert(b[0] == 0);
+  assert(b[2] == b[8]);
   pass(0);
 
   FILE *fp = fopen("/share/texts/num", "r+");
