@@ -22,12 +22,12 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   int key = read_key();
   if (key > 0) {
     if (key & 0x8000) {
-      return snprintf(buf, len, "ku %s", keyname[key & 0xff]);
+      return snprintf(buf, len, "ku %s\n", keyname[key & 0xff]);
     } else {
-      return snprintf(buf, len, "kd %s", keyname[key & 0xff]);
+      return snprintf(buf, len, "kd %s\n", keyname[key & 0xff]);
     }
   } else {
-    return snprintf(buf, len, "t %d", uptime());
+    return snprintf(buf, len, "t %d\n", uptime());
   }
 }
 
