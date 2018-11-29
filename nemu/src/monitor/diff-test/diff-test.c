@@ -63,9 +63,12 @@ void difftest_attach() {
   Log("Reloading difftest mem/reg...");
 
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
+  ref_difftest_setregs(&cpu); 
 
   difftest_on = true;
-  is_skip_ref = true;
+  is_skip_ref = false;
+  is_skip_dut = false;
+  is_skip_flg = false;
   Log("Differential testing is turned on.");
 }
 
@@ -112,6 +115,7 @@ void difftest_step(uint32_t eip) {
         OK = false;
       }
     }
+    is_skip_flg = false;
   }
   
   if (!OK) {
