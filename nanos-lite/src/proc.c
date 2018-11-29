@@ -2,7 +2,7 @@
 
 #define MAX_NR_PROC 4
 
-void naive_uload(PCB *, const char *);
+void naive_uload(PCB *, const char *, char* const *);
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used));
 static PCB pcb_boot;
@@ -21,9 +21,9 @@ void hello_fun(void *arg) {
   }
 }
 
-void init_proc(const char *filename) {
+void init_proc(const char *filename, char* const argv[]) {
   Log("Initializing process of %s...", filename);
-  naive_uload(NULL, filename);
+  naive_uload(NULL, filename, argv);
 }
 
 _Context* schedule(_Context *prev) {

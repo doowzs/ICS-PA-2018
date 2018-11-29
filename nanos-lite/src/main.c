@@ -5,7 +5,7 @@ void init_ramdisk(void);
 void init_device(void);
 void init_irq(void);
 void init_fs(void);
-void init_proc(const char *);
+void init_proc(const char *, char* const);
 
 int main() {
 #ifdef HAS_VME
@@ -29,7 +29,7 @@ int main() {
 
   init_fs();
 
-  init_proc("/bin/init");
+  init_proc("/bin/init", NULL);
 
 #ifdef HAS_CTE
   _yield();
