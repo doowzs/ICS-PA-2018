@@ -62,6 +62,8 @@ void difftest_detach() {
 void difftest_attach() {
   Log("Reloading difftest mem/reg...");
 
+  ref_difftest_memcpy_from_dut(0, guest_to_host(0), PMEM_SIZE + 0x100000);
+  ref_difftest_setregs(&cpu);
 
   difftest_on = true;
   is_skip_ref = false;
