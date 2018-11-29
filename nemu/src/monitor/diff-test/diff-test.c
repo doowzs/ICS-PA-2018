@@ -15,7 +15,6 @@ static bool is_skip_ref = false;
 static bool is_skip_dut = false;
 static bool is_skip_flg = false;
 static bool difftest_on =  true;
-static char* opened_ref_so_file = NULL;
 
 void difftest_skip_ref() { is_skip_ref = true; }
 void difftest_skip_dut() { is_skip_dut = true; }
@@ -27,7 +26,6 @@ void init_difftest(char *ref_so_file, long img_size) {
 #endif
 
   assert(ref_so_file != NULL);
-  opened_ref_so_file = ref_so_file;
 
   void *handle;
   handle = dlopen(ref_so_file, RTLD_LAZY | RTLD_DEEPBIND);
@@ -64,21 +62,7 @@ extern void difftest_detach() {
 }
 
 extern void difftest_attach() {
-  void *handle;
-  handle = dlopen(opened_ref_so_file, RTLD_LAZY | RTLD_DEEPBIND);
-  assert(handle);
-
-  ref_difftest_memcpy_from_dut = dlsym(handle, "difftest_memcpy_from_dut");
-  assert(ref_difftest_memcpy_from_dut);
-
-  ref_difftest_getregs = dlsym(handle, "difftest_getregs");
-  assert(ref_difftest_getregs);
-
-  ref_difftest_setregs = dlsym(handle, "difftest_setregs");
-  assert(ref_difftest_setregs);
-
-  ref_difftest_exec = dlsym(handle, "difftest_exec");
-  assert(ref_difftest_exec);
+  Log("Reloading difftest mem/reg...");
 
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
   ref_difftest_setregs(&cpu); 
