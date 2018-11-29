@@ -58,12 +58,12 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_setregs(&cpu);
 }
 
-void difftest_detach() {
+extern void difftest_detach() {
   difftest_on = false;
   Log("Differential testing is turned off.");
 }
 
-void difftest_attach() {
+extern void difftest_attach() {
   void *handle;
   handle = dlopen(opened_ref_so_file, RTLD_LAZY | RTLD_DEEPBIND);
   assert(handle);

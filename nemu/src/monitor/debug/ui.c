@@ -36,6 +36,10 @@ static int cmd_p(char *args);
 static int cmd_x(char *args);
 static int cmd_w(char *args);
 static int cmd_d(char *args);
+#ifdef DIFF_TEST
+static int cmd_detach(char *args);
+static int cmd_attach(char *args);
+#endif
 static void cmd_wrong_parameter();
 
 static struct {
@@ -55,6 +59,10 @@ static struct {
 	{ "x", "Usage: x N EXPR, Calculate EXPR and print 4N bytes of memory data from EXPR.", cmd_x	},
 	{ "w", "usage: w EXPR, Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
   { "d", "Usage: d N, Delete watchpoint numbered with N.", cmd_d },
+#ifdef DIFF_TEST
+  { "detach", "Usage: detach, stop difftest.", cmd_detach },
+  { "attach", "Usage: attach, restart difftest.", cmd_attach },
+#endif
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
@@ -239,6 +247,20 @@ static int cmd_d(char *args) {
 	return 0;
 }
 
+#ifdef DIFF_TEST
+static int cmd_detach(char *args) {
+  void difftest_detach();
+  difftest_detach();
+  return 0;
+}
+
+static int cmd_attach(char *args) {
+  void difftest_attach();
+  difftest_attach();
+  return 0;
+}
+#endif
+
 static void cmd_wrong_parameter(char *args) {
 	/* input a prompt message and abort running the command */
 	printf("[\033[1;36mCMD\033[0m] Wrong parameter \'%s\'. Please check your input. Type 'help' for usage.\n", args);
@@ -279,6 +301,11 @@ void ui_mainloop(int is_batch_mode) {
       }
     }
 
-    if (i == NR_CMD) { printf("[\033[1;36mCMD\033[0m] Unknown command '%s'. Type 'help' for usage.\n", cmd); }
+    if (i == NR_CMD) { 
+      printf("[\033[1;36mCMD\033[0m] Unknown command '%s'. Type 'help' for usage.\n", cmd); 
+#ifndef DIFF_TEST
+      printf("[\033[1;36mCMD\033[0m] Note that this version does not contain diff-test.\n");
+#endif
+    }
   }
 }
