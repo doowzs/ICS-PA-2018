@@ -63,14 +63,9 @@ void difftest_attach() {
   Log("Reloading difftest mem/reg...");
 
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
-  ref_difftest_setregs(&cpu); 
-
-  CPU_state r;
-  ref_difftest_getregs(&r);
-  printf("r's ebx is 0x%08x\n", r.ebx);
-  printf("r's eip is 0x%08x\n", r.eip);
 
   difftest_on = true;
+  is_skip_ref = true;
   Log("Differential testing is turned on.");
 }
 
