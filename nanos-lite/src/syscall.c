@@ -25,9 +25,7 @@ _Context* do_syscall(_Context *c) {
      * @params int
      */
     case SYS_exit:
-#ifdef SYS_DEBUG
       Log("SYS_exit(code=%d)", a[1]);
-#endif
       _halt(a[1]);
       break;
 
