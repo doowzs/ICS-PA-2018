@@ -73,6 +73,7 @@ void difftest_attach() {
 }
 
 void difftest_step(uint32_t eip) {
+  if (!difftest_on) return;
 
   CPU_state ref_r;
 
@@ -91,7 +92,6 @@ void difftest_step(uint32_t eip) {
   ref_difftest_exec(1);
   ref_difftest_getregs(&ref_r);
 
-  if (!difftest_on) return;
   // Check the registers state with the reference design.
   // Set `nemu_state` to `NEMU_ABORT` if they are not the same.
   bool OK = true;
