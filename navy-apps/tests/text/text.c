@@ -10,7 +10,7 @@ int main() {
   int *a = (int *) malloc (sizeof(int) * 5);
   assert(a);
   pass(-5);
-  memset(a, 0, sizeof(a));
+  memset(a, 0, sizeof(int) * 5);
   pass(-4);
   printf("a[] is [%d %d %d %d %d]\n", a[0], a[1], a[2], a[3], a[4]);
   assert(a[4] == 0);
