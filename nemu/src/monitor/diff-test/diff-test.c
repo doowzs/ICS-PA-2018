@@ -64,6 +64,7 @@ void difftest_attach() {
 
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
   ref_difftest_setregs(&cpu); 
+  ref_difftest_exec(1);
 
   difftest_on = true;
   Log("Differential testing is turned on.");
