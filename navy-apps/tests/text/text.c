@@ -7,6 +7,12 @@
 int main() {
   printf("test start!\n");
 
+  int xxx[100] = {11111};
+  memset(xxx, 0, sizeof(xxx));
+  printf("sizeof xxx[100] is %d\n", sizeof(xxx));
+  assert(xxx[0] == 0);
+  pass(-6);
+
   int *a = (int *) malloc (sizeof(int) * 5);
   assert(a);
   pass(-5);
@@ -20,7 +26,7 @@ int main() {
   long *b = (long *) malloc (sizeof(long) * 10);
   assert(b);
   pass(-2);
-  memset(b, 0, sizeof(b));
+  memset(b, 0, sizeof(long) * 10);
   pass(-1);
   assert(b[2] == b[8]);
   pass(0);
