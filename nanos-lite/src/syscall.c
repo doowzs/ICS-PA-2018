@@ -26,7 +26,7 @@ _Context* do_syscall(_Context *c) {
       Log("SYS_exit(code=%d)", a[1]);
 #endif
       void init_proc(const char *);
-      init_proc("bin/init");
+      init_proc("/bin/init");
       break;
 
     /**
