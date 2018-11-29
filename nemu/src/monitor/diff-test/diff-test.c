@@ -62,8 +62,6 @@ void difftest_detach() {
 void difftest_attach() {
   Log("Reloading difftest mem/reg...");
 
-  ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
-  ref_difftest_setregs(&cpu); 
 
   difftest_on = true;
   is_skip_ref = false;
@@ -73,8 +71,6 @@ void difftest_attach() {
 }
 
 void difftest_step(uint32_t eip) {
-  if (!difftest_on) return;
-  Log("diff at eip=0x%08x", eip);
 
   CPU_state ref_r;
 
@@ -93,6 +89,7 @@ void difftest_step(uint32_t eip) {
   ref_difftest_exec(1);
   ref_difftest_getregs(&ref_r);
 
+  if (!difftest_on) return;
   // Check the registers state with the reference design.
   // Set `nemu_state` to `NEMU_ABORT` if they are not the same.
   bool OK = true;
