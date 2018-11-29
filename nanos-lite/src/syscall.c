@@ -4,6 +4,8 @@
 #include "ramdisk.h"
 #include "syscall.h"
 
+void naive_uload(PCB *, const char *);
+
 void syscall_ret(_Context *c, int val) {
   c->GPRx = val;
 }
@@ -163,7 +165,6 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_execve(%s)", (const char *) a[1]);
 #endif
-      void naive_uload(PCB *, const char *);
       naive_uload(NULL, (const char *) a[1]);
       break;
 
