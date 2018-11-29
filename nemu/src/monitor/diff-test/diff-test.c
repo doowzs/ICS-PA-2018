@@ -74,6 +74,7 @@ void difftest_attach() {
 
 void difftest_step(uint32_t eip) {
   if (!difftest_on) return;
+  Log("diff at eip=0x%08x", eip);
 
   CPU_state ref_r;
 
