@@ -79,16 +79,10 @@ Log("3");
 Log("4");
   ref_difftest_exec = dlsym(handle, "difftest_exec");
   assert(ref_difftest_exec);
-Log("5");
-  void (*ref_difftest_init)(void) = dlsym(handle, "difftest_init");
-  assert(ref_difftest_init);
 Log("6");
   Log("Differential testing is turned on.");
 Log("7");
-  ref_difftest_init();
-Log("8");
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
-Log("9");
   ref_difftest_setregs(&cpu); 
 }
 
