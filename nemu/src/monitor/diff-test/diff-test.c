@@ -67,23 +67,24 @@ extern void difftest_attach() {
   void *handle;
   handle = dlopen(opened_ref_so_file, RTLD_LAZY | RTLD_DEEPBIND);
   assert(handle);
-Log("1");
+
   ref_difftest_memcpy_from_dut = dlsym(handle, "difftest_memcpy_from_dut");
   assert(ref_difftest_memcpy_from_dut);
-Log("2");
+
   ref_difftest_getregs = dlsym(handle, "difftest_getregs");
   assert(ref_difftest_getregs);
-Log("3");
+
   ref_difftest_setregs = dlsym(handle, "difftest_setregs");
   assert(ref_difftest_setregs);
-Log("4");
+
   ref_difftest_exec = dlsym(handle, "difftest_exec");
   assert(ref_difftest_exec);
-Log("6");
-  Log("Differential testing is turned on.");
-Log("7");
+
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
   ref_difftest_setregs(&cpu); 
+
+  difftest_on = true;
+  Log("Differential testing is turned on.");
 }
 
 void difftest_step(uint32_t eip) {
