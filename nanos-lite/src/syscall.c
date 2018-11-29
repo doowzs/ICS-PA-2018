@@ -26,6 +26,7 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_exit:
       Log("SYS_exit(code=%d)", a[1]);
+      printf("%08x %08x %08x %08x\n", a[0], a[1], a[2], a[3]);
       _halt(a[1]);
       break;
 
