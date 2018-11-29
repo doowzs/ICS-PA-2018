@@ -39,11 +39,9 @@ void cpu_exec(uint64_t n) {
     exec_wrapper(print_flag);
     nr_guest_instr_add(1);
 
-#ifdef DEBUG
 		if (check_wp()) {
 			nemu_state = NEMU_STOP;
 		}
-#endif
 
 #ifdef HAS_IOE
     extern void device_update();
