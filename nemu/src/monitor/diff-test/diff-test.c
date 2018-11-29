@@ -4,8 +4,6 @@
 #include "monitor/monitor.h"
 #include "diff-test.h"
 
-#define PMEM_SIZE (128 * 1024 * 1024)
-
 static void (*ref_difftest_memcpy_from_dut)(paddr_t dest, void *src, size_t n);
 static void (*ref_difftest_getregs)(void *c);
 static void (*ref_difftest_setregs)(const void *c);
