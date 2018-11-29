@@ -64,7 +64,10 @@ void difftest_attach() {
 
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
   ref_difftest_setregs(&cpu); 
-  ref_difftest_exec(1);
+
+  CPU_state r;
+  ref_difftest_getregs(&r);
+  printf("r's ebp is 0x%08x\n", r.ebp);
 
   difftest_on = true;
   Log("Differential testing is turned on.");
