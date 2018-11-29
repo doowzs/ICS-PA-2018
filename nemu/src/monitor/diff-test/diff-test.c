@@ -4,14 +4,18 @@
 #include "monitor/monitor.h"
 #include "diff-test.h"
 
+#define PMEM_SIZE (128 * 1024 * 1024)
+
 static void (*ref_difftest_memcpy_from_dut)(paddr_t dest, void *src, size_t n);
 static void (*ref_difftest_getregs)(void *c);
 static void (*ref_difftest_setregs)(const void *c);
 static void (*ref_difftest_exec)(uint64_t n);
 
-static bool is_skip_ref;
-static bool is_skip_dut;
-static bool is_skip_flg;
+static bool is_skip_ref = false;
+static bool is_skip_dut = false;
+static bool is_skip_flg = false;
+static bool difftest_on =  true;
+static char* opened_ref_so_file = NULL;
 
 void difftest_skip_ref() { is_skip_ref = true; }
 void difftest_skip_dut() { is_skip_dut = true; }
@@ -23,6 +27,7 @@ void init_difftest(char *ref_so_file, long img_size) {
 #endif
 
   assert(ref_so_file != NULL);
+  opened_ref_so_file = ref_so_file;
 
   void *handle;
   handle = dlopen(ref_so_file, RTLD_LAZY | RTLD_DEEPBIND);
@@ -53,7 +58,41 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_setregs(&cpu);
 }
 
+void difftest_detach() {
+  difftest_on = false;
+  Log("Differential testing is turned off.");
+}
+
+void difftest_attach() {
+  void *handle;
+  handle = dlopen(opened_ref_so_file, RTLD_LAZY | RTLD_DEEPBIND);
+  assert(handle);
+
+  ref_difftest_memcpy_from_dut = dlsym(handle, "difftest_memcpy_from_dut");
+  assert(ref_difftest_memcpy_from_dut);
+
+  ref_difftest_getregs = dlsym(handle, "difftest_getregs");
+  assert(ref_difftest_getregs);
+
+  ref_difftest_setregs = dlsym(handle, "difftest_setregs");
+  assert(ref_difftest_setregs);
+
+  ref_difftest_exec = dlsym(handle, "difftest_exec");
+  assert(ref_difftest_exec);
+
+  void (*ref_difftest_init)(void) = dlsym(handle, "difftest_init");
+  assert(ref_difftest_init);
+
+  Log("Differential testing is turned on.");
+
+  ref_difftest_init();
+  ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
+  ref_difftest_setregs(&cpu); 
+}
+
 void difftest_step(uint32_t eip) {
+  if (!difftest_on) return;
+
   CPU_state ref_r;
 
   if (is_skip_dut) {
