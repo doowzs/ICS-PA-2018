@@ -1,5 +1,6 @@
 #include "common.h"
 #include "fs.h"
+#include "proc.h"
 #include "ramdisk.h"
 #include "syscall.h"
 
@@ -149,6 +150,22 @@ _Context* do_syscall(_Context *c) {
       Log("SYS_brk(%p)", a[1]);
 #endif
       syscall_ret(c, 0);
+      break;
+
+    /**
+     * SYS_execve(13)
+     *  execute program
+     * @params const char *
+     * @params char *const
+     * @params char *const
+     * @return int
+     */
+    case SYS_execve:
+#ifdef SYS_DEBUG
+      Log("SYS_execve(%s)", (const char *) a[1]);
+#endif
+      void naive_uload(PCB *, const char *);
+      naive_uload(NULL, (const char *) a[1]);
       break;
 
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
