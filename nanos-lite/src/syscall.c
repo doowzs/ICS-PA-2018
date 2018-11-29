@@ -29,7 +29,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_exit(code=%d)", a[1]);
 #endif
-      if (0) {
+      if (a[1] == 0) {
         init_proc("/bin/init");
       } else {
         _halt(a[1]);
