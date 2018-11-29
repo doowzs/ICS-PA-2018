@@ -34,7 +34,7 @@ _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
   // print_tf(tf);
   if (user_handler) {
-    _Event ev;
+    _Event ev = {0};
     switch (tf->irq) {
       case 0x80: ev.event = _EVENT_SYSCALL; break;
       case 0x81: ev.event = _EVENT_YIELD; break;
