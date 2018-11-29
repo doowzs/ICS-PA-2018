@@ -4,6 +4,7 @@
 #include "ramdisk.h"
 #include "syscall.h"
 
+void init_proc(const char *);
 void naive_uload(PCB *, const char *);
 
 void syscall_ret(_Context *c, int val) {
@@ -25,8 +26,14 @@ _Context* do_syscall(_Context *c) {
      * @params int
      */
     case SYS_exit:
+#ifdef SYS_DEBUG
       Log("SYS_exit(code=%d)", a[1]);
-      _halt(a[1]);
+#endif
+      if (a[1] == 0) {
+        init_proc("/bin/init");
+      } else {
+        _halt(a[1]);
+      }
       break;
 
     /**
