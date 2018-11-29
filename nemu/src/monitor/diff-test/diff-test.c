@@ -67,7 +67,7 @@ void difftest_attach() {
 
   CPU_state r;
   ref_difftest_getregs(&r);
-  printf("r's ebp is 0x%08x\n", r.ebp);
+  printf("r's ebx is 0x%08x\n", r.ebx);
   printf("r's eip is 0x%08x\n", r.eip);
 
   difftest_on = true;
