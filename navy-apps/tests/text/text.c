@@ -12,6 +12,7 @@ int main() {
   pass(-5);
   memset(a, 0, sizeof(int) * 5);
   pass(-4);
+  printf("sizeof a[] is %d\n", sizeof(a));
   printf("a[] is [%d %d %d %d %d]\n", a[0], a[1], a[2], a[3], a[4]);
   assert(a[4] == 0);
   pass(-3);
