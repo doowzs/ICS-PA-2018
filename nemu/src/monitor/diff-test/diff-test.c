@@ -56,12 +56,12 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_setregs(&cpu);
 }
 
-extern void difftest_detach() {
+void difftest_detach() {
   difftest_on = false;
   Log("Differential testing is turned off.");
 }
 
-extern void difftest_attach() {
+void difftest_attach() {
   Log("Reloading difftest mem/reg...");
 
   ref_difftest_memcpy_from_dut(ENTRY_START, guest_to_host(ENTRY_START), PMEM_SIZE);
