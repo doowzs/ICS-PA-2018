@@ -162,9 +162,7 @@ _Context* do_syscall(_Context *c) {
      * @return int
      */
     case SYS_execve:
-#ifdef SYS_DEBUG
       Log("SYS_execve(%s)", (const char *) a[1]);
-#endif
       naive_uload(NULL, (const char *) a[1]);
       break;
 
