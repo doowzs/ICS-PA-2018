@@ -36,6 +36,8 @@ static int cmd_p(char *args);
 static int cmd_x(char *args);
 static int cmd_w(char *args);
 static int cmd_d(char *args);
+static int cmd_save(char *args);
+static int cmd_load(char *args);
 #ifdef DIFF_TEST
 static int cmd_detach(char *args);
 static int cmd_attach(char *args);
@@ -59,6 +61,8 @@ static struct {
 	{ "x", "Usage: x N EXPR, Calculate EXPR and print 4N bytes of memory data from EXPR.", cmd_x	},
 	{ "w", "usage: w EXPR, Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
   { "d", "Usage: d N, Delete watchpoint numbered with N.", cmd_d },
+  { "save", "Usage: save filename, Save NEMU state to a file.", cmd_save },
+  { "load", "Usage: load filename, Load NEMU state from a specific file.", cmd_load },
 #ifdef DIFF_TEST
   { "detach", "Usage: detach, stop difftest.", cmd_detach },
   { "attach", "Usage: attach, restart difftest.", cmd_attach },
@@ -67,6 +71,7 @@ static struct {
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 #define PMEM_SIZE (128 * 1024 * 1024)
+#define SAVE_PATH "~/ics2018/savefiles/"
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -245,6 +250,36 @@ static int cmd_d(char *args) {
 		printf("[\033[1;32mSuccess\033[0m] Deleted watchpoint #%02d.\n", wp_NO);
 	}
 	return 0;
+}
+
+static int cmd_save(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    cmd_wrong_parameter(args);
+    return 0;
+  }
+
+  char fn[128] = SAVE_PATH;
+  strcat(fn, arg);
+  FILE *fp = fopen(fn, "r");
+  if (fp != NULL) {
+    printf("[\033[1;31mSAVE\033[0m] ERR: The target file exists. Aborted.\n");
+    return 0;
+  }
+  fclose(fp);
+
+  fp = fopen(fn, "w");
+  if (fp == NULL) {
+    Log("[\033[0;31mSAVE\033[0m;] Open target file failed.");
+  } else {
+    Log("OK");
+  }
+  return 0;
+}
+
+static int cmd_load(char *args) {
+  TODO();
+  return 0;
 }
 
 #ifdef DIFF_TEST

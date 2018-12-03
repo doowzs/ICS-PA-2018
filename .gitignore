@@ -1,6 +1,7 @@
 *.*
 *
 !*/
+savefiles/
 !Makefile
 !README.md
 !.gitignore
