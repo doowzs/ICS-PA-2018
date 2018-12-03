@@ -194,6 +194,7 @@ static void draw_text_row(char *s, int r) {
 static void display_menu(int n) {
   clear_display();
   NDL_DrawRect(logo.pixels, W - logo.w, 0, logo.w, logo.h);
+  printf("Welcome to NEMU OS!\n");
   printf("Available applications:\n");
   char buf[80];
   int i;
@@ -213,11 +214,11 @@ static void display_menu(int n) {
   draw_text_row(buf, i);
   i ++;
 
-  sprintf(buf, "  <-  PageDown");
+  sprintf(buf, "  <-  PageUp");
   draw_text_row(buf, i);
   i ++;
 
-  sprintf(buf, "  ->  PageUp");
+  sprintf(buf, "  ->  PageDown");
   draw_text_row(buf, i);
   i ++;
 
