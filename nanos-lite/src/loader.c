@@ -22,6 +22,8 @@ void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const
   Log("Start running at address 0x%08x", entry);
 
   int argc = sizeof(*argv) / sizeof(char *);
+  Log("Count of argumnts: %d", argc);
+  for (int i = 0; i < argc; ++i) Log("arg[%d]: %s", i, argv[i]);
   ((void(*)(int, char* const[]))entry) (argc, argv);
 }
 
