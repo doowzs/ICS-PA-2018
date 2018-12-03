@@ -4,8 +4,7 @@
 #include "ramdisk.h"
 #include "syscall.h"
 
-void init_proc(const char *, char* const);
-void naive_uload(PCB *, const char *);
+void init_proc(const char *, char* const, char* const);
 
 void syscall_ret(_Context *c, int val) {
   c->GPRx = val;
@@ -30,7 +29,7 @@ _Context* do_syscall(_Context *c) {
       Log("SYS_exit(code=%d)", a[1]);
 #endif
       if (a[1] == 0) {
-        init_proc("/bin/init", NULL);
+        init_proc("/bin/init", NULL, NULL);
       } else {
         _halt(a[1]);
       }
@@ -170,7 +169,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_execve(file=%s)", (const char *) a[1]);
 #endif
-      init_proc((const char *) a[1], (char* const) a[2]);
+      init_proc((const char *) a[1], (char* const) a[2], (char* const) a[3]);
       break;
 
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
