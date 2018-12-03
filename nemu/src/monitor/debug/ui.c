@@ -261,6 +261,7 @@ static int cmd_save(char *args) {
 
   char fn[128] = SAVE_PATH;
   strcat(fn, arg);
+  Log("%s", fn);
   FILE *fp = fopen(fn, "r");
   if (fp != NULL) {
     printf("[\033[1;31mSAVE\033[0m] ERR: The target file exists. Aborted.\n");
