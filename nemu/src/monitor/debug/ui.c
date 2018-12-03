@@ -266,6 +266,8 @@ static int cmd_save(char *args) {
   if (fp != NULL) {
     printf("[\033[1;31mSAVE\033[0m] ERR: The target file exists. Aborted.\n");
     return 0;
+  } else {
+    Log("OKOK");
   }
   fclose(fp);
 
