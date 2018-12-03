@@ -71,7 +71,7 @@ static struct {
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 #define PMEM_SIZE (128 * 1024 * 1024)
-#define SAVE_PATH "/home/doowzs/ics2018/savefiles/"
+#define SAVE_PATH "savefiles/"
 
 static int cmd_help(char *args) {
   /* extract the first argument */
