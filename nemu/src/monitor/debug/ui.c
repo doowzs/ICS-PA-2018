@@ -71,7 +71,7 @@ static struct {
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 #define PMEM_SIZE (128 * 1024 * 1024)
-#define SAVE_PATH "~/ics2018/savefiles/"
+#define SAVE_PATH "/home/doowzs/ics2018/savefiles/"
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -270,9 +270,9 @@ static int cmd_save(char *args) {
 
   fp = fopen(fn, "w+");
   if (fp == NULL) {
-    printf("[\033[1;31mSAVE\033[0m] Open target file failed.");
+    printf("[\033[1;31mSAVE\033[0m] Open target file failed.\n");
   } else {
-    printf("OK");
+    printf("OK\n");
   }
   return 0;
 }
