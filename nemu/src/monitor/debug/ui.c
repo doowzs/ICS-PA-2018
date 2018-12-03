@@ -268,11 +268,11 @@ static int cmd_save(char *args) {
     return 0;
   }
 
-  fp = fopen(fn, "w");
+  fp = fopen(fn, "w+");
   if (fp == NULL) {
-    Log("[\033[0;31mSAVE\033[0m;] Open target file failed.");
+    printf("[\033[1;31mSAVE\033[0m] Open target file failed.");
   } else {
-    Log("OK");
+    printf("OK");
   }
   return 0;
 }
