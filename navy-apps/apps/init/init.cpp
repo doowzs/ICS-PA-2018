@@ -23,21 +23,21 @@ static Font *font;
 struct MenuItem {
   const char *name, *bin, *arg1;
 } items[] = {
-  {"Test - dummy",                 "/bin/dummy",   NULL},
-  {"Test - hello",                 "/bin/hello",   NULL},
-  {"Test - events",                "/bin/events",  NULL},
-  {"Test - text",                  "/bin/text",    NULL},
-  {"Test - bmptest",               "/bin/bmptest", NULL},
-  {"App - LUA",                    "/bin/lua",     NULL},
-  {"App - NTerminator",            "/bin/nterm",   NULL},
-  {"App - NWM",                    "/bin/nwm",     NULL},
-  {"App - slider",                 "/bin/slider",  NULL},
-  {"PAL - Xian Jian Qi Xia Zhuan", "/bin/pal",     NULL},
-  {"NES - Battle City",            "/bin/litenes", "/share/games/nes/battlecity.nes"},
-  {"NES - Circus",                 "/bin/litenes", "/share/games/nes/circus.nes"},
-  {"NES - Yie Ar Kung Fu",         "/bin/litenes", "/share/games/nes/kungfu.nes"},
-  {"NES - Lode Runner",            "/bin/litenes", "/share/games/nes/loderunner.nes"},
-  {"NES - Super Mario Bros.",      "/bin/litenes", "/share/games/nes/mario.nes"},
+  {"Test - dummy",              "/bin/dummy",   NULL},
+  {"Test - hello",              "/bin/hello",   NULL},
+  {"Test - events",             "/bin/events",  NULL},
+  {"Test - text",               "/bin/text",    NULL},
+  {"Test - bmptest",            "/bin/bmptest", NULL},
+  //{"App - LUA",                 "/bin/lua",     NULL},
+  //{"App - NTerminator",         "/bin/nterm",   NULL},
+  //{"App - NWM",                 "/bin/nwm",     NULL},
+  //{"App - slider",              "/bin/slider",  NULL},
+  {"PAL - Xian Jian Gayme",     "/bin/pal",     NULL},
+  {"NES - Battle City",         "/bin/litenes", "/share/games/nes/battlecity.nes"},
+  {"NES - Circus",              "/bin/litenes", "/share/games/nes/circus.nes"},
+  {"NES - Yie Ar Kung Fu",      "/bin/litenes", "/share/games/nes/kungfu.nes"},
+  {"NES - Lode Runner",         "/bin/litenes", "/share/games/nes/loderunner.nes"},
+  {"NES - Super Mario Bros.",   "/bin/litenes", "/share/games/nes/mario.nes"},
 };
 
 #define nitems (sizeof(items) / sizeof(items[0]))
