@@ -290,7 +290,29 @@ static int cmd_save(char *args) {
 }
 
 static int cmd_load(char *args) {
-  TODO();
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    cmd_wrong_parameter(args);
+    return 0;
+  }
+
+  char fn[128] = SAVE_PATH;
+  strcat(fn, arg);
+  Log("%s", fn);
+  FILE *fp = fopen(fn, "r");
+  if (fp == NULL) {
+    printf("[\033[1;32mLOAD\033[0m] ERR: The target file does not exist.\n");
+    return 0;
+  }
+
+  printf("[\033[1;32mLOAD\033[0m] Start loading from file %s\n", fn);
+  {
+    fwrite(&cpu, sizeof(CPU_state), 1, fp);
+    fwrite(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
+    fwrite(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
+  }
+  printf("[\033[1;32mLOAD\033[0m] NEMU state load finished.\n");
+  fclose(fp);
   return 0;
 }
 
