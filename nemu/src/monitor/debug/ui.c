@@ -71,7 +71,7 @@ static struct {
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 #define PMEM_SIZE (128 * 1024 * 1024)
-#define SAVE_PATH "savefiles/"
+#define SAVE_PATH "/home/doowzs/ics2018/savefiles/"
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -272,7 +272,18 @@ static int cmd_save(char *args) {
   if (fp == NULL) {
     printf("[\033[1;31mSAVE\033[0m] Open target file failed.\n");
   } else {
-    printf("OK\n");
+    fprintf(fp, "----NEMU STATE SAVEFILE----\n");
+    fprintf(fp, "------BEGIN CPU STATE------\n");
+    /* -- GPR+EIP -- */
+		for (int i = 0; i < 8; ++i) {
+			printf("%11d\n", reg_l(i));
+		}
+		printf("%11d\n", cpu.eip);
+    /* -- EFLAGS -- */
+		printf("%11d\n", cpu.eflags32);
+    /* -- IDTR -- */
+    printf("IDTR base \033[1;33m0x%08x\033[0m limit \033[1;33m%d\033[0m\n", cpu.IDTR.base, cpu.IDTR.limit);
+    fprintf(fp, "-------END CPU STATE-------\n");
   }
   return 0;
 }
