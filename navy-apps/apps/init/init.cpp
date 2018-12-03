@@ -113,6 +113,7 @@ int main(int argc, char *argv[], char *envp[]) {
       strcpy(arg1, item->bin);
       strcpy(arg2, item->arg1);
       char* const exec_argv[] = {arg1, arg2};
+      printf("argument cnt: %d", sizeof(exec_argv));
       execve(item->bin, exec_argv, envp);
       
       fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed.\n\n", item->bin);
