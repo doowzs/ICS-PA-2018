@@ -23,14 +23,17 @@ static Font *font;
 struct MenuItem {
   const char *name, *bin, *arg1;
 } items[] = {
-  {"Litenes (Super Mario Bros)", "/bin/litenes", "/share/games/nes/mario.nes"},
-  {"Litenes (Yie Ar Kung Fu)", "/bin/litenes", "/share/games/nes/kungfu.nes"},
-  {"PAL - Xian Jian Qi Xia Zhuan", "/bin/pal", NULL},
-  {"bmptest", "/bin/bmptest", NULL},
-  {"dummy", "/bin/dummy", NULL},
-  {"events", "/bin/events", NULL},
-  {"hello", "/bin/hello", NULL},
-  {"text", "/bin/text", NULL},
+  {"Test - dummy",                 "/bin/dummy",   NULL},
+  {"Test - hello",                 "/bin/hello",   NULL},
+  {"Test - events",                "/bin/events",  NULL},
+  {"Test - text",                  "/bin/text",    NULL},
+  {"Test - bmptest",               "/bin/bmptest", NULL},
+  {"PAL - Xian Jian Qi Xia Zhuan", "/bin/pal",     NULL},
+  {"Litenes (Battle City)",        "/bin/litenes", "/share/games/nes/battlecity.nes"},
+  {"Litenes (Circus)",             "/bin/litenes", "/share/games/nes/circus.nes"},
+  {"Litenes (Yie Ar Kung Fu)",     "/bin/litenes", "/share/games/nes/kungfu.nes"},
+  {"Litenes (Lode Runner)",        "/bin/litenes", "/share/games/nes/loderunner.nes"},
+  {"Litenes (Super Mario Bros)",   "/bin/litenes", "/share/games/nes/mario.nes"},
 };
 
 #define nitems (sizeof(items) / sizeof(items[0]))
