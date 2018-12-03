@@ -278,12 +278,11 @@ static int cmd_save(char *args) {
     printf("[\033[1;31mSAVE\033[0m] Open target file failed.\n");
   } else {
     printf("[\033[1;31mSAVE\033[0m] Start writing to file %s\n", fn);
-    fprintf(fp, "----NEMU STATE SAVEFILE----\n");
-    fprintf(fp, "------BEGIN CPU STATE------\n");
     {
       fwrite(&cpu, sizeof(CPU_state), 1, fp);
+      fwrite(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
+      fwrite(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
     }
-    fprintf(fp, "-------END CPU STATE-------\n");
     printf("[\033[1;31mSAVE\033[0m] NEMU state save finished.\n");
     fclose(fp);
   }
