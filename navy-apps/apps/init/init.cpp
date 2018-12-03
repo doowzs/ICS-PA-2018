@@ -28,12 +28,16 @@ struct MenuItem {
   {"Test - events",                "/bin/events",  NULL},
   {"Test - text",                  "/bin/text",    NULL},
   {"Test - bmptest",               "/bin/bmptest", NULL},
+  {"App - LUA",                    "/bin/lua",     NULL},
+  {"App - NTerminator",            "/bin/nterm",   NULL},
+  {"App - NWM",                    "/bin/nwm",     NULL},
+  {"App - slider",                 "/bin/slider",  NULL},
   {"PAL - Xian Jian Qi Xia Zhuan", "/bin/pal",     NULL},
-  {"Litenes (Battle City)",        "/bin/litenes", "/share/games/nes/battlecity.nes"},
-  {"Litenes (Circus)",             "/bin/litenes", "/share/games/nes/circus.nes"},
-  {"Litenes (Yie Ar Kung Fu)",     "/bin/litenes", "/share/games/nes/kungfu.nes"},
-  {"Litenes (Lode Runner)",        "/bin/litenes", "/share/games/nes/loderunner.nes"},
-  {"Litenes (Super Mario Bros)",   "/bin/litenes", "/share/games/nes/mario.nes"},
+  {"NES - Battle City",            "/bin/litenes", "/share/games/nes/battlecity.nes"},
+  {"NES - Circus",                 "/bin/litenes", "/share/games/nes/circus.nes"},
+  {"NES - Yie Ar Kung Fu",         "/bin/litenes", "/share/games/nes/kungfu.nes"},
+  {"NES - Lode Runner",            "/bin/litenes", "/share/games/nes/loderunner.nes"},
+  {"NES - Super Mario Bros.",      "/bin/litenes", "/share/games/nes/mario.nes"},
 };
 
 #define nitems (sizeof(items) / sizeof(items[0]))
@@ -198,11 +202,11 @@ static void display_menu(int n) {
   char buf[80];
   int i = 0;
 
-  sprintf(buf, "Welcome to Aunt's custom NEMU OS!\n");
+  sprintf(buf, "  Welcome to Aunt's custom X-NEMU!\n");
   draw_text_row(buf, i);
   i ++;
 
-  sprintf(buf, "Available applications:\n");
+  sprintf(buf, "  Available applications:\n");
   draw_text_row(buf, i);
   i ++;
 
