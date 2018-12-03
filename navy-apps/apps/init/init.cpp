@@ -106,13 +106,17 @@ int main(int argc, char *argv[], char *envp[]) {
     if (i != -1 && i <= i_max) {
       i += page * 10;
       auto *item = &items[i];
-      char* const exec_argv[3];
-      exec_argv[0] = item->bin;
-      exec_argv[1] = item->arg1;
-      exec_argv[2] = NULL;
       clear_display();
-      execve(exec_argv[0], (char* []) exec_argv, envp);
-      fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed.\n\n", exec_argv[0]);
+
+      //avoid const complaints
+      char arg1[128] = "";
+      char arg2[128] = "";
+      strcpy(arg1, item->bin);
+      strcpy(arg2, item->arg1);
+      char* const exec_argv[] = {arg1, arg2};
+      execve(item->bin, exec_argv, envp);
+      
+      fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed.\n\n", item->bin);
     } else {
       fprintf(stderr, "Choose a number between %d and %d\n\n", 0, i_max);
     }
