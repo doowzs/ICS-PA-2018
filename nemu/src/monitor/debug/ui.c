@@ -305,13 +305,14 @@ static int cmd_load(char *args) {
     return 0;
   }
 
+  int sz = 0;
   printf("[\033[1;32mLOAD\033[0m] Start loading from file %s\n", fn);
   {
-    fread(&cpu, sizeof(CPU_state), 1, fp);
-    fread(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
-    fread(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
+    sz += fread(&cpu, sizeof(CPU_state), 1, fp);
+    sz += fread(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
+    sz += fread(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
   }
-  printf("[\033[1;32mLOAD\033[0m] NEMU state load finished. eip is at 0x%08x.\n", cpu.eip);
+  printf("[\033[1;32mLOAD\033[0m] NEMU state load finished (%u bytes). eip is at 0x%08x.\n", sz, cpu.eip);
   fclose(fp);
   return 0;
 }
