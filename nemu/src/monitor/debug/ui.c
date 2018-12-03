@@ -277,6 +277,7 @@ static int cmd_save(char *args) {
   if (fp == NULL) {
     printf("[\033[1;31mSAVE\033[0m] Open target file failed.\n");
   } else {
+    printf("[\033[1;31mSAVE\033[0m] Start writing to file %s\n", fn);
     fprintf(fp, "----NEMU STATE SAVEFILE----\n");
     fprintf(fp, "------BEGIN CPU STATE------\n");
     /* -- GPR+EIP -- */
