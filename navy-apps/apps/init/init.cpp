@@ -194,19 +194,27 @@ static void draw_text_row(char *s, int r) {
 static void display_menu(int n) {
   clear_display();
   NDL_DrawRect(logo.pixels, W - logo.w, 0, logo.w, logo.h);
-  printf("Welcome to NEMU OS!\n");
-  printf("Available applications:\n");
+  
   char buf[80];
-  int i;
-  for (i = 0; i <= n; i ++) {
-    auto *item = &items[page * 10 + i];
-    sprintf(buf, "  [%d] %s", i, item->name);
-    draw_text_row(buf, i);
+  int i = 0;
+
+  sprintf(buf, "Welcome to Aunt's custom NEMU OS!\n");
+  draw_text_row(buf, i);
+  i ++;
+
+  sprintf(buf, "Available applications:\n");
+  draw_text_row(buf, i);
+  i ++;
+
+  for (int j = 0; j <= n; j ++) {
+    auto *item = &items[page * 10 + j];
+    sprintf(buf, "  [%d] %s", j, item->name);
+    draw_text_row(buf, i + j);
   }
 
-  i = 11;
+  i = 13;
 
-  sprintf(buf, "  page = %2d, #total apps = %d", page, nitems);
+  sprintf(buf, "  page = %2d / %2d, #total apps = %d", page + 1, nitems / 10 + 1,  nitems);
   draw_text_row(buf, i);
   i ++;
 
