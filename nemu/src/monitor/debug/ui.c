@@ -264,6 +264,7 @@ static int cmd_save(char *args) {
   Log("%s", fn);
   FILE *fp = fopen(fn, "r");
   if (fp != NULL) {
+    fclose(fp);
     if ((arg = strtok(NULL, " ")) != NULL && strcmp(arg, "-f") == 0) {
       printf("[\033[1;31mSAVE\033[0m] Warning: You are force saving to a existent file.\n");
     } else {
