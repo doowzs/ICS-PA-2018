@@ -169,7 +169,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_execve(file=%s)", (const char *) a[1]);
 #endif
-      init_proc((const char *) a[1], (char** const) a[2], (char** const) a[3]);
+      init_proc((const char *) a[1], (char* const*) a[2], (char* const*) a[3]);
       break;
 
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
