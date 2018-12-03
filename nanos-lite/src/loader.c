@@ -20,7 +20,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 void naive_uload(PCB *pcb, const char *filename, char* const argv[]) {
   uintptr_t entry = loader(pcb, filename);
   Log("Start running at address 0x%08x", entry);
-  ((void(*)())entry) (argv);
+  ((void(*)(char* const[]))entry) (argv);
 }
 
 void context_kload(PCB *pcb, void *entry) {
