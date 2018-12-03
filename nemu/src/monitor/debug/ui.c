@@ -264,8 +264,12 @@ static int cmd_save(char *args) {
   Log("%s", fn);
   FILE *fp = fopen(fn, "r");
   if (fp != NULL) {
-    printf("[\033[1;31mSAVE\033[0m] ERR: The target file exists. Aborted.\n");
-    return 0;
+    if ((arg = strtok(NULL, " ")) != NULL && strcmp(arg, "-f") == 0) {
+      printf("[\033[1;31mSAVE\033[0m] Warning: You are force saving to a existent file.\n");
+    } else {
+      printf("[\033[1;31mSAVE\033[0m] ERR: The target file exists. Use -f to force save.\n");
+      return 0;
+    }
   }
 
   fp = fopen(fn, "w+");
@@ -276,13 +280,13 @@ static int cmd_save(char *args) {
     fprintf(fp, "------BEGIN CPU STATE------\n");
     /* -- GPR+EIP -- */
 		for (int i = 0; i < 8; ++i) {
-			printf("%11d\n", reg_l(i));
+			fprintf(fp, "%11d\n", reg_l(i));
 		}
-		printf("%11d\n", cpu.eip);
+		fprintf(fp, "%11d\n", cpu.eip);
     /* -- EFLAGS -- */
-		printf("%11d\n", cpu.eflags32);
+		fprintf(fp, "%11d\n", cpu.eflags32);
     /* -- IDTR -- */
-    printf("IDTR base \033[1;33m0x%08x\033[0m limit \033[1;33m%d\033[0m\n", cpu.IDTR.base, cpu.IDTR.limit);
+    fprintf(fp, "IDTR base \033[1;33m0x%08x\033[0m limit \033[1;33m%d\033[0m\n", cpu.IDTR.base, cpu.IDTR.limit);
     fprintf(fp, "-------END CPU STATE-------\n");
   }
   return 0;
