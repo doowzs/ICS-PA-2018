@@ -307,9 +307,9 @@ static int cmd_load(char *args) {
 
   printf("[\033[1;32mLOAD\033[0m] Start loading from file %s\n", fn);
   {
-    fwrite(&cpu, sizeof(CPU_state), 1, fp);
-    fwrite(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
-    fwrite(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
+    fread(&cpu, sizeof(CPU_state), 1, fp);
+    fread(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
+    fread(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
   }
   printf("[\033[1;32mLOAD\033[0m] NEMU state load finished. eip is at 0x%08x.\n", cpu.eip);
   fclose(fp);
