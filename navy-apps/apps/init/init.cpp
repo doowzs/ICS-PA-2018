@@ -109,8 +109,7 @@ int main(int argc, char *argv[], char *envp[]) {
       clear_display();
 
       //avoid const complaints
-      char arg1[128] = "";
-      char arg2[128] = "";
+      char arg1[128], arg2[128];
       strcpy(arg1, item->bin);
       strcpy(arg2, item->arg1);
       char* const exec_argv[] = {arg1, arg2};
