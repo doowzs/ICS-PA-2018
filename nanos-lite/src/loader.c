@@ -21,8 +21,8 @@ void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const
   uintptr_t entry = loader(pcb, filename);
   Log("Start running at address 0x%08x", entry);
 
-  int argc = sizeof(*argv) / sizeof(char *);
-  argc = 2;
+  int argc = 0;
+  while(strcmp(argv[argc], "\0") != 0) argc++;
   Log("Count of argumnts: %d", argc);
   for (int i = 0; i < argc; ++i) Log("arg[%d]: %s", i, argv[i]);
   ((void(*)(int, char* const[]))entry) (argc, argv);
