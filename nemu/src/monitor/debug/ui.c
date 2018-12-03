@@ -280,16 +280,18 @@ static int cmd_save(char *args) {
     printf("[\033[1;31mSAVE\033[0m] Start writing to file %s\n", fn);
     fprintf(fp, "----NEMU STATE SAVEFILE----\n");
     fprintf(fp, "------BEGIN CPU STATE------\n");
-    /* -- GPR+EIP -- */
-		for (int i = 0; i < 8; ++i) {
-			fprintf(fp, "%11d\n", reg_l(i));
-		}
-		fprintf(fp, "%11d\n", cpu.eip);
-    /* -- EFLAGS -- */
-		fprintf(fp, "%11d\n", cpu.eflags32);
-    /* -- IDTR -- */
-    fprintf(fp, "%08x %d\n", cpu.IDTR.base, cpu.IDTR.limit);
-    fprintf(fp, "-------END CPU STATE-------\n");
+    {
+      /* -- GPR+EIP -- */
+		  for (int i = 0; i < 8; ++i) {
+		  	fprintf(fp, "%d\n", reg_l(i));
+		  }
+		  fprintf(fp, "%d\n", cpu.eip);
+      /* -- EFLAGS -- */
+		  fprintf(fp, "%d\n", cpu.eflags32);
+      /* -- IDTR -- */
+      fprintf(fp, "%d %d\n", cpu.IDTR.base, cpu.IDTR.limit);
+      fprintf(fp, "-------END CPU STATE-------\n");
+    }
     printf("[\033[1;31mSAVE\033[0m] NEMU state save finished.\n");
     fclose(fp);
   }
