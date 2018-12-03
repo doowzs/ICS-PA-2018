@@ -17,10 +17,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   return (intptr_t) buf;
 }
 
-void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const enpv[]) {
+void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const envp[]) {
   uintptr_t entry = loader(pcb, filename);
   Log("Start running at address 0x%08x", entry);
-  ((void(*)(char* const[], char* const[]))entry) (argv, enpv);
+  ((void(*)(char* const[], char* const[]))entry) (argv, envp);
 }
 
 void context_kload(PCB *pcb, void *entry) {

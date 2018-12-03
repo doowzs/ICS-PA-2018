@@ -21,9 +21,9 @@ void hello_fun(void *arg) {
   }
 }
 
-void init_proc(const char *filename, char* const argv[], char* const enpv[]) {
+void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("Initializing process of %s...", filename);
-  naive_uload(NULL, filename, argv, enpv);
+  naive_uload(NULL, filename, argv, envp);
 }
 
 _Context* schedule(_Context *prev) {

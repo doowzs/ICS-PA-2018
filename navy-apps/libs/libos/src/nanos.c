@@ -6,6 +6,9 @@
 #include <time.h>
 #include "syscall.h"
 
+void _fork();
+void _wait();
+
 extern void *end;
 static void *brk_old = &(end);
 static void *brk_new = NULL;
