@@ -9,7 +9,7 @@ static _Context* do_event(_Event e, _Context* c) {
 #ifdef SYS_DEBUG
       //Log("A yield event (0x81) is triggered.");
 #endif
-      return schedule(c);
+      return schedule(c, false);
       break;
     case _EVENT_SYSCALL:
       return do_syscall(c);

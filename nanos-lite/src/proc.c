@@ -9,6 +9,7 @@ void context_uload(PCB *pcb, const char *filename);
 static PCB pcb[MAX_NR_PROC] __attribute__((used));
 PCB pcb_boot;
 PCB *current;
+int last_id = 0;
 
 bool pcb_valid(PCB* pcb) {
   return !(pcb->cp == NULL || pcb->cp->prot == NULL);
@@ -39,8 +40,7 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   switch_boot_pcb();
 }
 
-int last_id = 0;
-_Context* schedule(_Context *prev, bool kill = false) {
+_Context* schedule(_Context *prev, bool kill) {
   Log("prev's   prot is 0x%08x", prev->prot);
   Log("PCB[0]'s prot is 0x%08x", &pcb[0].as);
   if (kill) Log("KILL THE PROCESS");
