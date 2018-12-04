@@ -53,7 +53,8 @@ _Context* schedule(_Context *prev, bool kill = false) {
   for (i = 0; i < MAX_NR_PROC; ++i) {
     next_PCB = &pcb[(last_id + i + 1) % MAX_NR_PROC];
     if (pcb_valid(next_PCB)) {
-      printf("switching to pcb no. %d\n", (last_id + i + 1) % MAX_NR_PROC);
+      last_id = (last_id + i + 1) % MAX_NR_PROC;
+      printf("switching to pcb no. %d\n", last_id);
       current = next_PCB;
       break;
     }
@@ -66,6 +67,7 @@ _Context* schedule(_Context *prev, bool kill = false) {
         if (prev->prot == &pcb[i].as) {
           current->cp = NULL;
           pcb[i].cp = NULL;
+          pcb[i].as = NULL;
         }
       }
     }
