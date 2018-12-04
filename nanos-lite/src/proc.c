@@ -60,16 +60,15 @@ _Context* schedule(_Context *prev, bool kill = false) {
   }
 
   /* Kill the process */
-  if (kill) {
-    for (i = 0; i < MAX_NR_PROC; ++i) {
-      if (prev->prot == &pcb[i].as) {
-        current->cp = NULL;
-        pcb[i].cp = NULL;
+  if (i == MAX_NR_PROC || kill) {
+    if (kill) {
+      for (i = 0; i < MAX_NR_PROC; ++i) {
+        if (prev->prot == &pcb[i].as) {
+          current->cp = NULL;
+          pcb[i].cp = NULL;
+        }
       }
     }
-  }
-
-  if (i == MAX_NR_PROC) {
     printf("SWITCHING TO BOOT PCB\n");
     switch_boot_pcb();
     return current->cp;
