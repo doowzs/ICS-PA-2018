@@ -16,14 +16,14 @@ int NDL_OpenDisplay(int w, int h) {
     NDL_CloseDisplay();
   }
 
-printf("Opending display...\n");
+//printf("Opending display...\n");
 
   canvas_w = w;
   canvas_h = h;
   canvas = malloc(sizeof(uint32_t) * w * h);
   assert(canvas);
 
-printf("canvas malloc ok\n");
+//printf("canvas malloc ok\n");
 
   if (getenv("NWM_APP")) {
     has_nwm = 1;
@@ -31,7 +31,7 @@ printf("canvas malloc ok\n");
     has_nwm = 0;
   }
 
-printf("has_nwm: %d\n", has_nwm);
+//printf("has_nwm: %d\n", has_nwm);
 
   if (has_nwm) {
     printf("\033[X%d;%ds", w, h); fflush(stdout);
@@ -40,13 +40,13 @@ printf("has_nwm: %d\n", has_nwm);
     get_display_info();
     assert(screen_w >= canvas_w);
     assert(screen_h >= canvas_h);
-printf("displayinfo: screen_w %d screen_h %d\n", screen_w, screen_h);
+//printf("displayinfo: screen_w %d screen_h %d\n", screen_w, screen_h);
     pad_x = (screen_w - canvas_w) / 2;
     pad_y = (screen_h - canvas_h) / 2;
     fbdev = fopen("/dev/fb", "w"); assert(fbdev);
-printf("fbdev opened: %p\n", fbdev);
+//printf("fbdev opened: %p\n", fbdev);
     evtdev = fopen("/dev/events", "r"); assert(evtdev);
-printf("evtdev opened: %p\n", evtdev);
+//printf("evtdev opened: %p\n", evtdev);
   }
 }
 
@@ -136,12 +136,12 @@ int NDL_WaitEvent(NDL_Event *event) {
 
 static void get_display_info() {
   FILE *dispinfo = fopen("/proc/dispinfo", "r");
-printf("dispinfo opened: %p\n", dispinfo);
+//printf("dispinfo opened: %p\n", dispinfo);
   assert(dispinfo);
   screen_w = screen_h = 0;
   char buf[128], key[128], value[128], *delim;
   while (fgets(buf, 128, dispinfo)) {
-printf("buf: %s\n", buf);
+//printf("buf: %s\n", buf);
     *(delim = strchr(buf, ':')) = '\0';
     sscanf(buf, "%s", key);
     sscanf(delim + 1, "%s", value);
