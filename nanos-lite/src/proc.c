@@ -43,6 +43,7 @@ int last_id = 0;
 _Context* schedule(_Context *prev, bool kill = false) {
   Log("prev's   prot is 0x%08x", prev->prot);
   Log("PCB[0]'s prot is 0x%08x", &pcb[0].as);
+  if (kill) Log("KILL THE PROCESS");
   if (prev->prot != NULL) {
     current->cp = prev;
   }
