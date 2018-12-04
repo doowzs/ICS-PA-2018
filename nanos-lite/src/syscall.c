@@ -8,7 +8,7 @@ void init_proc(const char *, char* const [], char* const []);
 void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const envp[]);
 void context_uload(PCB *pcb, const char *filename);
 void switch_boot_pcb();
-_Context *schedule(_Context *);
+_Context *schedule(_Context *, bool);
 PCB* get_free_pcb();
 int mm_brk(uintptr_t);
 
