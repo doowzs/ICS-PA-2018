@@ -40,7 +40,7 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
 }
 
 int last_id = 0;
-_Context* schedule(_Context *prev) {
+_Context* schedule(_Context *prev, bool kill = false) {
   Log("prev's   prot is 0x%08x", prev->prot);
   Log("PCB[0]'s prot is 0x%08x", &pcb[0].as);
   if (prev->prot != NULL) {
@@ -50,12 +50,22 @@ _Context* schedule(_Context *prev) {
   int i = 0;
   PCB *next_PCB = NULL;
 
-  for ( ; i < MAX_NR_PROC; ++i ) {
+  for (i = 0; i < MAX_NR_PROC; ++i) {
     next_PCB = &pcb[(last_id + i + 1) % MAX_NR_PROC];
     if (pcb_valid(next_PCB)) {
       printf("switching to pcb no. %d\n", (last_id + i + 1) % MAX_NR_PROC);
       current = next_PCB;
       break;
+    }
+  }
+
+  /* Kill the process */
+  if (kill) {
+    for (i = 0; i < MAX_NR_PROC; ++i) {
+      if (prev->prot == &pcb[i].as) {
+        current->cp = NULL;
+        pcb[i].cp = NULL;
+      }
     }
   }
 
