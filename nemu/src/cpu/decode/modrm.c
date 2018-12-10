@@ -133,12 +133,13 @@ void read_Mod_CR2R(vaddr_t *eip, Operand *cr, bool loadCR, Operand *r, bool load
   cr->reg = m.reg;
   if (loadCR) {
     rtl_mv(&cr->val, &reg_CR(cr->reg));
+  printf("CR No.%d, loaded with value 0x%08x\n", cr->reg, cr->val);
   }
 
   r->type = OP_TYPE_REG;
   r->reg = m.mod;
   if (loadR) {
     rtl_lr(&r->val, r->reg, 4); // force 32-bit
-  }
   printf("register No.%d, loaded with value 0x%08x\n", r->reg, r->val);
+  }
 }
