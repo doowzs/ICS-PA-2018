@@ -15,7 +15,7 @@
   ((entry >> 12) << 12) + (offset << 2)
   // clear lower 12 bits and add offset * SIZE
 #define ASSERT_PRESENT(entry, level) \
-  Assert(entry & 0x1, "Entry %x of %s is not present in page translation!", entry, level)
+  Assert(entry & 0x1, "%s is not present in page translation!", level)
 //-----------------------------------------------
 
 #define pmem_rw(addr, type) *(type *)({\
@@ -99,12 +99,12 @@ paddr_t do_page_translate(int dir, int page, int offset) {
   PDE = paddr_read(NEXT_PG(cpu.CR[3], dir), 4);
   printf("-> PDE at 0x%08x, is 0x%08x\n", 
       NEXT_PG(cpu.CR[3], dir), PDE);
-  ASSERT_PRESENT(PDE, "DIRECTORY");
+  ASSERT_PRESENT(PDE, "PDE(level 1)");
 
   PTE = paddr_read(NEXT_PG(PDE, page), 4);
   printf("-> PTE at 0x%08x, is 0x%08x\n",
       NEXT_PG(PDE, page), PTE);
-  ASSERT_PRESENT(PTE, "PAGE TABLE");
+  ASSERT_PRESENT(PTE, "PTE(level 2)");
 
   return paddr_read(NEXT_PG(PTE, offset),  4);
 }
