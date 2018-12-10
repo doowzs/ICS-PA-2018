@@ -172,17 +172,17 @@ make_DHelper(mov_I2r) {
   decode_op_I(eip, id_src, true);
 }
 
-/* CR <- XX
- * XX <- CR
+/* CR <- E
+ * E <- CR
+ * Check modrm.c for read function.
  */
+void read_Mod_CR2R(vaddr_t *, Operand *, bool, Operand *, bool);
 make_DHelper(mov_cr2r) {
-  decode_op_r(eip, id_dest, true);
-  TODO();
+  read_Mod_CR2R(eip, id_src, true, id_dest, false);
 }
 
 make_DHelper(mov_r2cr) {
-  decode_op_r(eip, id_src, true);
-  TODO();
+  read_Mod_CR2R(eip, id_dest, false, id_src, true);
 }
 
 /* used by unary operations */
