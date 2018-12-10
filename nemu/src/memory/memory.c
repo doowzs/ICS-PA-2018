@@ -21,7 +21,6 @@ paddr_t do_page_translate(int, int, int);
 /* Memory accessing interfaces */
 
 uint32_t paddr_read(paddr_t addr, int len) {
-  if (addr > PMEM_SIZE) return vaddr_read(addr, len);
   int mmio_id = is_mmio(addr);
   if (mmio_id != -1) {
     return mmio_read(addr, len, mmio_id);
@@ -31,11 +30,6 @@ uint32_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, uint32_t data, int len) {
-  if (addr > PMEM_SIZE) {
-    printf("addr 0x%08x->0x%08x\n", addr, page_translate(addr, len));
-    addr = page_translate(addr, len);
-    assert(0);
-  }
   int mmio_id = is_mmio(addr);
   if (mmio_id != -1) {
     mmio_write(addr, len, data, mmio_id);
