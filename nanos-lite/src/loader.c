@@ -1,7 +1,7 @@
 #include "fs.h"
 #include "proc.h"
 
-#define DEFAULT_ENTRY 0x4000000
+#define DEFAULT_ENTRY 0x8048000
 
 size_t ramdisk_read(void *, size_t, size_t);
 size_t get_ramdisk_size();
