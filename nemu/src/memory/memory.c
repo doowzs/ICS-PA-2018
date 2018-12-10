@@ -34,6 +34,7 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
   if (addr > PMEM_SIZE) {
     printf("addr 0x%08x->0x%08x\n", addr, page_translate(addr, len));
     addr = page_translate(addr, len);
+    assert(0);
   }
   int mmio_id = is_mmio(addr);
   if (mmio_id != -1) {
@@ -67,7 +68,7 @@ void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
  * See i386 Manual Page 98 for debugging memo.
  */
 paddr_t page_translate(vaddr_t vaddr, int len) {
-  //printf("PG status is %d\n", GET_CR0_PG);
+  printf("PG status is %d\n", GET_CR0_PG);
   if (GET_CR0_PG) {
     /* Paging is on. */
     int dir    = (vaddr >> 22) & 0x3ff; // 22-31: dir
