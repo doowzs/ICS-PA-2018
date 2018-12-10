@@ -233,18 +233,24 @@ void exec_wrapper(bool print_flag) {
 #endif
 
   decoding.seq_eip = ori_eip;
+  printf("before EXECREAL!\n");
   exec_real(&decoding.seq_eip);
 
 #ifdef DEBUG
   int instr_len = decoding.seq_eip - ori_eip;
+  printf("before SPRINTF!\n");
   sprintf(decoding.p, "%*.s", 50 - (12 + 3 * instr_len), "");
+  printf("before STRCAT!\n");
   strcat(decoding.asm_buf, decoding.assembly);
+  printf("before LOG!\n");
   Log_write("%s\n", decoding.asm_buf);
+  printf("before PRINTFLAG!\n");
   if (print_flag) {
     puts(decoding.asm_buf);
   }
 #endif
 
+  printf("before UDPATEEIP!\n");
   update_eip();
 
 #if defined(DIFF_TEST)
