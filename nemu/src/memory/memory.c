@@ -44,6 +44,7 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
  * should be done by page_translate!
  */
 uint32_t vaddr_read(vaddr_t vaddr, int len) {
+  Log("this is vaddr_read!");
   return paddr_read(page_translate(vaddr, len), len);
 }
 
