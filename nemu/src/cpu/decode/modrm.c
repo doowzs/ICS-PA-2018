@@ -140,4 +140,5 @@ void read_Mod_CR2R(vaddr_t *eip, Operand *cr, bool loadCR, Operand *r, bool load
   if (loadR) {
     rtl_lr(&r->val, r->reg, 4); // force 32-bit
   }
+  printf("register No.%d, loaded with value 0x%08x\n", r->reg, r->val);
 }
