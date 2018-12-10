@@ -80,18 +80,9 @@ void* memset(void* v, int c, size_t n) {
 
 void* memcpy(void* out, const void* in, size_t n) {
   printf("in memcopy!\n");
+  printf("ADDRESS: %p->%p", in, out);
   int8_t *pout = (int8_t *) out;
   int8_t *pin = (int8_t *) in;
-
-  printf("still in memcpy!\n");
-  for(int i = 0; i < n; ++i) {
-    *pout = *pin;
-    pout ++;
-    pin ++;
-
-  }
-  printf("memcpy finished!\n");
-  return pout;
 
   int i = 0, loops = (n / sizeof(int32_t));
   for (i = 0; i < loops; ++i) {
