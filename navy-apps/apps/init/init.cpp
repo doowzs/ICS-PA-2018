@@ -124,6 +124,7 @@ int main(int argc, char *argv[], char *envp[]) {
       execve(item->bin, &exec_argv[0], envp);
       
       fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed. (execve in init.cpp returned!)\n\n", item->bin);
+      assert(0);
     } else {
       fprintf(stderr, "Choose a number between %d and %d\n\n", 0, i_max);
     }
