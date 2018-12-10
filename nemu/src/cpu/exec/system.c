@@ -15,6 +15,7 @@ make_EHelper(lidt) {
 
 make_EHelper(mov_r2cr) {
   operand_write(id_dest, &id_src->val);
+  printf("moving to CR No.%d", id_dest->reg);
 
   print_asm("movl %%%s,%%cr%d", reg_name(id_src->reg, 4), id_dest->reg);
 
