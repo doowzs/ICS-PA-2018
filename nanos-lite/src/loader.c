@@ -15,6 +15,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 #endif
   void *pa = new_page(1); // allocate 1 new page
   _map(&pcb->as, buf, pa, 0); // map va to pa
+  Log("vaddr %p mapped to %p", buf, pa);
   fs_read(fd, buf, sz);
   return (intptr_t) buf;
 }
