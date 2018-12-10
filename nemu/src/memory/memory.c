@@ -71,7 +71,6 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
     }
   } else {
     /* Paging is off. */
-    Log("Paging is off.");
     return vaddr;
   }
 }
