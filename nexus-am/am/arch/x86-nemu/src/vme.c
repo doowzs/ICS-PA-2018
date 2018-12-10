@@ -90,6 +90,7 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
     argx = (char **) ustack.end--;
     *argx = argv + argc;
   }
+  printf("the next uentry is at %p\n", entry);
 
   return _kcontext(kstack, entry, args);
 }
