@@ -70,8 +70,10 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
     if (offset + len > PAGE_SIZE) {
       panic("Address exceeds page boundary! dir=%d, page=%d, offset=%d, len=%d", dir, page, offset, len);
     } else {
-      printf("translate address 0x%08x -> 0x%08x\n", vaddr, do_page_translate(dir, page, offset));
-      return do_page_translate(dir, page, offset);
+      printf("translate address 0x%08x\n", vaddr);
+      paddr_t paddr = do_page_translate(dir, page, offset);
+      printf("-> result is 0x%08x\n", paddr);
+      return paddr;
     }
   } else {
     /* Paging is off. */
