@@ -84,7 +84,7 @@ void _switch(_Context *c) {
 int _map(_Protect *p, void *va, void *pa, int mode) {
   int* PG_PTR = (int *) p->ptr;
   int page = ((int) va >> 12) & 0x3ff;
-  *(PG_PTR + page) = ((int) pa << 12) | 1;
+  *(PG_PTR + page) = ((int) pa << 12) | 0x1;
   return 0;
 }
 
