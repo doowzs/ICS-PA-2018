@@ -68,7 +68,6 @@ void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
  * See i386 Manual Page 98 for debugging memo.
  */
 paddr_t page_translate(vaddr_t vaddr, int len) {
-  //printf("PG status is %d\n", cpu.CR[0] < 0);
   if (GET_CR0_PG) {
     /* Paging is on. */
     int dir    = (vaddr >> 22) & 0x3ff; // 22-31: dir
@@ -89,7 +88,7 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
  * All frame addresses start at 12-th bit!
  */
 paddr_t do_page_translate(int dir, int page, int offset) {
-  printf("in translator!\n");
+  printf("in translator!, dir=%d, page=%d, offset=%d\n", dir, page, offset);
   paddr_t dir_entry, pg_entry, paddr;
   dir_entry = paddr_read(GET_FRAME_ADDR(cpu.CR[3]), 4) + dir;
   ASSERT_PRESENT(dir_entry, "DIRECTORY");
