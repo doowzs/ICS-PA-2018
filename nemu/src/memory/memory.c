@@ -91,7 +91,7 @@ paddr_t do_page_translate(int dir, int page, int offset) {
   printf("in translator!, dir=%d, page=%d, offset=%d\n", dir, page, offset);
   paddr_t dir_entry, pg_entry, paddr;
   dir_entry = paddr_read(cpu.CR[3] + dir, 4);
-  printf("address of PDE is 0x%08x\n", GET_FRAME_ADDR(cpu.CR[3]) + dir);
+  printf("address of PDE is 0x%08x\n", cpu.CR[3]+dir);
   ASSERT_PRESENT(dir_entry, "DIRECTORY");
   pg_entry  = paddr_read(GET_FRAME_ADDR(dir_entry), 4) + page;
   ASSERT_PRESENT(pg_entry, "PAGE TABLE");
