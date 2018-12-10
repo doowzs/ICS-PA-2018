@@ -20,13 +20,11 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
   pgfree_usr = pgfree_f;
 
   int i;
-  printf("OK1\n");
 
   // make all PDEs invalid
   for (i = 0; i < NR_PDE; i ++) {
     kpdirs[i] = 0;
   }
-  printf("OK2\n");
 
   PTE *ptab = kptabs;
   for (i = 0; i < NR_KSEG_MAP; i ++) {
@@ -35,12 +33,10 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
     for (; pdir_idx < pdir_idx_end; pdir_idx ++) {
       // fill PDE
       kpdirs[pdir_idx] = (uintptr_t)ptab | PTE_P;
-printf("OK3\n");
 
       // fill PTE
       PTE pte = PGADDR(pdir_idx, 0, 0) | PTE_P;
       PTE pte_end = PGADDR(pdir_idx + 1, 0, 0) | PTE_P;
-      printf("OK4\n");
       for (; pte < pte_end; pte += PGSIZE) {
         *ptab = pte;
         ptab ++;
@@ -48,9 +44,11 @@ printf("OK3\n");
     }
   }
 
+  printf("OK!\n");
   set_cr3(kpdirs);
+  printf("OKOK!\n");
   set_cr0(get_cr0() | CR0_PG);
-  //printf("CR0 is now 0x%08x\n", get_cr0());
+  printf("CR0 is now 0x%08x\n", get_cr0());
 
   return 0;
 }
