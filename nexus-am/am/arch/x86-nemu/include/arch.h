@@ -5,6 +5,7 @@
 
 #define PMEM_SIZE (128 * 1024 * 1024) // 128MB
 #define PAGE_SIZE (4 * 1024)          // 4KB
+#define PGSIZE 4096 // legency name
 
 typedef uint32_t size_t;
 

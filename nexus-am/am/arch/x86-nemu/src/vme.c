@@ -81,9 +81,9 @@ void _switch(_Context *c) {
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
-  paddr_t *PG_PTR = p->ptr;
-  int page = (va >> 12) & 0x3ff;
-  *(PG_PTR + page) = pa;
+  int** PG_PTR = (int **) p->ptr;
+  int page = ((int) va >> 12) & 0x3ff;
+  *(PG_PTR + page) = (int *) pa;
   return 0;
 }
 
