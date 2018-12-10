@@ -31,6 +31,7 @@ uint32_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, uint32_t data, int len) {
+  printf("paddr_write to %08x\n", addr);
   if (addr > PMEM_SIZE) return vaddr_write(addr, data, len);
   int mmio_id = is_mmio(addr);
   if (mmio_id != -1) {
