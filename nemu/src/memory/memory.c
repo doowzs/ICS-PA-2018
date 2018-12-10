@@ -30,7 +30,6 @@ uint32_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, uint32_t data, int len) {
-  Log("write addr=0x%08x", addr);
   int mmio_id = is_mmio(addr);
   if (mmio_id != -1) {
     mmio_write(addr, len, data, mmio_id);
