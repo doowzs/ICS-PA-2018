@@ -4,8 +4,8 @@
 #define PMEM_SIZE (128 * 1024 * 1024) // 128MB
 #define PAGE_SIZE (4 * 1024) // 4KB for each page
 
-#define CR0_PG   ((cpu.CR[0] >> 31) & 0x1)     // MSB of CR0
-#define CR3_PDBR ((cpu.CR[3] >> 12) & 0xfffff) // 20-bit length
+#define CR0_PG   ((cpu.CR[0] >> 31) & 0x1) // MSB of CR0
+#define GET_FRAME_ADDR(entry) ((entry >> 12) & 0xfffff) // 12-31
 
 #define pmem_rw(addr, type) *(type *)({\
     Assert(addr < PMEM_SIZE, "physical address(0x%08x) is out of bound", addr); \
@@ -75,11 +75,14 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
   }
 }
 
+/**
+ * All frame addresses start at 12-th bit!
+ */
 paddr_t do_page_translate(int dir, int page, int offset) {
   paddr_t dir_entry, pg_entry, paddr;
-  dir_entry = paddr_read(CR3_PDBR,  4) + dir;
-  pg_entry  = paddr_read(dir_entry, 4) + page;
-  paddr     = paddr_read(pg_entry,  4) + offset;
+  dir_entry = paddr_read(GET_FRAME_ADDR(cpu.CR[3]), 4) + dir;
+  pg_entry  = paddr_read(GET_FRAME_ADDR(dir_entry), 4) + page;
+  paddr     = paddr_read(GET_FRAME_ADDR(pg_entry),  4) + offset;
   Log("dir=%d -> %x", dir, dir_entry);
   Log("page=%d -> %x", page, pg_entry);
   Log("offset=%d -> %x", offset, paddr);
