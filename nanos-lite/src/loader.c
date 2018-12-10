@@ -41,6 +41,7 @@ void context_kload(PCB *pcb, void *entry) {
 
 void context_uload(PCB *pcb, const char *filename) {
   _protect(&pcb->as); // allocate a memory address
+  Log("protected a new page directory!");
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;
