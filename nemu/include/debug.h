@@ -32,7 +32,6 @@ extern FILE* log_fp;
 #define Assert(cond, ...) \
   do { \
     if (!(cond)) { \
-      Log("Assertion failed! Detail: __VA_ARGS__"); \
       fflush(stdout); \
       fprintf(stderr, "\33[1;31m"); \
       fprintf(stderr, __VA_ARGS__); \
