@@ -25,9 +25,7 @@ _Context* do_syscall(_Context *c) {
      * @params int
      */
     case SYS_exit:
-#ifdef SYS_DEBUG
       Log("SYS_exit(code=%d)", a[1]);
-#endif
       if (a[1] == 0) {
         init_proc("/bin/init", NULL, NULL);
       } else {
