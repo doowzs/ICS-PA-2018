@@ -32,7 +32,6 @@ uint32_t paddr_read(paddr_t addr, int len) {
 
 void paddr_write(paddr_t addr, uint32_t data, int len) {
   if (addr > PMEM_SIZE) {
-    addr = page_translate(addr, len);
     panic("Oops!! addr %08x > PMEM_SIZE\n", addr);
   }
   int mmio_id = is_mmio(addr);
