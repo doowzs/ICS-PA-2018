@@ -50,6 +50,9 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
   return 0;
 }
 
+/**
+ * Allocate a new page directory entry.
+ */
 int _protect(_Protect *p) {
   PDE *updir = (PDE*)(pgalloc_usr(1));
   p->pgsize = 4096;
@@ -78,6 +81,9 @@ void _switch(_Context *c) {
 }
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
+  paddr_t *PG_PTR = p->ptr;
+  int page = (va >> 12) & 0x3ff;
+  *(PG_PTR + page) = pa;
   return 0;
 }
 

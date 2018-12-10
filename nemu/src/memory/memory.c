@@ -63,8 +63,8 @@ void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
 paddr_t page_translate(vaddr_t vaddr, int len) {
   if (CR0_PG) {
     /* Paging is on. */
-    int dir    = (vaddr >> 21) & 0x3ff; // 22-31: dir
-    int page   = (vaddr >> 11) & 0x3ff; // 12-21: page
+    int dir    = (vaddr >> 22) & 0x3ff; // 22-31: dir
+    int page   = (vaddr >> 12) & 0x3ff; // 12-21: page
     int offset =  vaddr        & 0xfff; // 00-11: offset  
     if (offset + len > PAGE_SIZE) {
       panic("Address exceeds page boundary! dir=%d, page=%d, offset=%d, len=%d", dir, page, offset, len);

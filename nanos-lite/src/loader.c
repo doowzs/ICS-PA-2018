@@ -13,6 +13,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 #ifdef SYS_DEBUG
   Log("loading file %s to %p, fd=%d, sz=%d", filename, buf, fd, sz);
 #endif
+  void *pa = new_page(1); // allocate 1 new page
+  _map(pcb->as, buf, pa, NULL); // map va to pa
   fs_read(fd, buf, sz);
   return (intptr_t) buf;
 }
@@ -37,6 +39,7 @@ void context_kload(PCB *pcb, void *entry) {
 }
 
 void context_uload(PCB *pcb, const char *filename) {
+  _protect(pcb->as); // allocate a memory address
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;
