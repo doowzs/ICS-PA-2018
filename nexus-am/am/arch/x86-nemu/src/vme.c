@@ -87,7 +87,7 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
   char **argx = NULL;
   while (strcmp(argv + argc, "\0") != 0) argc++;
   while (argc--) {
-    argx = (char **) ustack.end--;
+    argx = (char **) --ustack.end;
     *argx = argv + argc;
   }
   printf("the next user entry is %p\n", entry);

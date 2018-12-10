@@ -72,7 +72,7 @@ int _cte_init(_Context*(*handler)(_Event, _Context*)) {
 }
 
 _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
-  _Context *c = (_Context *) stack.end--;
+  _Context *c = (_Context *) --stack.end;
   // See trap.S and nemu CPU for how this works!
   //c->eflags = cpu.eflags32;
   //c->cs  = cpu.CS;
