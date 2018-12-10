@@ -17,6 +17,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   _map(&pcb->as, buf, pa, 0); // map va to pa
   Log("vaddr %p mapped to %p", buf, pa);
   fs_read(fd, buf, sz);
+  Log("file %s loaded!", filename);
   return (intptr_t) buf;
 }
 
