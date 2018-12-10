@@ -44,6 +44,7 @@ typedef struct {
 	};
 
   rtlreg_t CS;
+  rtlreg_t CR[8];
 
   struct {
     rtlreg_t limit :16;

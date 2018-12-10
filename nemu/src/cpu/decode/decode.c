@@ -172,6 +172,19 @@ make_DHelper(mov_I2r) {
   decode_op_I(eip, id_src, true);
 }
 
+/* CR <- XX
+ * XX <- CR
+ */
+make_DHelper(mov_cr2r) {
+  decode_op_r(eip, id_dest, true);
+  TODO();
+}
+
+make_DHelper(mov_r2cr) {
+  decode_op_r(eip, id_src, true);
+  TODO();
+}
+
 /* used by unary operations */
 make_DHelper(I) {
   decode_op_I(eip, id_dest, true);
