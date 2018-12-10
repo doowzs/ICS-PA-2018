@@ -95,8 +95,8 @@ paddr_t do_page_translate(int dir, int page, int offset) {
   pg_entry  = paddr_read(GET_FRAME_ADDR(dir_entry), 4) + page;
   //ASSERT_PRESENT(pg_entry, "PAGE TABLE");
   paddr     = paddr_read(GET_FRAME_ADDR(pg_entry),  4) + offset;
-  Log("dir=%d -> %x", dir, dir_entry);
-  Log("page=%d -> %x", page, pg_entry);
-  Log("offset=%d -> %x", offset, paddr);
+  //Log("dir=%d -> %x", dir, dir_entry);
+  //Log("page=%d -> %x", page, pg_entry);
+  //Log("offset=%d -> %x", offset, paddr);
   return paddr;
 }
