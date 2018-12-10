@@ -87,11 +87,15 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
  */
 paddr_t do_page_translate(int dir, int page, int offset) {
   paddr_t PDE, PTE;
-  printf("-> address of PDE is 0x%08x\n", cpu.CR[3]+dir);
   PDE = paddr_read(cpu.CR[3] + dir, 4);
+  printf("-> PDE at 0x%08x, is 0x%08x\n", 
+      cpu.CR[3] + dir, PDE);
   ASSERT_PRESENT(PDE, "DIRECTORY");
-  printf("-> address of PTE is 0x%08x\n", PDE + page);
+
   PTE = paddr_read(PDE + page, 4);
+  printf("-> PTE at 0x%08x, is 0x%08x\n",
+      PDE + page, PTE);
   ASSERT_PRESENT(PTE, "PAGE TABLE");
+
   return paddr_read(PTE + offset,  4);
 }
