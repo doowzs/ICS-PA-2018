@@ -5,7 +5,7 @@
 #define PAGE_SIZE (4 * 1024) // 4KB for each page
 
 #define GET_CR0_PG ((cpu.CR[0] >> 31) & 0x1) // MSB of CR0
-#define GET_FRAME_ADDR(entry) ((entry >> 12) & 0xfffff) // 12-31
+#define FRAME_ADDR(entry) ((entry >> 12) << 12) // clear lower 12 bits
 #define ASSERT_PRESENT(entry, level) \
   Assert(entry & 0x1, "Entry %x of %s is not present in page translation!", entry, level)
 
@@ -87,15 +87,15 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
  */
 paddr_t do_page_translate(int dir, int page, int offset) {
   paddr_t PDE, PTE;
-  PDE = paddr_read(cpu.CR[3] + dir, 4);
+  PDE = paddr_read(FRAME_ADDR(cpu.CR[3]) + dir, 4);
   printf("-> PDE at 0x%08x, is 0x%08x\n", 
-      cpu.CR[3] + dir, PDE);
+      FRAME_ADDR(cpu.CR[3]) + dir, PDE);
   ASSERT_PRESENT(PDE, "DIRECTORY");
 
-  PTE = paddr_read(PDE + page, 4);
+  PTE = paddr_read(FRAME_ADDR(PDE) + page, 4);
   printf("-> PTE at 0x%08x, is 0x%08x\n",
-      PDE + page, PTE);
+      FRAME_ADDR(PDE) + page, PTE);
   ASSERT_PRESENT(PTE, "PAGE TABLE");
 
-  return paddr_read(PTE + offset,  4);
+  return paddr_read(FRAME_ADDR(PTE) + offset,  4);
 }
