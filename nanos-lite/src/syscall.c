@@ -5,6 +5,7 @@
 #include "syscall.h"
 
 void init_proc(const char *, char* const [], char* const []);
+void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const envp[]);
 
 void syscall_ret(_Context *c, int val) {
   c->GPRx = val;
@@ -169,7 +170,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_execve(file=%s)", (const char *) a[1]);
 #endif
-      init_proc((const char *) a[1], (char* const*) a[2], (char* const*) a[3]);
+      naive_uload(NULL, (const char *) a[1], (char* const*) a[2], (char* const*) a[3]);
       break;
 
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
