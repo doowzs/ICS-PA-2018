@@ -33,5 +33,8 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
 _Context* schedule(_Context *prev) {
   current->cp = prev;
   current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+#ifdef SYS_DEBUG
+  Log("switching to context at %p", current->cp);
+#endif
   return current->cp;
 }
