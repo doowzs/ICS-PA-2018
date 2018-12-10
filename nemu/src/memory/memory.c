@@ -7,6 +7,8 @@
 //-----------------------------------------------
 // PAGE TABLE HANDY HELPERS!!!
 // F*CK USELESS i386 MANUAL!!!
+// F*CK NONSENSE 4K ALIGNMENT!
+// SEE MANUAL PAGE 92 FOR INFO
 #define GET_CR0_PG \
   ((cpu.CR[0] >> 31) & 0x1) // MSB of CR0
 #define NEXT_PG(entry, offset) \
@@ -69,7 +71,7 @@ void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
  * See i386 Manual Page 98 for debugging memo.
  */
 paddr_t page_translate(vaddr_t vaddr, int len) {
-  if (GET_CR0_PG) {
+  if (GET_CR0_PG && vaddr > PMEM_SIZE) {
     /* Paging is on. */
     int dir    = (vaddr >> 22) & 0x3ff; // 22-31: dir
     int page   = (vaddr >> 12) & 0x3ff; // 12-21: page
