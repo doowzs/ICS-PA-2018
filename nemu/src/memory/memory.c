@@ -9,6 +9,7 @@
     })
 
 uint8_t pmem[PMEM_SIZE];
+paddr_t page_translate(vaddr_t);
 
 /* Memory accessing interfaces */
 
@@ -30,10 +31,23 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
   }
 }
 
-uint32_t vaddr_read(vaddr_t addr, int len) {
-  return paddr_read(addr, len);
+uint32_t vaddr_read(vaddr_t vaddr, int len) {
+  if (false) {// FIXME: how to judge the address exceeds the page boundary???
+    //
+  } else {
+    return paddr_read(page_translate(vaddr), len);
+  }
 }
 
-void vaddr_write(vaddr_t addr, uint32_t data, int len) {
-  paddr_write(addr, data, len);
+void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
+  if (false) { // FIXME: same as above.
+    //
+  } else {
+    paddr_write(page_translate(vaddr), data, len);
+  }
+}
+
+paddr_t page_translate(vaddr_t vaddr) {
+  //FIXME: How to do this???
+  return vaddr;
 }
