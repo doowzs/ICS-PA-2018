@@ -19,7 +19,7 @@ make_EHelper(mov_r2cr) {
   printf("2\n");
   //printf("moving R No.%d to CR No.%d with value 0x%08x\n", id_src->reg, id_dest->reg, id_src->val);
 
-  print_asm("movl %%%s,%%cr%d", reg_name(id_src->reg, 4), id_dest->reg);
+  //print_asm("movl %%%s,%%cr%d", reg_name(id_src->reg, 4), id_dest->reg);
 
 #if defined(DIFF_TEST)
   difftest_skip_ref();
