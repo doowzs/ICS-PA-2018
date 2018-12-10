@@ -137,7 +137,7 @@ void read_Mod_CR2R(vaddr_t *eip, Operand *cr, bool loadCR, Operand *r, bool load
   }
 
   r->type = OP_TYPE_REG;
-  r->reg = m.mod;
+  r->reg = m.R_M;
   r->width = 4; // force using 32-bit
   if (loadR) {
     rtl_lr(&r->val, r->reg, r->width);
