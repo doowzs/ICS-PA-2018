@@ -9,6 +9,9 @@ void vecsys();
 void vectrap();
 void vecnull();
 
+void get_cur_as(_Context *);
+void _switch(_Context *);
+
 void print_tf(_Context *tf) {
   printf("_CONTEXT ADDR AT %p\n", tf);
   printf("*PROT:  0x%p\n", tf->prot);
@@ -32,7 +35,8 @@ void print_tf(_Context *tf) {
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
-  // print_tf(tf);
+  get_cur_as(next);
+  // print_tf(next);
   if (user_handler) {
     _Event ev = {0};
     switch (tf->irq) {
@@ -46,7 +50,7 @@ _Context* irq_handle(_Context *tf) {
       next = tf;
     }
   }
-
+  _switch(next);
   return next;
 }
 
