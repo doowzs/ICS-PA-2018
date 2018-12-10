@@ -95,9 +95,7 @@ static inline uint32_t get_cr0(void) {
 
 #include<stdio.h>
 static inline void set_cr0(uint32_t cr0) {
-  printf("before ASM!\n");
   __asm__ volatile("movl %0, %%cr0" : : "r"(cr0));
-  printf("after ASM!\n");
 }
 
 
