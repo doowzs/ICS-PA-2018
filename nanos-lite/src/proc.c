@@ -34,7 +34,7 @@ _Context* schedule(_Context *prev) {
   current = &pcb[0];
   //current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
 #ifdef SYS_DEBUG
-  Log("switching to context at %p", current->cp);
+  Log("switching to context at %p, starting at %p", current->cp, current->cp->eip);
 #endif
   return current->cp;
 }
