@@ -4,7 +4,7 @@
 #define PMEM_SIZE (128 * 1024 * 1024) // 128MB
 #define PAGE_SIZE (4 * 1024) // 4KB for each page
 
-#define GET_CR0_PG   ((cpu.CR[0] < 0)) // MSB of CR0
+#define GET_CR0_PG ((cpu.CR[0] >> 31) & 0x1) // MSB of CR0
 #define GET_FRAME_ADDR(entry) ((entry >> 12) & 0xfffff) // 12-31
 #define ASSERT_PRESENT(entry, level) \
   Assert(entry & 0x1, "Entry %x of %s is not present in page translation!", entry, level)
@@ -68,7 +68,6 @@ void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
  * See i386 Manual Page 98 for debugging memo.
  */
 paddr_t page_translate(vaddr_t vaddr, int len) {
-  //printf("CR0 is now 0x%08x\n", cpu.CR[0]);
   //printf("PG status is %d\n", cpu.CR[0] < 0);
   if (GET_CR0_PG) {
     /* Paging is on. */
