@@ -118,8 +118,8 @@ void read_ModR_M(vaddr_t *eip, Operand *rm, bool load_rm_val, Operand *reg, bool
  * See http://www.felixcloutier.com/x86/MOV-1.html for detailed manual.
  *
  * CR is specified by reg field,
- *  R is specified by mod field.
- *         R/M field is ignored.
+ *  R is specified by R/M field.
+ *         mod field is ignored.
  *
  * IMPORTANT:
  * Under any circunstance, the code uses 32-bit length operands.
@@ -141,6 +141,6 @@ void read_Mod_CR2R(vaddr_t *eip, Operand *cr, bool loadCR, Operand *r, bool load
   r->width = 4; // force using 32-bit
   if (loadR) {
     rtl_lr(&r->val, r->reg, r->width);
-    printf("register No.%d, loaded with value 0x%08x\n", r->reg, r->val);
+    //printf("register No.%d, loaded with value 0x%08x\n", r->reg, r->val);
   }
 }
