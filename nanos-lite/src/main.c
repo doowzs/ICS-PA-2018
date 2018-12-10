@@ -29,7 +29,7 @@ int main() {
 
   init_fs();
 
-  init_proc("/bin/init", NULL);
+  //init_proc("/bin/init", NULL);
 
 #ifdef HAS_CTE
   _yield();
