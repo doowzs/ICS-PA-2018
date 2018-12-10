@@ -25,7 +25,7 @@ void hello_fun(void *arg) {
 
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("special init proc for testing SUCK PA4.2 MMAP!!!");
-  context_kload(&pcb[0], "/bin/dummy");
+  context_uload(&pcb[0], "/bin/dummy");
   switch_boot_pcb();
 }
 
@@ -34,7 +34,7 @@ _Context* schedule(_Context *prev) {
   current = &pcb[0];
   //current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
 #ifdef SYS_DEBUG
-  Log("switching to context at %p, starting at %p", current->cp, current->cp->eip);
+  Log("switching to context at %p, will start at %p", current->cp, current->cp->eip);
 #endif
   return current->cp;
 }
