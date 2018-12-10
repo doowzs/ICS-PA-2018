@@ -31,8 +31,9 @@ uint32_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, uint32_t data, int len) {
-  printf("paddr_write to %08x\n", addr);
-  if (addr > PMEM_SIZE) { printf("oops!\n");  vaddr_write(addr, data, len); }
+  if (addr > PMEM_SIZE) {
+    panic("Oops!! addr %08x > PMEM_SIZE\n", addr);
+  }
   int mmio_id = is_mmio(addr);
   if (mmio_id != -1) {
     mmio_write(addr, len, data, mmio_id);
@@ -85,6 +86,7 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
  * All frame addresses start at 12-th bit!
  */
 paddr_t do_page_translate(int dir, int page, int offset) {
+  printf("in translator!\n");
   paddr_t dir_entry, pg_entry, paddr;
   dir_entry = paddr_read(GET_FRAME_ADDR(cpu.CR[3]), 4) + dir;
   ASSERT_PRESENT(dir_entry, "DIRECTORY");
