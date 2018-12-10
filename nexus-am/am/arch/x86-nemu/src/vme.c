@@ -86,11 +86,11 @@ void _switch(_Context *c) {
 
 int _map(_Protect *p, void *va, void *pa, int mode) {
   // make PDE present
-  kpdirs[((int) va >> 22) & 0x3ff] |= 1;
+  kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
   // make PTE present
   int* PTBR = (int *) p->ptr;
   int page = ((int) va >> 12) & 0x3ff;
-  *(PTBR + page) = ((int) pa << 12) | 0x1;
+  *(PTBR + page) = ((int) pa << 12) | PTE_P;
   return 0;
 }
 
