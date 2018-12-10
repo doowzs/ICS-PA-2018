@@ -90,7 +90,7 @@ int _map(_Protect *p, void *va, void *pa, int mode) {
   // make PTE present
   int* PTBR = (int *) p->ptr;
   int page = ((int) va >> 12) & 0x3ff;
-  *(PTBR + page) = ((int) pa) | PTE_P;
+  *(PTBR + page) = (((int) pa >> 12) << 12) | PTE_P;
   return 0;
 }
 
