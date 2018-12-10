@@ -99,5 +99,7 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
   }
   printf("the next user entry is %p\n", entry);
 
-  return _kcontext(kstack, entry, args);
+  _Context *c = _kcontext(kstack, entry, args);
+  c->prot = p;
+  return c;
 }
