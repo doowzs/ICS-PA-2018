@@ -106,5 +106,5 @@ paddr_t do_page_translate(int dir, int page, int offset) {
       NEXT_PG(PDE, page), PTE);
   ASSERT_PRESENT(PTE, "PTE(level 2)");
 
-  return NEXT_PG(PTE, offset);
+  return ((PTE >> 12) << 12) + offset;
 }
