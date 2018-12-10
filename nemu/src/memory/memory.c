@@ -7,7 +7,7 @@
 #define CR0_PG   ((cpu.CR[0] >> 31) & 0x1) // MSB of CR0
 #define GET_FRAME_ADDR(entry) ((entry >> 12) & 0xfffff) // 12-31
 #define ASSERT_PRESENT(entry, level) \
-  Assert(entry & 0x1, "Entry %x of %s is not present in page translation!", entry, level)
+    Assert(entry & 0x1, "Entry %x of %s is not present in page translation!", entry, level)
 
 #define pmem_rw(addr, type) *(type *)({\
     Assert(addr < PMEM_SIZE, "physical address(0x%08x) is out of bound", addr); \
