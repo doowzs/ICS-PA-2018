@@ -183,6 +183,7 @@ make_DHelper(mov_cr2r) {
 
 make_DHelper(mov_r2cr) {
   read_Mod_CR2R(eip, id_dest, false, id_src, true);
+  printf("the value to be written is 0x%08x\n", id_src->val);
 }
 
 /* used by unary operations */
