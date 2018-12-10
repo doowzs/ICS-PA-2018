@@ -4,6 +4,7 @@
 
 void naive_uload(PCB *, const char *, char* const[], char* const[]);
 void context_kload(PCB *pcb, void *entry);
+void context_uload(PCB *pcb, const char *filename);
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used));
 static PCB pcb_boot;
@@ -25,13 +26,12 @@ void hello_fun(void *arg) {
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("special init proc for testing kContext!");
   context_kload(&pcb[0], (void *)hello_fun);
-  //context_uload(&pcb[1], "/bin/init");
+  context_uload(&pcb[1], "/bin/init");
   switch_boot_pcb();
 }
 
 _Context* schedule(_Context *prev) {
   current->cp = prev;
-  current = &pcb[0];
-  // current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
+  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
   return current->cp;
 }
