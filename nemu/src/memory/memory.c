@@ -1,7 +1,11 @@
 #include "nemu.h"
 #include "device/mmio.h"
 
-#define PMEM_SIZE (128 * 1024 * 1024)
+#define PMEM_SIZE (128 * 1024 * 1024) // 128MB
+#define PAGE_SIZE (4 * 1024) // 4KB for each page
+
+#define CR0_PG   ((cpu.CR[0] >> 31) & 0x1)     // MSB of CR0
+#define CR3_PDBR ((cpu.CR[3] >> 12) & 0xfffff) // 20-bit length
 
 #define pmem_rw(addr, type) *(type *)({\
     Assert(addr < PMEM_SIZE, "physical address(0x%08x) is out of bound", addr); \
@@ -9,7 +13,8 @@
     })
 
 uint8_t pmem[PMEM_SIZE];
-paddr_t page_translate(vaddr_t);
+paddr_t page_translate(vaddr_t, int);
+paddr_t do_page_translate(int, int, int);
 
 /* Memory accessing interfaces */
 
@@ -31,23 +36,53 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
   }
 }
 
+/**
+ * NOTE: the work of checking legality of CR and page,
+ * and whether the address exceeds the page boundary,
+ * should be done by page_translate!
+ */
 uint32_t vaddr_read(vaddr_t vaddr, int len) {
-  if (false) {// FIXME: how to judge the address exceeds the page boundary???
-    //
-  } else {
-    return paddr_read(page_translate(vaddr), len);
-  }
+  return paddr_read(page_translate(vaddr, len), len);
 }
 
 void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
-  if (false) { // FIXME: same as above.
-    //
+  paddr_write(page_translate(vaddr, len), data, len);
+}
+
+/**
+ * This translate a virtual addr to a real addr.
+ * On success (
+ *   1 - CR0.PG is invalid (paging is off)
+ *   2 - the address does not exceed page boundary
+ * ), return paddr. Otherwise throws an error and abort.
+ *
+ * See i386 Manual Page 98 for debugging memo.
+ */
+paddr_t page_translate(vaddr_t vaddr, int len) {
+  if (CR0_PG) {
+    /* Paging is on. */
+    int dir    = (vaddr >> 21) & 0x3ff; // 22-31: dir
+    int page   = (vaddr >> 11) & 0x3ff; // 12-21: page
+    int offset =  vaddr        & 0xfff; // 00-11: offset  
+    if (offset + len > PAGE_SIZE) {
+      panic("Address exceeds page boundary! dir=%d, page=%d, offset=%d, len=%d", dir, page, offset, len);
+    } else {
+      return do_page_translate(dir, page, offset);
+    }
   } else {
-    paddr_write(page_translate(vaddr), data, len);
+    /* Paging is off. */
+    Log("Paging is off.");
+    return vaddr;
   }
 }
 
-paddr_t page_translate(vaddr_t vaddr) {
-  //FIXME: How to do this???
-  return vaddr;
+paddr_t do_page_translate(int dir, int page, int offset) {
+  paddr_t dir_entry, pg_entry, paddr;
+  dir_entry = paddr_read(CR3_PDBR,  4) + dir;
+  pg_entry  = paddr_read(dir_entry, 4) + page;
+  paddr     = paddr_read(pg_entry,  4) + offset;
+  Log("dir=%d -> %x", dir, dir_entry);
+  Log("page=%d -> %x", page, pg_entry);
+  Log("offset=%d -> %x", offset, paddr);
+  return paddr;
 }
