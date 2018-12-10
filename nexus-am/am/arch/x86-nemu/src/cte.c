@@ -74,19 +74,19 @@ int _cte_init(_Context*(*handler)(_Event, _Context*)) {
 _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
   _Context *c = (_Context *) stack.end--;
   // See trap.S and nemu CPU for how this works!
-  c->eflags = cpu.eflags32;
-  c->cs  = cpu.CS;
-  c->eip = entry;
+  //c->eflags = cpu.eflags32;
+  //c->cs  = cpu.CS;
+  c->eip = (uintptr_t) entry;
   c->err = 0;
   c->irq = 0x81; // ASM_TRAP
-  c->eax = cpu.eax;
-  c->ecx = cpu.ecx;
-  c->edx = cpu.edx;
-  c->ebx = cpu.ebx;
-  c->esp = cpu.esp;
-  c->ebp = cpu.ebp;
-  c->esi = cpu.esi;
-  c->edi = cpu.edi;
+  //c->eax = cpu.eax;
+  //c->ecx = cpu.ecx;
+  //c->edx = cpu.edx;
+  //c->ebx = cpu.ebx;
+  //c->esp = cpu.esp;
+  //c->ebp = cpu.ebp;
+  //c->esi = cpu.esi;
+  //c->edi = cpu.edi;
   c->prot = 0;
   return c;
 }
