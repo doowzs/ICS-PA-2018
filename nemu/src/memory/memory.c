@@ -70,7 +70,7 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
     if (offset + len > PAGE_SIZE) {
       panic("Address exceeds page boundary! dir=%d, page=%d, offset=%d, len=%d", dir, page, offset, len);
     } else {
-      printf("translate the address of 0x%08x\n", vaddr);
+      printf("translate address 0x%08x -> 0x%08x\n", vaddr, do_page_translate(dir, page, offset));
       return do_page_translate(dir, page, offset);
     }
   } else {
@@ -83,7 +83,6 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
  * All frame addresses start at 12-th bit!
  */
 paddr_t do_page_translate(int dir, int page, int offset) {
-  printf("in translator!, dir=%d, page=%d, offset=%d\n", dir, page, offset);
   paddr_t dir_entry, pg_entry, paddr;
   dir_entry = paddr_read(cpu.CR[3] + dir, 4);
   printf("address of PDE is 0x%08x\n", cpu.CR[3]+dir);
@@ -91,8 +90,5 @@ paddr_t do_page_translate(int dir, int page, int offset) {
   pg_entry  = paddr_read(GET_FRAME_ADDR(dir_entry), 4) + page;
   ASSERT_PRESENT(pg_entry, "PAGE TABLE");
   paddr     = paddr_read(GET_FRAME_ADDR(pg_entry),  4) + offset;
-  //Log("dir=%d -> %x", dir, dir_entry);
-  //Log("page=%d -> %x", page, pg_entry);
-  //Log("offset=%d -> %x", offset, paddr);
   return paddr;
 }
