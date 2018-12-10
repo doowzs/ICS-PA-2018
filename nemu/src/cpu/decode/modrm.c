@@ -132,7 +132,7 @@ void read_Mod_CR2R(vaddr_t *eip, Operand *cr, bool loadCR, Operand *r, bool load
   cr->type = OP_TYPE_CR;
   cr->reg = m.reg;
   if (loadCR) {
-    rtl_mv(&reg_CR(cr->reg), &cr->val);
+    rtl_mv(&cr->val, &reg_CR(cr->reg));
   }
 
   r->type = OP_TYPE_REG;
