@@ -13,7 +13,7 @@ asm_trap:
   call irq_handle
 	
   addl $4, %esp
-	mov %esp, %esp
+	mov %eax, %esp
 
   addl $4, %esp
   popal
