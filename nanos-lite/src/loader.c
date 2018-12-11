@@ -18,6 +18,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   _map(&pcb->as, buf, pa, nr_pg); // map va to pa
   Log("vaddr %p mapped to %p", buf, pa);
   fs_read(fd, buf, sz);
+  pcb->cur_brk = DEFAULT_ENTRY;
+  pcb->max_brk = DEFAULT_ENTRY;
   Log("file %s loaded!", filename);
   return (intptr_t) buf;
 }
