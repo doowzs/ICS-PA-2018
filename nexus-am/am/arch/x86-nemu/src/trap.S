@@ -7,7 +7,9 @@
 asm_trap:
   pushal
 
-  pushl $0       # for prot
+  # pushl $0       # for prot
+	mov %cr3, %eax
+	pushl %eax
 
   pushl %esp
   call irq_handle
