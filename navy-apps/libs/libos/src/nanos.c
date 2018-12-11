@@ -9,7 +9,8 @@
 void _fork();
 void _wait();
 
-static void *brk_old = NULL;
+extern char end;
+static void *brk_old = &end;
 static void *brk_new = NULL;
 
 #if defined(__ISA_X86__)
@@ -44,9 +45,6 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  // if brk is NULL, call system to get where it is
-  if (brk_old == NULL) brk_old = (void *) _syscall_(SYS_brk, -1, -1, -1);
-
   void *brk_ret = brk_old;
   brk_new = brk_old + increment;
   int ret = _syscall_(SYS_brk, (uintptr_t) brk_new, 0, 0);
