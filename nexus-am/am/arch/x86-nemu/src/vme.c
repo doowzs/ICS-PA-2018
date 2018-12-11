@@ -74,14 +74,14 @@ int _protect(_Protect *p) {
 void _unprotect(_Protect *p) {
 }
 
-//static _Protect *cur_as = NULL;
+static _Protect *cur_as = NULL;
 void get_cur_as(_Context *c) {
-  //c->prot = cur_as;
+  cur_as = c->prot;
 }
 
 void _switch(_Context *c) {
-  //set_cr3(c->prot->ptr);
-  //cur_as = c->prot;
+  c->prot = cur_as;
+  set_cr3(c->prot->ptr);
 }
 
 /**
