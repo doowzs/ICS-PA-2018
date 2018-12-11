@@ -35,6 +35,7 @@ void print_tf(_Context *tf) {
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
+  printf("in irq_handle of cte, the PTR of tf is 0x%08x\n", tf);
   get_cur_as(next);
   // print_tf(next);
   if (user_handler) {
