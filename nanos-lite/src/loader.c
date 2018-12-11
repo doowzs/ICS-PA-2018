@@ -19,6 +19,9 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   Log("vaddr %p mapped to %p", buf, pa);
   fs_read(fd, buf, sz);
   Log("file %s loaded!", filename);
+
+  int *xxx = (int *) 0x8048bb7;
+  Log("value at 0x8048bb7 is 0x%08x", *xxx);
   return (intptr_t) buf;
 }
 
