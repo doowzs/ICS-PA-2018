@@ -18,7 +18,9 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t new_brk) {
+  Log("setting brk to 0x%08x", new_brk);
   if (new_brk > current->max_brk) {
+    Log("new memory is needed!");
     /* new memory, call newpage and map it */
     int nr_pg = (new_brk - current->max_brk) / PGSIZE + 1;
     void *pa = new_page(nr_pg);
