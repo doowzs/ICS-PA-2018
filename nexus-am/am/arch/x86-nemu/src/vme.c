@@ -90,23 +90,29 @@ void _switch(_Context *c) {
  * it so that it MAY work.
  */
 int _map(_Protect *p, void *va, void *pa, int nr_pg) {
-  // make PDE present
-  kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
-
-  // check page does not exceed PDE limit 
+  int dir = ((int) va >> 22) & 0x3ff;
   int page = ((int) va >> 12) & 0x3ff;
-  if (page + nr_pg >= 4096) {
+  // check page does not exceed PDE limit 
+  if (page + nr_pg >= PGSIZE) {
     printf("PDE boundary exceeded!\n");  
   }
 
-  // fill the PTEs
-  int *PTBR = (int *) (((int) p->ptr >> 12) << 12);
+  // map PDE
+  int *PDBR = (int *) p->ptr;
+  int *PDE = PDBR + dir;
+  if (!(*(PDE) & PTE_P)) {
+    /** 
+     * target page is not present
+     * allocate a new page now
+     */
+    *(PDE) = (int) pgalloc_usr(1);
+  }
+  // map PTE
+  int *PTBR = (int *) (*(PDE));
   int *PTB = PTBR + page;
   int *PTB_END = PTBR + page + nr_pg;
-  printf("mapping %d pages from %p\n", nr_pg, PTBR);
   int PTBE = (((int) pa >> 12) << 12) | PTE_P;
   for ( ; PTB < PTB_END; PTBE += PGSIZE ) {
-    printf("PTB at %p assigned 0x%08x\n", PTB, PTBE);
     *(PTB) = PTBE;
     PTB++;
   }
