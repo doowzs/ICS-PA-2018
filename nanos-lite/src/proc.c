@@ -12,7 +12,6 @@ PCB *current;
 
 void switch_boot_pcb() {
   current = &pcb_boot;
-  current = &pcb[0];
   printf("in switch_boot_pcb, the PTR of bootpcb is 0x%08x\n", current->cp->prot->ptr);
 }
 
@@ -28,7 +27,6 @@ void hello_fun(void *arg) {
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("special init proc for testing SUCK PA4.2 MMAP!!!");
   context_uload(&pcb[0], "/bin/dummy");
-  switch_boot_pcb();
 }
 
 _Context* schedule(_Context *prev) {
