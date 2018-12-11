@@ -31,7 +31,7 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
 
 _Context* schedule(_Context *prev) {
   current->cp = prev;
-  current = &pcb[0];
+  current = &pcb_boot;
   //current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
 #ifdef SYS_DEBUG
   Log("switching to context at %p, will start at %p and set CR3 to 0x%08x", current->cp, current->cp->eip, current->cp->prot->ptr);
