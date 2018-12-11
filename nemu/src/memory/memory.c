@@ -65,7 +65,6 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
     printf("read 0x%08x\n", ret);
     return ret;
   } else {
-    return paddr_read(vaddr, len);
     /* not aligned */
     printf("bad alignment at 0x%08x\n", vaddr);
     uint32_t upper = vaddr_read((vaddr >> 2) << 2, 4);
@@ -85,7 +84,7 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
         ret = ((upper & 0xff000000) >> 24) | ((lower & 0x00ffffff) <<  8);
     }
     printf("read 0x%08x + 0x%08x -> 0x%08x, should be 0x%08x\n", upper, lower, ret, paddr_read(vaddr, 4));
-    return ret;
+    return ret >> (8 << (4 - len));
   }
 }
 
