@@ -46,7 +46,7 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  if (increment == 0) return brk_old;
+  if (increment == 0) return &(_end);
 
   brk_ret = brk_old;
   brk_new = brk_old + increment;
