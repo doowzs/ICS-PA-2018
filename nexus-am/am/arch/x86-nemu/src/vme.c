@@ -108,6 +108,7 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   for ( ; PTB < PTB_END; PTBE += PGSIZE ) {
     *(PTB) = PTBE;
     PTB++;
+    printf("PTB is now at %p\n", PTB);
   }
   return 0;
 }
