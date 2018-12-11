@@ -82,7 +82,7 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
       //printf("translate address 0x%08x\n", vaddr);
       //printf("-> dir=%d, page=%d, offset=%d\n", dir, page, offset);
       paddr_t paddr = do_page_translate(dir, page, offset);
-      //printf("-> result is 0x%08x\n", paddr);
+      printf("-> result is 0x%08x\n", paddr);
       return paddr;
     }
   } else {
