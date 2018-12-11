@@ -45,7 +45,7 @@ int _write(int fd, void *buf, size_t count){
 
 void *_sbrk(intptr_t increment){
   // if brk is NULL, call system to where it is
-  if (brk_old == NULL) brk_old = _syscall_(SYS_brk, -1, -1, -1);
+  if (brk_old == NULL) brk_old = (void *) _syscall_(SYS_brk, -1, -1, -1);
 
   void *brk_ret = brk_old;
   brk_new = brk_old + increment;
