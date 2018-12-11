@@ -9,7 +9,8 @@
 void _fork();
 void _wait();
 
-void *brk_old = 0x4000000;
+extern char end;
+void *brk_old = &end;
 void *brk_new = NULL;
 void *brk_ret = NULL;
 
