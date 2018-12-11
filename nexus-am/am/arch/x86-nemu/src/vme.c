@@ -84,13 +84,29 @@ void _switch(_Context *c) {
   cur_as = c->prot;
 }
 
-int _map(_Protect *p, void *va, void *pa, int mode) {
+/**
+ * NOTE: The 4-th argument size
+ * was originally mode. I changed
+ * it so that it MAY work.
+ */
+int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   // make PDE present
   kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
-  // make PTE present
-  int* PTBR = (int *) p->ptr;
+
+  // check page does not exceed PDE limit 
+  int *PTBR = (int *) p->ptr;
   int page = ((int) va >> 12) & 0x3ff;
-  *(PTBR + page) = (((int) pa >> 12) << 12) | PTE_P;
+  if (page + nr_pg >= 4096) {
+    printf("PDE boundary exceeded!\n");  
+  }
+
+  // fill the PTEs
+  int *PTB = PTBR + page;
+  int *PTB_END = PTBR + page + nr_pg;
+  int PTBE = (((int) pa >> 12) << 12) | PTE_P;
+  for ( ; PTB < PTB_END; PTB++, PTBE += PGSIZE ) {
+    *(PTB) = PTBE;
+  }
   return 0;
 }
 

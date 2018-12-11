@@ -13,8 +13,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 #ifdef SYS_DEBUG
   Log("loading file %s to %p, fd=%d, sz=%d", filename, buf, fd, sz);
 #endif
-  void *pa = new_page(1); // allocate 1 new page
-  _map(&pcb->as, buf, pa, 0); // map va to pa
+  int nr_pg = sz / PGSIZE;
+  void *pa = new_page(nr_pg); // allocate new pages
+  Log("%d new pages allocated!", nr_pg);
+  _map(&pcb->as, buf, pa, nr_pg); // map va to pa
   Log("vaddr %p mapped to %p", buf, pa);
   fs_read(fd, buf, sz);
   Log("file %s loaded!", filename);

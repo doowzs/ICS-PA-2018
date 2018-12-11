@@ -91,9 +91,6 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
   }
 }
 
-/**
- * All frame addresses start at 12-th bit!
- */
 paddr_t do_page_translate(int dir, int page, int offset) {
   paddr_t PDE, PTE;
   PDE = paddr_read(NEXT_PG(cpu.CR[3], dir), 4);
