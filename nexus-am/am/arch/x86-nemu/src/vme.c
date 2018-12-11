@@ -44,12 +44,12 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
     }
   }
 
-  printf("OK!\n");
+  //printf("OK!\n");
   set_cr3(kpdirs);
-  printf("OKOK!\n");
+  //printf("OKOK!\n");
   set_cr0(get_cr0() | CR0_PG);
-  printf("OKOKOK!\n");
-  printf("CR0 is now 0x%08x\n", get_cr0());
+  //printf("OKOKOK!\n");
+  //printf("CR0 is now 0x%08x\n", get_cr0());
 
   return 0;
 }
@@ -82,6 +82,7 @@ void get_cur_as(_Context *c) {
 void _switch(_Context *c) {
   c->prot = cur_as;
   set_cr3(c->prot->ptr);
+  printf("CR3 set to 0x%08x\n", c->prot->ptr); 
 }
 
 /**
