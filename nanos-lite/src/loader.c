@@ -3,6 +3,8 @@
 
 #define DEFAULT_ENTRY 0x8048000
 
+char filename_tmp[128];
+
 size_t ramdisk_read(void *, size_t, size_t);
 size_t get_ramdisk_size();
 
@@ -51,9 +53,12 @@ void context_kload(PCB *pcb, void *entry) {
 }
 
 void context_uload(PCB *pcb, const char *filename) {
+  // avoid the side-effect of changing pcb
+  strcpy(filename_tmp, filename);
+
   _protect(&pcb->as); // allocate a memory address
   Log("a new addr space is created, PTR = 0x%08x", pcb->as.ptr);
-  uintptr_t entry = loader(pcb, filename);
+  uintptr_t entry = loader(pcb, filename_tmp);
 
   _Area stack;
   stack.start = pcb->stack;
