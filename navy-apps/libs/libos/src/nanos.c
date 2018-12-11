@@ -52,6 +52,7 @@ void *_sbrk(intptr_t increment){
   int ret = _syscall_(SYS_brk, (uintptr_t) brk_new, 0, 0);
   if (ret == 0) {
     brk_old = brk_new;
+    printf("new brk will be 0x%08x\n", brk_new);
     return brk_ret;
   } else {
     return (void *) -1;
