@@ -157,6 +157,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_brk(%p)", a[1]);
 #endif
+      printf("returning 0x%08x\n", mm_brk(a[1]));
       syscall_ret(c, mm_brk(a[1]));
       break;
 
