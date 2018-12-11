@@ -76,6 +76,7 @@ void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
   if ((vaddr & 0xfff) + len <= 4096) {
     paddr_write(page_translate(vaddr, len), data, len);
   } else {
+    Assert(0, "WARNING, SPLIT WRITE IS NOT TESTED!!!");
     int align = vaddr & 0x3;
     int len1 = 4 - align;  // we must have len + align > 4
     int len2 = len - len1;
