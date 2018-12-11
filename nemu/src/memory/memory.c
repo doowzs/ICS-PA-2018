@@ -63,8 +63,11 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
     return paddr_read(page_translate(vaddr, len), len);
   } else {
     /* not aligned */
+    Log("OK!");
     uint32_t upper = vaddr_read(vaddr & 0xc, 4);
+    Log("OKOK!");
     uint32_t lower = vaddr_read(vaddr | 0x3, 4);
+    Log("OKOKOK!");
     switch (align) {
       case 1:
         // 3 + 1
