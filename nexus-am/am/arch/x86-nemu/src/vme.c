@@ -94,13 +94,13 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
 
   // check page does not exceed PDE limit 
-  int *PTBR = (int *) p->ptr;
   int page = ((int) va >> 12) & 0x3ff;
   if (page + nr_pg >= 4096) {
     printf("PDE boundary exceeded!\n");  
   }
 
   // fill the PTEs
+  int *PTBR = (int *) p->ptr;
   int *PTB = PTBR + page;
   int *PTB_END = PTBR + page + nr_pg;
   int PTBE = (((int) pa >> 12) << 12) | PTE_P;
