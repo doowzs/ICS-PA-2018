@@ -59,7 +59,6 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
  */
 int _protect(_Protect *p) {
   PDE *updir = (PDE*)(pgalloc_usr(1));
-  set_cr3(updir);
   p->pgsize = 4096;
   p->ptr = updir;
   // map kernel space
@@ -82,7 +81,7 @@ void get_cur_as(_Context *c) {
 }
 
 void _switch(_Context *c) {
-  set_cr3(c->prot->ptr);
+  set_cr3(kpdirs);
   cur_as = c->prot;
   printf("CR3 set to 0x%08x\n", c->prot->ptr); 
 }
@@ -131,6 +130,5 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
   _Context *c = _kcontext(kstack, entry, args);
   c->prot = p;
   printf("the CR3 of this ucontext is 0x%08x\n", p->ptr);
-  c->prot = cur_as;
   return c;
 }
