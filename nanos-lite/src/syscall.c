@@ -64,7 +64,7 @@ _Context* do_syscall(_Context *c) {
      */
     case SYS_open:  
 #ifdef SYS_DEBUG
-      Log("SYS_open(name=%s, mode=%d, mod=%d)", a[1], a[2], a[3]);
+      Log("SYS_open(name=%s, flags=%d, mode=%d)", a[1], a[2], a[3]);
 #endif
       syscall_ret(c, fs_open((const char *) a[1], a[2], a[3]));
       break;
