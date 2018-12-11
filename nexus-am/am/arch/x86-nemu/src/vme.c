@@ -100,7 +100,7 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   }
 
   // fill the PTEs
-  int *PTBR = (int *) p->ptr;
+  int *PTBR = (int *) (((int) p->ptr >> 12) << 12);
   int *PTB = PTBR + page;
   int *PTB_END = PTBR + page + nr_pg;
   printf("mapping %d pages\n", nr_pg);
