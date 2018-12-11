@@ -53,6 +53,7 @@ _Context* irq_handle(_Context *tf) {
     }
   }
   _switch(next);
+  printf("in irq_handle, the PTR of next is 0x%08x\n", next->prot->ptr);
   return next;
 }
 
