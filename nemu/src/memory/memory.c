@@ -74,7 +74,7 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
     uint32_t lower = vaddr_read(((vaddr >> 2) << 2) + 4, 4);
     uint32_t ret = ((upper & lff[4 - align]) >> (align       << 3))
                  | ((lower & rff[align]    ) << ((4 - align) << 3));
-    //ret &= rff[len];
+    ret &= rff[len];
    
     printf("read 0x%08x + 0x%08x -> 0x%08x, should be 0x%08x\n", upper, lower, ret, paddr_read(vaddr, len));
     return ret;
