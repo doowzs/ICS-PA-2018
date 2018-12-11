@@ -82,7 +82,7 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
       //printf("translate address 0x%08x\n", vaddr);
       //printf("-> dir=%d, page=%d, offset=%d\n", dir, page, offset);
       paddr_t paddr = do_page_translate(dir, page, offset);
-      printf("-> result is 0x%08x\n", paddr);
+      //printf("-> result is 0x%08x\n", paddr);
       return paddr;
     }
   } else {
@@ -99,8 +99,8 @@ paddr_t do_page_translate(int dir, int page, int offset) {
   ASSERT_PRESENT(PDE, "PDE(level 1)");
 
   PTE = paddr_read(NEXT_PG(PDE, page), 4);
-  printf("-> PTE at 0x%08x, is 0x%08x\n",
-      NEXT_PG(PDE, page), PTE);
+  //printf("-> PTE at 0x%08x, is 0x%08x\n",
+  //    NEXT_PG(PDE, page), PTE);
   ASSERT_PRESENT(PTE, "PTE(level 2)");
 
   return ((PTE >> 12) << 12) + offset;
