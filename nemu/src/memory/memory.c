@@ -15,7 +15,7 @@
   ((entry >> 12) << 12) + (offset << 2)
   // clear lower 12 bits and add offset * SIZE
 #define ASSERT_PRESENT(entry, level) \
-  Assert(entry & 0x1, "%s is not present in page translation!", level)
+  Assert(entry & 0x1, "%s at %p is not present in page translation!", level, &entry)
 //-----------------------------------------------
 
 #define pmem_rw(addr, type) *(type *)({\
