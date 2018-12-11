@@ -18,8 +18,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   _map(&pcb->as, buf, pa, nr_pg); // map va to pa
   Log("vaddr %p mapped to %p", buf, pa);
   fs_read(fd, buf, sz);
-  pcb->cur_brk = DEFAULT_ENTRY;
-  pcb->max_brk = DEFAULT_ENTRY;
   Log("file %s loaded!", filename);
   return (intptr_t) buf;
 }
@@ -52,6 +50,8 @@ void context_uload(PCB *pcb, const char *filename) {
   stack.start = pcb->stack;
   stack.end = stack.start + sizeof(pcb->stack);
 
+  pcb->cur_brk = (uintptr_t) pcb->stack;
+  pcb->max_brk = DEFAULT_ENTRY;
+
   pcb->cp = _ucontext(&pcb->as, stack, stack, (void *)entry, NULL);
-  printf("in uload, PTR address is 0x%08x\n", pcb->cp->prot->ptr);
 }
