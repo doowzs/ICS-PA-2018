@@ -9,7 +9,7 @@
 void _fork();
 void _wait();
 
-static void *brk_old = 0x8048000;
+static void *brk_old = NULL;
 static void *brk_new = NULL;
 
 #if defined(__ISA_X86__)
