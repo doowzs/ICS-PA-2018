@@ -73,13 +73,13 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
     switch (align) {
       case 1:
         // 3 + 1
-        ret = ((upper & 0x00ffffff) <<  8) | ((lower & 0xff000000) >> 24);
+        ret = ((upper & 0xffffff00) >>  8) | ((lower & 0x000000ff) << 24);
       case 2:
         // 2 + 2
-        ret = ((upper & 0x0000ffff) << 16) | ((lower & 0xffff0000) >> 16);
+        ret = ((upper & 0xffff0000) >> 16) | ((lower & 0x0000ffff) << 16);
       default:
         // 1 + 3
-        ret = ((upper & 0x000000ff) << 24) | ((lower & 0xffffff00) >>  8);
+        ret = ((upper & 0xff000000) >> 24) | ((lower & 0x00ffffff) <<  8);
     }
     printf("read 0x%08x + 0x%08x -> 0x%08x\n", upper, lower, ret);
     return ret;
