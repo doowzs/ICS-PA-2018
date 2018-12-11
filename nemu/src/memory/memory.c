@@ -57,7 +57,7 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
  * avoid paging boundary excceding fault.
  */
 uint32_t vaddr_read(vaddr_t vaddr, int len) {
-  printf("reading 0x%8x\n", vaddr);
+  printf("reading 0x%08x\n", vaddr);
   int align = vaddr & 0x3;
   if (align == 0) {
     /* aligned */
@@ -83,7 +83,7 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
         // 1 + 3
         ret = ((upper & 0xff000000) >> 24) | ((lower & 0x00ffffff) <<  8);
     }
-    printf("read 0x%08x + 0x%08x -> 0x%08x\n", upper, lower, ret);
+    printf("read 0x%08x + 0x%08x -> 0x%08x, should be 0x%08x\n", upper, lower, ret, paddr_read(vaddr, 4));
     return ret;
   }
 }
