@@ -7,7 +7,7 @@
 asm_trap:
   pushal
 
-	mov %eax, %cr3
+	mov %cr3, %eax
   pushl %eax
 
   pushl %esp
