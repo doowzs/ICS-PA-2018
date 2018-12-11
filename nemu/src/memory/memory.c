@@ -116,6 +116,7 @@ paddr_t do_page_translate(int dir, int page, int offset) {
   PTE = paddr_read(NEXT_PG(PDE, page), 4);
   //printf("-> PTE at 0x%08x, is 0x%08x\n",
   //    NEXT_PG(PDE, page), PTE);
+  if ((PTE & 1) == 0) { printf("error reading address: 0x%08x\n", (dir << 22) + (page << 12) + offset); }
   ASSERT_PRESENT(PTE, "PTE(level 2)");
 
   return ((PTE >> 12) << 12) + offset;
