@@ -63,6 +63,7 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
     return paddr_read(page_translate(vaddr, len), len);
   } else {
     /* not aligned */
+    printf("bad alignment at 0x%08x\n", vaddr);
     Log("OK!");
     uint32_t upper = vaddr_read((vaddr >> 2) << 2, 4);
     Log("OKOK!");
