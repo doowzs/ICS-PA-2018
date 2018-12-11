@@ -6,6 +6,8 @@
 
 void init_proc(const char *, char* const [], char* const []);
 void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const envp[]);
+void context_uload(PCB *pcb, const char *filename);
+PCB* get_free_pcb();
 int mm_brk(uintptr_t);
 
 void syscall_ret(_Context *c, int val) {
@@ -30,9 +32,8 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_exit(code=%d)", a[1]);
 #endif
-      _halt(a[1]); //testing dummy!!!
       if (a[1] == 0) {
-        init_proc("/bin/init", NULL, NULL);
+        c->prot = NULL;
       } else {
         _halt(a[1]);
       }
@@ -169,7 +170,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_execve(file=%s)", (const char *) a[1]);
 #endif
-      naive_uload(NULL, (const char *) a[1], (char* const*) a[2], (char* const*) a[3]);
+      context_uload(get_free_pcb(), (const char *) a[1]);
       break;
 
     default: panic("Unhandled syscall ID = %d, fix in nanos/src/syscall.c", a[0]);
