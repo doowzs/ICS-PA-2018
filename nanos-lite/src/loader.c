@@ -15,7 +15,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   Log("loading file %s to %p, fd=%d, sz=%d", filename, buf, fd, sz);
 #endif
 
-  int nr_pg = sz / PGSIZE + 1;
+  int nr_pg = sz / PGSIZE + 100;
   void *pa = new_page(nr_pg); // allocate new pages
   _map(&pcb->as, buf, pa, nr_pg); // map va to pa
   pcb->cur_brk = DEFAULT_ENTRY + sz;
