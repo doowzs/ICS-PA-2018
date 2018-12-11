@@ -43,7 +43,7 @@ void context_kload(PCB *pcb, void *entry) {
 
 void context_uload(PCB *pcb, const char *filename) {
   _protect(&pcb->as); // allocate a memory address
-  Log("protected a new page directory!");
+  Log("a new addr space is created, PTR = 0x%08x", pcb->as.ptr);
   uintptr_t entry = loader(pcb, filename);
 
   _Area stack;
