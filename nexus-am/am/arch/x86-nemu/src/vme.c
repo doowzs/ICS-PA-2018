@@ -105,7 +105,7 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
      * target page is not present
      * allocate a new page now
      */
-    *(PDE) = (int) pgalloc_usr(1);
+    *(PDE) = (int) pgalloc_usr(1) | PTE_P;
   }
   // map PTE
   int *PTBR = (int *) (*(PDE));
