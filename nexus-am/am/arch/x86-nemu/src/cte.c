@@ -35,9 +35,9 @@ void print_tf(_Context *tf) {
 
 _Context* irq_handle(_Context *tf) {
   _Context *next = tf;
-  printf("in irq_handle of cte, the PTR of tf is 0x%08x\n", tf->prot->ptr);
+  //printf("in irq_handle of cte, the PTR of tf is 0x%08x\n", tf->prot->ptr);
   get_cur_as(next);
-  printf("in irq_handle of cte, the PTR of next is 0x%08x\n", next->prot->ptr);
+  //printf("in irq_handle of cte, the PTR of next is 0x%08x\n", next->prot->ptr);
   // print_tf(next);
   if (user_handler) {
     _Event ev = {0};
@@ -53,7 +53,7 @@ _Context* irq_handle(_Context *tf) {
     }
   }
   _switch(next);
-  printf("in irq_handle, the PTR of next is 0x%08x\n", next->prot->ptr);
+  //printf("in irq_handle, the PTR of next is 0x%08x\n", next->prot->ptr);
   return next;
 }
 
