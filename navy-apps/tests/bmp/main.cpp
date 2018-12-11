@@ -4,9 +4,9 @@
 #include <ndl.h>
 
 int main() {
-  int *a = (int *)malloc(sizeof(int)*5);
-  assert(a);
-  printf("*a = %p\n", a);
+  //int *a = (int *)malloc(sizeof(int)*5);
+  //assert(a);
+  //printf("*a = %p\n", a);
 
   NDL_Bitmap *bmp = (NDL_Bitmap*)malloc(sizeof(NDL_Bitmap));
   printf("*bmp = %p\n", bmp);
