@@ -108,12 +108,11 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
     *(PDE) = (((int) pgalloc_usr(1) >> 12) << 12) | PTE_P;
   }
   // map PTE
-  int *PTBR = (int *) (*(PDE));
+  int *PTBR = (int *) ((*(PDE) >> 12) << 12);
   int *PTB = PTBR + page;
   int *PTB_END = PTBR + page + nr_pg;
   int PTBE = (((int) pa >> 12) << 12) | PTE_P;
   for ( ; PTB < PTB_END; PTBE += PGSIZE ) {
-    printf("set 0x%08x to 0x%08x\n", PTB, PTBE);
     *(PTB) = PTBE;
     PTB++;
   }
