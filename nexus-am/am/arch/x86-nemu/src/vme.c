@@ -75,13 +75,13 @@ void _unprotect(_Protect *p) {
 static _Protect *cur_as = NULL;
 void get_cur_as(_Context *c) {
   c->prot = cur_as;
-  printf("the address of c->ptr is 0x%08x\n", c->prot->ptr);
+  //printf("the address of c->ptr is 0x%08x\n", c->prot->ptr);
 }
 
 void _switch(_Context *c) {
   set_cr3(c->prot->ptr);
   cur_as = c->prot;
-  printf("CR3 set to 0x%08x\n", c->prot->ptr); 
+  //printf("CR3 set to 0x%08x\n", c->prot->ptr); 
 }
 
 /**
@@ -129,10 +129,10 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
     argx = (char **) ustack.end;
     *argx = argv + argc;
   }
-  printf("the next user entry is %p\n", entry);
+  //printf("the next user entry is %p\n", entry);
 
   _Context *c = _kcontext(kstack, entry, args);
   c->prot = p;
-  printf("the CR3 of this ucontext is 0x%08x\n", p->ptr);
+  //printf("the CR3 of this ucontext is 0x%08x\n", p->ptr);
   return c;
 }

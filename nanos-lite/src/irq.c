@@ -9,7 +9,6 @@ static _Context* do_event(_Event e, _Context* c) {
 #ifdef SYS_DEBUG
       //Log("A yield event (0x81) is triggered.");
 #endif
-      printf("in irq, the PTR address is 0x%08x\n", c->prot->ptr);
       return schedule(c);
       break;
     case _EVENT_SYSCALL:
