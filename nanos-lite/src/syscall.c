@@ -6,6 +6,7 @@
 
 void init_proc(const char *, char* const [], char* const []);
 void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const envp[]);
+int mm_brk(uintptr_t);
 
 void syscall_ret(_Context *c, int val) {
   c->GPRx = val;
@@ -156,7 +157,7 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_brk(%p)", a[1]);
 #endif
-      syscall_ret(c, 0);
+      syscall_ret(c, mm_brk(a[1]));
       break;
 
     /**
