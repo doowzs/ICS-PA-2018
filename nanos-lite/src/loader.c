@@ -20,8 +20,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   fs_read(fd, buf, sz);
   Log("file %s loaded!", filename);
 
-  int *xxx = (int *) 0x8048bb7;
-  Log("value at 0x8048bb7 is 0x%08x", *xxx);
+  int *xxx = (int *) 0x8048b0b;
+  Log("value at 0x8048b0b is 0x%08x", *xxx);
   return (intptr_t) buf;
 }
 
