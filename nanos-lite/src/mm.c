@@ -18,6 +18,9 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t new_brk) {
+  // help to initialize navy-app
+  if (new_brk == -1) return current->cur_brk;
+
   Log("setting brk from 0x%08x to 0x%08x", current->cur_brk, new_brk);
   if (new_brk > current->max_brk) {
     Log("new memory is needed!");
