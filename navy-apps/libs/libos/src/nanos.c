@@ -10,9 +10,9 @@ void _fork();
 void _wait();
 
 extern char _end;
-static void *brk_old = &(_end);
-static void *brk_new = NULL;
-static void *brk_ret = NULL;
+void *brk_old = &(_end);
+void *brk_new = NULL;
+void *brk_ret = NULL;
 
 #if defined(__ISA_X86__)
 intptr_t _syscall_(int type, intptr_t a0, intptr_t a1, intptr_t a2){
