@@ -64,9 +64,9 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
   } else {
     /* not aligned */
     Log("OK!");
-    uint32_t upper = vaddr_read(vaddr & 0xc, 4);
+    uint32_t upper = vaddr_read((vaddr >> 2) << 2, 4);
     Log("OKOK!");
-    uint32_t lower = vaddr_read(vaddr | 0x3, 4);
+    uint32_t lower = vaddr_read(((vaddr >> 2) << 2) + 4, 4);
     Log("OKOKOK!");
     switch (align) {
       case 1:
