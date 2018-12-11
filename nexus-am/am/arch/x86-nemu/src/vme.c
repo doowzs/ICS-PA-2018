@@ -81,8 +81,8 @@ void get_cur_as(_Context *c) {
 }
 
 void _switch(_Context *c) {
-  set_cr3(c->prot->ptr);
   c->prot = cur_as;
+  set_cr3(c->prot->ptr);
   printf("CR3 set to 0x%08x\n", c->prot->ptr); 
 }
 
