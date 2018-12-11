@@ -106,8 +106,8 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   printf("mapping %d pages\n", nr_pg);
   int PTBE = (((int) pa >> 12) << 12) | PTE_P;
   for ( ; PTB < PTB_END; PTBE += PGSIZE ) {
-    *(PTB) = PTBE;
     PTB++;
+    *(PTB) = PTBE;
     printf("PTB at %p assigned 0x%08x\n", PTB, PTBE);
   }
   return 0;
