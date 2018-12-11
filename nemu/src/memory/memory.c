@@ -83,7 +83,7 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
         // 1 + 3
         ret = ((upper & 0xff000000) >> 24) | ((lower & 0x00ffffff) <<  8);
     }
-    ret >>= ((3 - len) << 3);
+    //ret >>= ((3 - len) << 3);
     printf("read 0x%08x + 0x%08x -> 0x%08x, should be 0x%08x\n", upper, lower, ret, paddr_read(vaddr, len));
     return ret;
   }
