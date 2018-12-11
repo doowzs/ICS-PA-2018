@@ -2180,8 +2180,9 @@ static void malloc_extend_top(RARG nb) RDECL INTERNAL_SIZE_T nb;
   }
   else
   {
-    if (sbrk_base == (char*)(-1))  /* First time through. Record base */
+    if (sbrk_base == (char*)(-1)) {  /* First time through. Record base */
       sbrk_base = brk;
+      printf("sbrk_base is 0x%08x\n", sbrk_base); }
     else  /* Someone else called sbrk().  Count those bytes as sbrked_mem. */
       sbrked_mem += brk - (char*)old_end;
 
