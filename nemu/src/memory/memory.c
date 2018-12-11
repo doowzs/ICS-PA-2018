@@ -80,7 +80,7 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
       panic("Address exceeds page boundary! dir=%d, page=%d, offset=%d, len=%d", dir, page, offset, len);
     } else {
       printf("translate address 0x%08x\n", vaddr);
-      printf("-> dir=%d, page=%d, offset=%d\n", dir, page, offset);
+      printf("-> CR3=0x%08x, dir=%d, page=%d, offset=%d\n", cpu.CR[3], dir, page, offset);
       paddr_t paddr = do_page_translate(dir, page, offset);
       printf("-> result is 0x%08x\n", paddr);
       return paddr;
