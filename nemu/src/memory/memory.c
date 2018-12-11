@@ -60,24 +60,15 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
  * avoid paging boundary excceding fault.
  */
 uint32_t vaddr_read(vaddr_t vaddr, int len) {
-  printf("reading 0x%08x\n", vaddr);
-  int align = vaddr & 0x3;
-  if (align == 0) {
-    /* aligned */
-    uint32_t ret = paddr_read(page_translate(vaddr, len), len);
-    printf("read 0x%08x\n", ret);
-    return ret;
+  if ((vaddr & 0xfff) + len <= 4096) {
+    return paddr_read(page_translate(vaddr, len), len);
   } else {
-    /* not aligned */
-    printf("bad alignment at 0x%08x\n", vaddr);
+    int align = vaddr & 0x3;
     uint32_t upper = vaddr_read((vaddr >> 2) << 2, 4);
     uint32_t lower = vaddr_read(((vaddr >> 2) << 2) + 4, 4);
     uint32_t ret = ((upper & lff[4 - align]) >> (align       << 3))
                  | ((lower & rff[align]    ) << ((4 - align) << 3));
-    ret &= rff[len];
-   
-    printf("read 0x%08x + 0x%08x -> 0x%08x, should be 0x%08x\n", upper, lower, ret, paddr_read(vaddr, len));
-    return ret;
+    return ret & rff[len]; // take last len bits
   }
 }
 
