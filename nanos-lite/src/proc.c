@@ -36,5 +36,6 @@ _Context* schedule(_Context *prev) {
 #ifdef SYS_DEBUG
   Log("switching to context at %p, will start at %p", current->cp, current->cp->eip);
 #endif
+  printf("in schedule, the PTR address of next context is 0x%08x\n", current->cp->prot->ptr);
   return current->cp;
 }
