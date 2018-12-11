@@ -10,7 +10,7 @@ void _fork();
 void _wait();
 
 extern char _end;
-void *brk_old = &(_end);
+void *brk_old = 0x8048000;
 void *brk_new = NULL;
 void *brk_ret = NULL;
 
@@ -46,8 +46,6 @@ int _write(int fd, void *buf, size_t count){
 }
 
 void *_sbrk(intptr_t increment){
-  if (increment == 0) return 0x8048000;
-
   brk_ret = brk_old;
   brk_new = brk_old + increment;
   int ret = _syscall_(SYS_brk, (uintptr_t) brk_new, 0, 0);
