@@ -74,9 +74,11 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
       case 1:
         // 3 + 1
         ret = ((upper & 0xffffff00) >>  8) | ((lower & 0x000000ff) << 24);
+        break;
       case 2:
         // 2 + 2
         ret = ((upper & 0xffff0000) >> 16) | ((lower & 0x0000ffff) << 16);
+        break;
       default:
         // 1 + 3
         ret = ((upper & 0xff000000) >> 24) | ((lower & 0x00ffffff) <<  8);
