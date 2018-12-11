@@ -27,8 +27,10 @@ uint8_t pmem[PMEM_SIZE];
 paddr_t page_translate(vaddr_t, int);
 paddr_t do_page_translate(int, int, int);
 
-/* Memory accessing interfaces */
+int lff[4] = { 0x0000000, 0xff000000, 0xffff0000, 0xffffff00 };
+int rff[4] = { 0x0000000, 0x000000ff, 0x0000ffff, 0x00ffffff };
 
+/* Memory accessing interfaces */
 uint32_t paddr_read(paddr_t addr, int len) {
   int mmio_id = is_mmio(addr);
   if (mmio_id != -1) {
@@ -69,21 +71,9 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
     printf("bad alignment at 0x%08x\n", vaddr);
     uint32_t upper = vaddr_read((vaddr >> 2) << 2, 4);
     uint32_t lower = vaddr_read(((vaddr >> 2) << 2) + 4, 4);
-    uint32_t ret = 0;
-    switch (align) {
-      case 1:
-        // 3 + 1
-        ret = ((upper & 0xffffff00) >>  8) | ((lower & 0x000000ff) << 24);
-        break;
-      case 2:
-        // 2 + 2
-        ret = ((upper & 0xffff0000) >> 16) | ((lower & 0x0000ffff) << 16);
-        break;
-      default:
-        // 1 + 3
-        ret = ((upper & 0xff000000) >> 24) | ((lower & 0x00ffffff) <<  8);
-    }
-    //ret >>= ((3 - len) << 3);
+    uint32_t ret = ((upper & lff[4 - align]) >> (align << 8))
+                  | (lower & rff[align] << ((4 - align) << 8));
+   
     printf("read 0x%08x + 0x%08x -> 0x%08x, should be 0x%08x\n", upper, lower, ret, paddr_read(vaddr, len));
     return ret;
   }
