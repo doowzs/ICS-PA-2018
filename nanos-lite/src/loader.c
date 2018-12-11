@@ -18,8 +18,8 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   int nr_pg = sz / PGSIZE + 100;
   void *pa = new_page(nr_pg); // allocate new pages
   _map(&pcb->as, buf, pa, nr_pg); // map va to pa
-  pcb->cur_brk = DEFAULT_ENTRY + sz;
-  pcb->max_brk = DEFAULT_ENTRY + sz; // ser brk
+  pcb->cur_brk = DEFAULT_ENTRY + nr_pg * PGSIZE;
+  pcb->max_brk = DEFAULT_ENTRY + nr_pg * PGSIZE; // ser brk
   printf("the initial brk is 0x%08x\n", pcb->max_brk);
 
   fs_read(fd, buf, sz);
