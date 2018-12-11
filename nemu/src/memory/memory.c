@@ -14,8 +14,8 @@
 #define NEXT_PG(entry, offset) \
   ((entry >> 12) << 12) + (offset << 2)
   // clear lower 12 bits and add offset * SIZE
-#define ASSERT_PRESENT(entry, level, pgaddr) \
-  Assert(entry & 0x1, "%s at %p is not present in page translation!", level, pgaddr)
+#define ASSERT_PRESENT(entry, level) \
+  Assert(entry & 0x1, "%s is not present in page translation!", level)
 //-----------------------------------------------
 
 #define pmem_rw(addr, type) *(type *)({\
@@ -79,10 +79,10 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
     if (offset + len > PAGE_SIZE) {
       panic("Address exceeds page boundary! dir=%d, page=%d, offset=%d, len=%d", dir, page, offset, len);
     } else {
-      //printf("translate address 0x%08x\n", vaddr);
-      //printf("-> dir=%d, page=%d, offset=%d\n", dir, page, offset);
+      printf("translate address 0x%08x\n", vaddr);
+      printf("-> dir=%d, page=%d, offset=%d\n", dir, page, offset);
       paddr_t paddr = do_page_translate(dir, page, offset);
-      //printf("-> result is 0x%08x\n", paddr);
+      printf("-> result is 0x%08x\n", paddr);
       return paddr;
     }
   } else {
@@ -94,14 +94,14 @@ paddr_t page_translate(vaddr_t vaddr, int len) {
 paddr_t do_page_translate(int dir, int page, int offset) {
   paddr_t PDE, PTE;
   PDE = paddr_read(NEXT_PG(cpu.CR[3], dir), 4);
-  //printf("-> PDE at 0x%08x, is 0x%08x\n", 
-  //    NEXT_PG(cpu.CR[3], dir), PDE);
-  ASSERT_PRESENT(PDE, "PDE(level 1)", &PDE);
+  printf("-> PDE at 0x%08x, is 0x%08x\n", 
+      NEXT_PG(cpu.CR[3], dir), PDE);
+  ASSERT_PRESENT(PDE, "PDE(level 1)");
 
   PTE = paddr_read(NEXT_PG(PDE, page), 4);
-  //printf("-> PTE at 0x%08x, is 0x%08x\n",
-  //    NEXT_PG(PDE, page), PTE);
-  ASSERT_PRESENT(PTE, "PTE(level 2)", &PTE);
+  printf("-> PTE at 0x%08x, is 0x%08x\n",
+      NEXT_PG(PDE, page), PTE);
+  ASSERT_PRESENT(PTE, "PTE(level 2)");
 
   return ((PTE >> 12) << 12) + offset;
 }
