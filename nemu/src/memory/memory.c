@@ -61,26 +61,28 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
   int align = vaddr & 0x3;
   if (align == 0) {
     /* aligned */
-    return paddr_read(page_translate(vaddr, len), len);
+    uint32_t ret = paddr_read(page_translate(vaddr, len), len);
+    printf("read 0x%08x\n", ret);
+    return ret;
   } else {
     /* not aligned */
     printf("bad alignment at 0x%08x\n", vaddr);
-    Log("OK!");
     uint32_t upper = vaddr_read((vaddr >> 2) << 2, 4);
-    Log("OKOK!");
     uint32_t lower = vaddr_read(((vaddr >> 2) << 2) + 4, 4);
-    Log("OKOKOK!");
+    uint32_t ret = 0;
     switch (align) {
       case 1:
         // 3 + 1
-        return ((upper & 0x00ffffff) <<  8) | ((lower & 0xff000000) >> 24);
+        ret = ((upper & 0x00ffffff) <<  8) | ((lower & 0xff000000) >> 24);
       case 2:
         // 2 + 2
-        return ((upper & 0x0000ffff) << 16) | ((lower & 0xffff0000) >> 16);
+        ret = ((upper & 0x0000ffff) << 16) | ((lower & 0xffff0000) >> 16);
       default:
         // 1 + 3
-        return ((upper & 0x000000ff) << 24) | ((lower & 0xffffff00) >>  8);
+        ret = ((upper & 0x000000ff) << 24) | ((lower & 0xffffff00) >>  8);
     }
+    printf("read 0x%08x + 0x%08x -> 0x%08x\n", upper, lower, ret);
+    return ret;
   }
 }
 
