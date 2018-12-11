@@ -96,7 +96,7 @@ _Context *_kcontext(_Area stack, void (*entry)(void *), void *arg) {
   //c->esi = cpu.esi;
   //c->edi = cpu.edi;
   c->prot = 0;
-  printf("a context to eip=%p is registered at %p\n", entry, c);
+  //printf("a context to eip=%p is registered at %p\n", entry, c);
   return c;
 }
 

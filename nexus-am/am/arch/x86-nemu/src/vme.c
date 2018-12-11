@@ -94,7 +94,7 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   int page = ((int) va >> 12) & 0x3ff;
   // check page does not exceed PDE limit 
   if (page + nr_pg >= PGSIZE) {
-    printf("PDE boundary exceeded!\n");  
+    //printf("PDE boundary exceeded!\n");  
   }
 
   // map PDE
