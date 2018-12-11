@@ -26,13 +26,14 @@ void hello_fun(void *arg) {
 
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("special init proc for testing SUCK PA4.2 MMAP!!!");
+
   context_uload(&pcb[0], "/bin/pal");
-  //switch_boot_pcb();
+  context_uload(&pcb[1], "/bin/hello");
 }
 
 _Context* schedule(_Context *prev) {
   current->cp = prev;
-  current = &pcb[0];
+  current = (current == &pcb[0] ? &pcb[1] : &pcb[0]);
 #ifdef SYS_DEBUG
   Log("switching to context at %p, will start at %p and set CR3 to 0x%08x", current->cp, current->cp->eip, current->cp->prot->ptr);
 #endif
