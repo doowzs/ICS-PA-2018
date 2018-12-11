@@ -10,7 +10,7 @@ void _fork();
 void _wait();
 
 extern char end;
-static void *brk_old = _end;
+static void *brk_old = &end;
 static void *brk_new = NULL;
 
 #if defined(__ISA_X86__)
