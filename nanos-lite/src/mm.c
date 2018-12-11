@@ -4,6 +4,7 @@
 static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
+  printf("%d page is allocated, pf will be %p\n", nr_page, pf + PGSIZE * nr_page);
   void *p = pf;
   pf += PGSIZE * nr_page;
   assert(pf < (void *)_heap.end);

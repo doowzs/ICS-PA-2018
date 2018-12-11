@@ -2,7 +2,7 @@
 #include <amdev.h>
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
-  _yield(); // schedule
+  //_yield(); // schedule
   char *pchar = (char *) buf;
   for (int i = 0; i < len; ++i) {
     _putc(*pchar);
