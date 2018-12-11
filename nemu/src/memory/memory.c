@@ -27,8 +27,9 @@ uint8_t pmem[PMEM_SIZE];
 paddr_t page_translate(vaddr_t, int);
 paddr_t do_page_translate(int, int, int);
 
-int lff[4] = { 0x0000000, 0xff000000, 0xffff0000, 0xffffff00 };
-int rff[4] = { 0x0000000, 0x000000ff, 0x0000ffff, 0x00ffffff };
+// Left/Right 0xff array for separate reading/writing
+int lff[5] = { 0x0000000, 0xff000000, 0xffff0000, 0xffffff00, 0xffffffff };
+int rff[5] = { 0x0000000, 0x000000ff, 0x0000ffff, 0x00ffffff, 0xffffffff };
 
 /* Memory accessing interfaces */
 uint32_t paddr_read(paddr_t addr, int len) {
@@ -73,7 +74,7 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
     uint32_t lower = vaddr_read(((vaddr >> 2) << 2) + 4, 4);
     uint32_t ret = ((upper & lff[4 - align]) >> (align       << 3))
                  | ((lower & rff[align]    ) << ((4 - align) << 3));
-    ret &= rff[len];
+    //ret &= rff[len];
    
     printf("read 0x%08x + 0x%08x -> 0x%08x, should be 0x%08x\n", upper, lower, ret, paddr_read(vaddr, ret));
     return ret;
