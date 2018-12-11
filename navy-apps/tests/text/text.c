@@ -16,6 +16,7 @@ int main() {
   int *a = (int *) malloc (sizeof(int) * 5);
   assert(a);
   pass(-5);
+  printf("the address of array a is 0x%08x\n", a);
   memset(a, 0, sizeof(int) * 5);
   pass(-4);
   printf("sizeof a[] is %d\n", sizeof(a));
