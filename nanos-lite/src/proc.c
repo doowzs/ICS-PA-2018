@@ -44,6 +44,7 @@ _Context* schedule(_Context *prev) {
   for ( ; j < MAX_NR_PROC; ++j ) {
     next_PCB = &pcb[(i + j + 1) % MAX_NR_PROC];
     if (pcb_valid(next_PCB)) {
+      printf("switching to pcb no. %d\n", (i + j + 1) % MAX_NR_PROC);
       current = next_PCB;
       break;
     }
@@ -57,6 +58,7 @@ _Context* schedule(_Context *prev) {
 PCB* get_free_pcb() {
   for (int i = 0; i < MAX_NR_PROC; ++i) {
     if (!pcb_valid(&pcb[i])) {
+      printf("new process will run on pcb no. %d\n", i);
       return &pcb[i];
     }
   }
