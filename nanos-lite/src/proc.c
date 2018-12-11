@@ -27,8 +27,7 @@ void hello_fun(void *arg) {
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("special init proc for testing SUCK PA4.2 MMAP!!!");
 
-  context_uload(&pcb[0], "/bin/pal");
-  context_uload(&pcb[1], "/bin/hello");
+  context_kload(&pcb_boot, "/bin/init");
 }
 
 _Context* schedule(_Context *prev) {
