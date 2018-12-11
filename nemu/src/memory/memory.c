@@ -73,7 +73,15 @@ uint32_t vaddr_read(vaddr_t vaddr, int len) {
 }
 
 void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
-  paddr_write(page_translate(vaddr, len), data, len);
+  if ((vaddr & 0xfff) + len <= 4096) {
+    paddr_write(page_translate(vaddr, len), data, len);
+  } else {
+    int align = vaddr & 0x3;
+    int len1 = 4 - align;  // we must have len + align > 4
+    int len2 = len - len1;
+    vaddr_write(vaddr, data & rff[len1], len1);
+    vaddr_write(((vaddr >> 2) << 2) + 4, data & lff[len2] >> ((4 - len2) << 3), len2); 
+  }
 }
 
 /**
