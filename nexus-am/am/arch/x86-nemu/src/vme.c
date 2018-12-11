@@ -90,7 +90,7 @@ void _switch(_Context *c) {
  * it so that it MAY work.
  */
 int _map(_Protect *p, void *va, void *pa, int nr_pg) {
-  int dir = ((int) va >> 22) & 0x3ff;
+  int dir  = ((int) va >> 22) & 0x3ff;
   int page = ((int) va >> 12) & 0x3ff;
   // check page does not exceed PDE limit 
   if (page + nr_pg >= PGSIZE) {
@@ -105,7 +105,7 @@ int _map(_Protect *p, void *va, void *pa, int nr_pg) {
      * target page is not present
      * allocate a new page now
      */
-    *(PDE) = (int) pgalloc_usr(1) | PTE_P;
+    *(PDE) = (((int) pgalloc_usr(1) >> 12) << 12) | PTE_P;
   }
   // map PTE
   int *PTBR = (int *) (*(PDE));
