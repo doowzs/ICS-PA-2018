@@ -51,10 +51,32 @@ void paddr_write(paddr_t addr, uint32_t data, int len) {
  * NOTE: the work of checking legality of CR and page,
  * and whether the address exceeds the page boundary,
  * should be done by page_translate!
+ *
+ * NOTE2: vaddr should align by 4, otherwise, the data
+ * should be split and write separately so that we can
+ * avoid paging boundary excceding fault.
  */
 uint32_t vaddr_read(vaddr_t vaddr, int len) {
-  if (vaddr > 0x4000000) Log("addr translate %08x -> %08x", vaddr, page_translate(vaddr, len));
-  return paddr_read(page_translate(vaddr, len), len);
+  int align = vaddr & 0x3;
+  if (align == 0) {
+    /* aligned */
+    return paddr_read(page_translate(vaddr, len), len);
+  } else {
+    /* not aligned */
+    uint32_t upper = vaddr_read(vaddr & 0xc, 4);
+    uint32_t lower = vaddr_read(vaddr | 0x3, 4);
+    switch (align) {
+      case 1:
+        // 3 + 1
+        return ((upper & 0x00ffffff) <<  8) | ((lower & 0xff000000) >> 24);
+      case 2:
+        // 2 + 2
+        return ((upper & 0x0000ffff) << 16) | ((lower & 0xffff0000) >> 16);
+      default:
+        // 1 + 3
+        return ((upper & 0x000000ff) << 24) | ((lower & 0xffffff00) >>  8);
+    }
+  }
 }
 
 void vaddr_write(vaddr_t vaddr, uint32_t data, int len) {
