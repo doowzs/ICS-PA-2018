@@ -22,7 +22,7 @@ int mm_brk(uintptr_t new_brk) {
   if (new_brk > current->max_brk) {
     Log("new memory is needed!");
     /* new memory, call newpage and map it */
-    int nr_pg = (new_brk - current->max_brk) / PGSIZE + 100;
+    int nr_pg = (new_brk - current->max_brk) / PGSIZE + 1;
     void *pa = new_page(nr_pg);
     _map(&current->as, (void *) current->max_brk, pa, nr_pg);
 
