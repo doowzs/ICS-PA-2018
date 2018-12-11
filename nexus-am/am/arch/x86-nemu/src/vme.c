@@ -76,13 +76,13 @@ void _unprotect(_Protect *p) {
 
 static _Protect *cur_as = NULL;
 void get_cur_as(_Context *c) {
+  c->prot = cur_as;
   printf("the address of c->ptr is 0x%08x\n", c->prot->ptr);
-  cur_as = c->prot;
 }
 
 void _switch(_Context *c) {
-  c->prot = cur_as;
   set_cr3(c->prot->ptr);
+  cur_as = c->prot;
   printf("CR3 set to 0x%08x\n", c->prot->ptr); 
 }
 
