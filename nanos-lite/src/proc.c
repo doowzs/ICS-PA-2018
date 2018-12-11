@@ -12,6 +12,7 @@ PCB *current;
 
 void switch_boot_pcb() {
   current = &pcb_boot;
+  current = &pcb[0];
   printf("in switch_boot_pcb, the PTR of bootpcb is 0x%08x\n", current->cp->prot->ptr);
 }
 
