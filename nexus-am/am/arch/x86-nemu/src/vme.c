@@ -81,7 +81,7 @@ void get_cur_as(_Context *c) {
 }
 
 void _switch(_Context *c) {
-  set_cr3(kpdirs);
+  set_cr3(c->prot->ptr);
   cur_as = c->prot;
   printf("CR3 set to 0x%08x\n", c->prot->ptr); 
 }
@@ -93,7 +93,7 @@ void _switch(_Context *c) {
  */
 int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   // make PDE present
-  kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
+  // kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
 
   // check page does not exceed PDE limit 
   int page = ((int) va >> 12) & 0x3ff;
