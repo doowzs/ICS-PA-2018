@@ -59,6 +59,7 @@ int _vme_init(void* (*pgalloc_f)(size_t), void (*pgfree_f)(void*)) {
  */
 int _protect(_Protect *p) {
   PDE *updir = (PDE*)(pgalloc_usr(1));
+  set_cr3(updir);
   p->pgsize = 4096;
   p->ptr = updir;
   // map kernel space
@@ -93,7 +94,7 @@ void _switch(_Context *c) {
  */
 int _map(_Protect *p, void *va, void *pa, int nr_pg) {
   // make PDE present
-  // kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
+  kpdirs[((int) va >> 22) & 0x3ff] = (int) p->ptr | PTE_P;
 
   // check page does not exceed PDE limit 
   int page = ((int) va >> 12) & 0x3ff;
