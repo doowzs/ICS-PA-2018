@@ -35,7 +35,7 @@ _Context* do_syscall(_Context *c) {
 #endif
       if (a[1] == 0) {
         c->prot = NULL;
-        return schedule(c);
+        return pcb_boot.cp;
       } else {
         _halt(a[1]);
       }

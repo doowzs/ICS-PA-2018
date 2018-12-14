@@ -7,7 +7,7 @@ void context_kload(PCB *pcb, void *entry);
 void context_uload(PCB *pcb, const char *filename);
 
 static PCB pcb[MAX_NR_PROC] __attribute__((used));
-static PCB pcb_boot;
+PCB pcb_boot;
 PCB *current;
 
 bool pcb_valid(PCB* pcb) {
