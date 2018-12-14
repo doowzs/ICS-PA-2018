@@ -38,6 +38,9 @@ _Context* schedule(_Context *prev) {
   current->cp = prev;
   int i = 0, j = 0;
   PCB *next_PCB = NULL;
+  for ( ; i < MAX_NR_PROC; ++i ) {
+    if (&pcb[i].as == prev->prot) break;
+  }
   for ( ; j < MAX_NR_PROC; ++j ) {
     next_PCB = &pcb[(i + j + 1) % MAX_NR_PROC];
     if (pcb_valid(next_PCB)) {
