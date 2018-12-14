@@ -86,7 +86,9 @@ _Context* schedule(_Context *prev, bool kill) {
 PCB* get_free_pcb() {
   for (int i = 0; i < MAX_NR_PROC; ++i) {
     if (!pcb_valid(&pcb[i])) {
-      printf("new process will run on pcb no. %d\n", i);
+#ifdef SYS_DEBUG
+      Log("new process will run on PCB No.%d", i);
+#endif
       return &pcb[i];
     }
   }
