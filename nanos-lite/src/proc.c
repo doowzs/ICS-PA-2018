@@ -40,6 +40,10 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
 }
 
 _Context* schedule(_Context *prev) {
+  if (prev->prot != NULL) {
+    current->cp = prev;
+  }
+
   int i = 0, j = 0;
   PCB *next_PCB = NULL;
 
@@ -51,10 +55,6 @@ _Context* schedule(_Context *prev) {
     switch_boot_pcb();
     return current->cp;
   }
-
-  // if not switching to BOOT PCB, 
-  // save the last context for future use
-  current->cp = prev;
 
   for ( ; j < MAX_NR_PROC; ++j ) {
     next_PCB = &pcb[(i + j + 1) % MAX_NR_PROC];
