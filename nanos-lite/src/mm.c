@@ -26,7 +26,10 @@ int mm_brk(uintptr_t new_brk) {
 #endif
 
   if (new_brk > current->max_brk) {
+#ifdef SYS_DEBUG
     Log("new memory is needed!");
+#endif
+
     /* new memory, call newpage and map it */
     int nr_pg = (new_brk - current->max_brk) / PGSIZE + 1;
     void *pa = new_page(nr_pg);
