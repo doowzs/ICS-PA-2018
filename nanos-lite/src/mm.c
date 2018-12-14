@@ -4,11 +4,14 @@
 static void *pf = NULL;
 
 void* new_page(size_t nr_page) {
-  printf("%d page is allocated, pf will be %p\n", nr_page, pf + PGSIZE * nr_page);
   void *p = pf;
   pf += PGSIZE * nr_page;
   assert(pf < (void *)_heap.end);
+
+#ifdef SYS_DEBUG
   Log("new page allocated at %p", p);
+#endif
+
   return p;
 }
 
@@ -18,7 +21,10 @@ void free_page(void *p) {
 
 /* The brk() system call handler. */
 int mm_brk(uintptr_t new_brk) {
+#ifdef SYS_DEBUG
   Log("setting brk from 0x%08x to 0x%08x", current->cur_brk, new_brk);
+#endif
+
   if (new_brk > current->max_brk) {
     Log("new memory is needed!");
     /* new memory, call newpage and map it */
