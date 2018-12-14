@@ -35,6 +35,7 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("special init proc for testing SUCK PA4.2 MMAP!!!");
 
   context_uload(&pcb_boot, "/bin/init");
+  printf("eip of pcb_boot is 0x%08x\n", pcb_boot.cp->eip);
   switch_boot_pcb();
 }
 
