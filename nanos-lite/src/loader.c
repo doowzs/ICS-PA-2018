@@ -13,19 +13,16 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   void *buf = (void *) DEFAULT_ENTRY;
   size_t sz = fs_filesz(fd);
 
-  Log("loading file %s to %p, fd=%d, sz=%d", filename, buf, fd, sz);
-
   int nr_pg = sz / PGSIZE + 1;
   void *pa = new_page(nr_pg); // allocate new pages
   _map(&pcb->as, buf, pa, nr_pg); // map va to pa
 
-  Log("virtual address of program mapped");
   pcb->cur_brk = DEFAULT_ENTRY + nr_pg * PGSIZE;
   pcb->max_brk = DEFAULT_ENTRY + nr_pg * PGSIZE; // ser brk
-  printf("the initial brk is 0x%08x\n", pcb->max_brk);
+  Log("virtual address of program mapped, brk = 0x%08x", pcb->cur_brk);
 
   fs_read(fd, buf, sz);
-  Log("file loaded!");
+  Log("loaded file %s to %p, fd=%d, sz=%d", filename, buf, fd, sz);
 
   return (intptr_t) buf;
 }
