@@ -73,7 +73,6 @@ _Context* schedule(_Context *prev, bool kill) {
         }
       }
     }
-    printf("SWITCHING TO BOOT PCB\n");
     switch_boot_pcb();
     return current->cp;
   }
