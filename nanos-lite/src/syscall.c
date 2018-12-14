@@ -36,7 +36,6 @@ _Context* do_syscall(_Context *c) {
 #endif
       if (a[1] == 0) {
         syscall_ret(c, 0);
-        printf("XXX\n");
         return schedule(c, true);
       } else {
         _halt(a[1]);

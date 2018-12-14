@@ -57,7 +57,6 @@ _Context* schedule(_Context *prev, bool kill) {
     next_PCB = &pcb[(last_id + i + 1) % MAX_NR_PROC];
     if (pcb_valid(next_PCB)) {
       last_id = (last_id + i + 1) % MAX_NR_PROC;
-      printf("switching to pcb no. %d\n", last_id);
       current = next_PCB;
       break;
     }
