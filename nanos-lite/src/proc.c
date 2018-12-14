@@ -31,16 +31,23 @@ void hello_fun(void *arg) {
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("special init proc for testing SUCK PA4.2 MMAP!!!");
 
-  context_uload(&pcb[0], "/bin/init");
+  context_uload(&pcb_boot, "/bin/init");
+  switch_boot_pcb();
 }
 
 _Context* schedule(_Context *prev) {
   current->cp = prev;
   int i = 0, j = 0;
   PCB *next_PCB = NULL;
+
   for ( ; i < MAX_NR_PROC; ++i ) {
     if (&pcb[i].as == prev->prot) break;
   }
+  if (i == MAX_NR_PROC) {
+    switch_boot_pcb();
+    return current->cp;
+  }
+
   for ( ; j < MAX_NR_PROC; ++j ) {
     next_PCB = &pcb[(i + j + 1) % MAX_NR_PROC];
     if (pcb_valid(next_PCB)) {
