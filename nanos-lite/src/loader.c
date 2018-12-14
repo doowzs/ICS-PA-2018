@@ -9,11 +9,8 @@ size_t ramdisk_read(void *, size_t, size_t);
 size_t get_ramdisk_size();
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
-  Log("1");
   int fd = fs_open(filename, 0, 0);
-  Log("2");
   void *buf = (void *) DEFAULT_ENTRY;
-  Log("3");
   size_t sz = fs_filesz(fd);
 
   Log("loading file %s to %p, fd=%d, sz=%d", filename, buf, fd, sz);

@@ -17,7 +17,9 @@ bool pcb_valid(PCB* pcb) {
 void switch_boot_pcb() {
   current = &pcb_boot;
   current->cp->prot = &pcb_boot.as;
-  printf("in switch_boot_pcb, the PTR of bootpcb is 0x%08x\n", current->cp->prot->ptr);
+#ifdef SYS_DEBUG
+  Log("switching to BOOT PCB, will start at %p and set CR3 to 0x%08x", current->cp->eip, current->cp->prot->ptr);
+#endif
 }
 
 void hello_fun(void *arg) {
