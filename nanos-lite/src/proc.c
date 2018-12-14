@@ -52,6 +52,7 @@ _Context* schedule(_Context *prev) {
 #ifdef SYS_DEBUG
   Log("switching to context at %p, will start at %p and set CR3 to 0x%08x", current->cp, current->cp->eip, current->cp->prot->ptr);
 #endif
+  current->cp->prot = &next_PCB->as;
   return current->cp;
 }
 
