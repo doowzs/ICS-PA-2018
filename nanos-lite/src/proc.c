@@ -68,7 +68,6 @@ _Context* schedule(_Context *prev, bool kill) {
         if (prev->prot == &pcb[i].as) {
           current->cp = NULL;
           pcb[i].cp = NULL;
-          pcb[i].as = NULL;
         }
       }
     }
