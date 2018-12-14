@@ -7,6 +7,7 @@
 void init_proc(const char *, char* const [], char* const []);
 void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const envp[]);
 void context_uload(PCB *pcb, const char *filename);
+void switch_boot_pcb();
 _Context *schedule(_Context *);
 PCB* get_free_pcb();
 int mm_brk(uintptr_t);
@@ -35,7 +36,8 @@ _Context* do_syscall(_Context *c) {
 #endif
       if (a[1] == 0) {
         c->prot = NULL;
-        return pcb_boot.cp;
+        switch_boot_pcb();
+        return current->cp;
       } else {
         _halt(a[1]);
       }
