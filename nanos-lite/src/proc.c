@@ -16,6 +16,7 @@ bool pcb_valid(PCB* pcb) {
 
 void switch_boot_pcb() {
   current = &pcb_boot;
+  current->cp->prot = &pcb_boot.as;
   printf("in switch_boot_pcb, the PTR of bootpcb is 0x%08x\n", current->cp->prot->ptr);
 }
 
