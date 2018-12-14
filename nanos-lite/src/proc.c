@@ -39,31 +39,30 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   switch_boot_pcb();
 }
 
+int last_id = 0;
 _Context* schedule(_Context *prev) {
   if (prev->prot != NULL) {
     current->cp = prev;
   }
 
-  int i = 0, j = 0;
+  int i = 0;
   PCB *next_PCB = NULL;
 
   for ( ; i < MAX_NR_PROC; ++i ) {
-    if (&pcb[i].as == prev->prot) break;
+    next_PCB = &pcb[(last_id + i + 1) % MAX_NR_PROC];
+    if (pcb_valid(next_PCB)) {
+      printf("switching to pcb no. %d\n", (last_id + i + 1) % MAX_NR_PROC);
+      current = next_PCB;
+      break;
+    }
   }
+
   if (i == MAX_NR_PROC) {
     printf("SWITCHING TO BOOT PCB\n");
     switch_boot_pcb();
     return current->cp;
   }
 
-  for ( ; j < MAX_NR_PROC; ++j ) {
-    next_PCB = &pcb[(i + j + 1) % MAX_NR_PROC];
-    if (pcb_valid(next_PCB)) {
-      printf("switching to pcb no. %d\n", (i + j + 1) % MAX_NR_PROC);
-      current = next_PCB;
-      break;
-    }
-  }
 #ifdef SYS_DEBUG
   Log("switching to context at %p, will start at %p and set CR3 to 0x%08x", current->cp, current->cp->eip, current->cp->prot->ptr);
 #endif
