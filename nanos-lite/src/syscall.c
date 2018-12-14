@@ -7,6 +7,7 @@
 void init_proc(const char *, char* const [], char* const []);
 void naive_uload(PCB *pcb, const char *filename, char* const argv[], char* const envp[]);
 void context_uload(PCB *pcb, const char *filename);
+_Context *schedule(_Context *);
 PCB* get_free_pcb();
 int mm_brk(uintptr_t);
 
@@ -33,7 +34,7 @@ _Context* do_syscall(_Context *c) {
       Log("SYS_exit(code=%d)", a[1]);
 #endif
       if (a[1] == 0) {
-        _yield();
+        return schedule(c);
       } else {
         _halt(a[1]);
       }

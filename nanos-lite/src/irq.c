@@ -12,8 +12,7 @@ static _Context* do_event(_Event e, _Context* c) {
       return schedule(c);
       break;
     case _EVENT_SYSCALL:
-      do_syscall(c);
-      break;
+      return do_syscall(c);
     default: panic("Unhandled event ID = %d, fix in nanos/src/irq.c", e.event);
   }
 
