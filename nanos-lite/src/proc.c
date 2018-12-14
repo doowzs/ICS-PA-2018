@@ -44,6 +44,7 @@ _Context* schedule(_Context *prev) {
     if (&pcb[i].as == prev->prot) break;
   }
   if (i == MAX_NR_PROC) {
+    printf("SWITCHING TO BOOT PCB\n");
     switch_boot_pcb();
     return current->cp;
   }
