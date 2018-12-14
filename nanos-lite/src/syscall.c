@@ -33,7 +33,7 @@ _Context* do_syscall(_Context *c) {
       Log("SYS_exit(code=%d)", a[1]);
 #endif
       if (a[1] == 0) {
-        c->prot = NULL;
+        _yield();
       } else {
         _halt(a[1]);
       }
