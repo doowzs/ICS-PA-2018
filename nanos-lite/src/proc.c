@@ -42,7 +42,7 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
 int last_id = 0;
 _Context* schedule(_Context *prev) {
   Log("prev's   prot is 0x%08x", prev->prot);
-  Log("PCB[0]'s prot is 0x%08x", pcb[0].cp->prot);
+  Log("PCB[0]'s prot is 0x%08x", &pcb[0].as);
   if (prev->prot != NULL) {
     current->cp = prev;
   }
