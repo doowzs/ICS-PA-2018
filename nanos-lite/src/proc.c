@@ -33,17 +33,19 @@ void hello_fun(void *arg) {
 }
 
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
-  Log("special init proc for testing SUCK PA4.2 MMAP!!!");
+  Log("initializing process of %s...", filename);
 
   context_uload(&pcb_boot, "/bin/init");
-  printf("eip of pcb_boot is 0x%08x\n", pcb_boot.cp->eip);
   switch_boot_pcb();
 }
 
 _Context* schedule(_Context *prev, bool kill) {
+#ifdef SYS_DEBUG
   Log("prev's   prot is 0x%08x", prev->prot);
   Log("PCB[0]'s prot is 0x%08x", &pcb[0].as);
   if (kill) Log("KILL THE PROCESS");
+#endif
+
   if (prev->prot != NULL) {
     current->cp = prev;
   }
