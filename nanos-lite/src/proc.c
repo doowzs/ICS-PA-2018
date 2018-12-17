@@ -85,11 +85,16 @@ _Context* schedule(_Context *prev, bool kill) {
   
   /* Handle key event */
   if (schedule_target > -2) {
+    Log("Handling schedule to target %d", schedule_target);
     if (schedule_target == -1) {
       next_PCB = &pcb_boot;
     } else {
       assert(schedule_target < MAX_NR_PROC);
-      next_PCB = &pcb[schedule_target];
+      if (pcb_valid(&pcb[schedule_target])) {
+        next_PCB = &pcb[schedule_target];
+      } else {
+        Log("Target %d is not in use!", schedule_target);
+      }
     }
     schedule_target = -2;
   }
