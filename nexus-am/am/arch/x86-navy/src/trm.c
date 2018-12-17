@@ -3,12 +3,12 @@
 extern int main();
 
 void _trm_init() {
+  printf("HELLO WORLD FROM NAVY\n");
   int ret = main();
   _halt(ret);
 }
 
 void _putc(char ch) {
-  printf("HELLO\n");
   while ((inb(SERIAL_PORT + 5) & 0x20) == 0);
   outb(SERIAL_PORT, ch);
 }
