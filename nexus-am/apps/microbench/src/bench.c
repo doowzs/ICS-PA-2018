@@ -54,18 +54,25 @@ unsigned long score(Benchmark *b, unsigned long tsc, unsigned long msec) {
   return (REF_SCORE / 1000) * setting->ref / msec;
 }
 
+#define OK(i) printf("OK %d!\n", i);
 int main() {
   _ioe_init();
+  OK(0);
 
   unsigned long bench_score = 0;
   int pass = 1;
 
   for (int i = 0; i < ARR_SIZE(benchmarks); i ++) {
     Benchmark *bench = &benchmarks[i];
+    OK(1);
     current = bench;
+    OK(2);
     setting = &bench->settings[SETTING];
+    OK(3);
     const char *msg = bench_check(bench);
+    OK(4);
     printk("[%s] %s: ", bench->name, bench->desc);
+    OK(5);
     if (msg != NULL) {
       printk("Ignored %s\n", msg);
     } else {
