@@ -35,6 +35,8 @@ void hello_fun(void *arg) {
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("initializing process of %s...", filename);
 
+  Log("testing PA 4.3");
+  context_uload(&pcb[0], "/bin/hello");
   context_uload(&pcb_boot, "/bin/init");
   switch_boot_pcb();
 }
