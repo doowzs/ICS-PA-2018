@@ -41,6 +41,7 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
 
 int schedule_target = -2;
 void key_schedule(int target) {
+  Log("Key schedule to target %d handled.", target);
   schedule_target = target;
   _yield();
 }
