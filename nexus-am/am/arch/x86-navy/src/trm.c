@@ -1,31 +1,13 @@
 #include <am.h>
 
-//void _trm_init() {
-//}
-
-//void _putc(char ch) {
-//}
-
-//void _halt(int code) {
-//}
-
-//_Area _heap;
-
-
-#define SERIAL_PORT 0x3f8
-
-extern char _heap_start;
-extern char _heap_end;
 extern int main();
 
-_Area _heap = {
-  .start = &_heap_start,
-  .end = &_heap_end,
-};
+void _trm_init() {
+  int ret = main();
+  _halt(ret);
+}
 
 void _putc(char ch) {
-  while ((inb(SERIAL_PORT + 5) & 0x20) == 0);
-  outb(SERIAL_PORT, ch);
 }
 
 void _halt(int code) {
@@ -35,7 +17,4 @@ void _halt(int code) {
   while (1);
 }
 
-void _trm_init() {
-  int ret = main();
-  _halt(ret);
-}
+_Area _heap;

@@ -38,6 +38,14 @@ struct MenuItem {
   {"NES - Yie Ar Kung Fu",      "/bin/litenes", "/share/games/nes/kungfu.nes"},
   //{"NES - Lode Runner",         "/bin/litenes", "/share/games/nes/loderunner.nes"},
   {"NES - Super Mario Bros.",   "/bin/litenes", "/share/games/nes/mario.nes"},
+  {"AM - coremark",    "/bin/coremark-am", NULL},
+  {"AM - dhrystone",   "/bin/dhrystone-am", NULL},
+  {"AM - hello",       "/bin/hello-am", NULL},
+  {"AM - litenes",     "/bin/litenes-am", NULL},
+  {"AM - microbench",  "/bin/microbench-am", NULL},
+  {"AM - slider",      "/bin/slider-am", NULL},
+  {"AM - typing",      "/bin/typing-am", NULL},
+  {"AM - videotest",   "/bin/videotest-am", NULL},
 };
 
 #define nitems (sizeof(items) / sizeof(items[0]))
