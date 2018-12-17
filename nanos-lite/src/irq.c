@@ -6,9 +6,7 @@ _Context* do_syscall(_Context* c);
 static _Context* do_event(_Event e, _Context* c) {
   switch (e.event) {
     case _EVENT_IRQ_TIMER:
-#ifdef SYS_DEBUG
       Log("A timer event is triggered.");
-#endif
       return schedule(c, false);
     case _EVENT_YIELD:
 #ifdef SYS_DEBUG
