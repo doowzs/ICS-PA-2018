@@ -1,9 +1,11 @@
 #include <am.h>
+#include <x86.h>
+
+#define SERIAL_PORT 0x3f8
 
 extern int main();
 
 void _trm_init() {
-  printf("HELLO WORLD FROM NAVY\n");
   int ret = main();
   _halt(ret);
 }
