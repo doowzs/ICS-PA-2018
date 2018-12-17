@@ -5,7 +5,7 @@
 #include <klib.h>
 
 static inline void* bench_memcpy(void* dst, const void* src, size_t n){
-  printf("Copying from 0x%08x to 0x%08x\n", src, dst);
+  printf("dst = 0x%08x, src = 0x%08x\n", dst, src);
   assert(dst&&src);
   const char* s;
   char* d;
