@@ -20,7 +20,6 @@ void bench_lzip_prepare() {
 }
 
 void bench_lzip_run() {
-  assert(0);
   len = qlz_compress(blk, compress, SIZE, state);
 }
 
