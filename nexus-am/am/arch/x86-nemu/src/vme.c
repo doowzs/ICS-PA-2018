@@ -133,6 +133,7 @@ _Context *_ucontext(_Protect *p, _Area ustack, _Area kstack, void *entry, void *
 
   _Context *c = _kcontext(kstack, entry, args);
   c->prot = p;
+  c->eflags |= (1 << 9); // setup IF flag
   //printf("the CR3 of this ucontext is 0x%08x\n", p->ptr);
   return c;
 }
