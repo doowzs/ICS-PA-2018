@@ -20,7 +20,14 @@ static const char *keyname[256] __attribute__((used)) = {
 
 size_t events_read(void *buf, size_t offset, size_t len) {
   int key = read_key();
-  printf("KEY NUMBER 0x%08x\n", key);
+  if (key >= 0x8002 && key <= 0x8006) {
+    /* If F1 ~ F5 is pressed:
+     * F1: set target to -1 for boot pcb,
+     * Fx: set target to x - 1.
+     */
+    extern void key_schedule(int);
+    key_schedule(key - 0x8003);
+  }
   if (key > 0) {
     if (key & 0x8000) {
       return snprintf(buf, len, "kd %s\n", keyname[key & 0xff]);

@@ -39,6 +39,12 @@ void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   switch_boot_pcb();
 }
 
+int schedule_target = -2;
+void key_schedule(int target) {
+  schedule_target = target;
+  _yield();
+}
+
 _Context* schedule(_Context *prev, bool kill) {
 #ifdef SYS_DEBUG
   Log("prev's   prot is 0x%08x", prev->prot);
@@ -74,6 +80,17 @@ _Context* schedule(_Context *prev, bool kill) {
     }
     switch_boot_pcb();
     return current->cp;
+  }
+  
+  /* Handle key event */
+  if (schedule_target > -2) {
+    if (schedule_target == -1) {
+      next_PCB = &pcb_boot;
+    } else {
+      assert(schedule_target < MAX_NR_PROC);
+      next_PCB = &pcb[schedule_target];
+    }
+    schedule_target = -2;
   }
 
 #ifdef SYS_DEBUG
