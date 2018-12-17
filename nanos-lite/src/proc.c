@@ -35,8 +35,8 @@ void hello_fun(void *arg) {
 void init_proc(const char *filename, char* const argv[], char* const envp[]) {
   Log("initializing process of %s...", filename);
 
-  context_uload(&pcb[0], "/bin/init");
-  //switch_boot_pcb();
+  context_uload(&pcb_boot, "/bin/init");
+  switch_boot_pcb();
 }
 
 _Context* schedule(_Context *prev, bool kill) {
