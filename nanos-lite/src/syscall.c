@@ -173,7 +173,6 @@ _Context* do_syscall(_Context *c) {
 #ifdef SYS_DEBUG
       Log("SYS_execve(file=%s)", (const char *) a[1]);
 #endif
-      context_uload(get_free_pcb(), "/bin/hello");
       context_uload(get_free_pcb(), (const char *) a[1]);
       break;
 
