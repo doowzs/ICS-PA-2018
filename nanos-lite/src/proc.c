@@ -53,6 +53,7 @@ _Context* schedule(_Context *prev, bool kill) {
   if (kill) Log("KILL THE PROCESS");
 #endif
 
+  if (current == &pcb_boot) return current->cp;
   if (schedule_target != -2) Log("hello in schedule, target = %d", schedule_target);
 
   if (prev->prot != NULL) {
