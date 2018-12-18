@@ -59,8 +59,6 @@ _Context* schedule(_Context *prev, bool kill) {
     current->cp = prev;
   }
 
-  if (current == &pcb_boot) return current->cp;
-
   /* Handle key event */
   if (schedule_target > -2) {
     Log("Handling schedule to target %d", schedule_target);
@@ -79,6 +77,9 @@ _Context* schedule(_Context *prev, bool kill) {
     schedule_target = -2;
     return current->cp;
   }
+
+  /* Boot PCB reservation */
+  if (current == &pcb_boot) return current->cp;
 
   int i = 0;
   PCB *next_PCB = NULL;
