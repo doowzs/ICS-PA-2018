@@ -54,15 +54,13 @@ _Context* schedule(_Context *prev, bool kill) {
   if (kill) Log("KILL THE PROCESS");
 #endif
 
-  if (schedule_target != -2) Log("hello in schedule, target = %d", schedule_target);
-
   if (prev->prot != NULL) {
     current->cp = prev;
   }
 
   /* Handle key event */
   if (schedule_target > -2) {
-    Log("Handling schedule to target %d", schedule_target);
+    Log("Handling key overrided schedule to target %d", schedule_target);
     if (schedule_target == -1) {
       current = &pcb_boot;
       current->cp->prot = &(pcb_boot.as);
@@ -72,7 +70,8 @@ _Context* schedule(_Context *prev, bool kill) {
         current = &pcb[schedule_target];
         current->cp->prot = &(pcb[schedule_target].as);
       } else {
-        Log("Target %d is not in use!", schedule_target);
+        Log("Target PCB No.%d is not in use!", schedule_target);
+        Log("Read the friendly manual to learn how to start new apps!");
       }
     }
     schedule_target = -2;
