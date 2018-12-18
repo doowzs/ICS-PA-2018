@@ -67,7 +67,6 @@ void stop_time(void) {
 	and the resolution is controlled by <TIMER_RES_DIVIDER>
 */
 CORE_TICKS get_time(void) {
-  ee_printf("time lapse: %d %d", start_time_val, stop_time_val);
   return stop_time_val - start_time_val;
 }
 
