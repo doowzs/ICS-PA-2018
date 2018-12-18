@@ -31,6 +31,7 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
       int w = ctl->w, h = ctl->h;
       uint32_t *ppx = ctl->pixels;
       NDL_DrawRect(ppx, x, y, w, h);
+      NDL_Render();
       return sizeof(_FBCtlReg);
     }
   }
