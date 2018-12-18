@@ -4,14 +4,24 @@
 #include <ndl.h>
 
 NDL_Event event;
+int cur_time;
 
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
       _UptimeReg *uptime = (_UptimeReg *)buf;
-      while (event.type != NDL_EVENT_TIMER) NDL_WaitEvent(&event);
-      uptime->hi = 0;
-      uptime->lo = event.data;
+      NDL_WaitEvent(&event);
+      switch (event.type) {
+        case NDL_EVENT_TIMER:
+          uptime->hi = 0;
+          uptime->lo = event.data;
+          cur_time = event.data;
+          break;
+        default:
+          uptime->hi = 0;
+          uptime->lo = cur_time;
+          break;
+      }
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
