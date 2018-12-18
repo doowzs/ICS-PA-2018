@@ -15,7 +15,6 @@ void _putc(char ch) {
 }
 
 void _halt(int code) {
-  printf("fuck!!!\n");
   exit(code);
 }
 
