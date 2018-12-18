@@ -1,18 +1,18 @@
 #include <am.h>
 #include <x86.h>
 #include <amdev.h>
+#include <ndl.h>
 
-#define RTC_PORT 0x48
-
+NDL_Event event;
 uint32_t boot_time = 0;
 
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
       _UptimeReg *uptime = (_UptimeReg *)buf;
+      while (event.type != NDL_EVENT_TIMER) NDL_WaitEvent(&event);
       uptime->hi = 0;
-      //FIXME: the time may overflow!!!
-      uptime->lo = inl(RTC_PORT) - boot_time;
+      uptime->lo = event.data;
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
@@ -30,5 +30,6 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
 }
 
 void timer_init() {
-  boot_time = inl(RTC_PORT);
+  while (event.type != NDL_EVENT_TIMER) NDL_WaitEvent(&event);
+  boot_time = event.data;
 }

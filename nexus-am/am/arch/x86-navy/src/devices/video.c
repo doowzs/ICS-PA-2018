@@ -2,6 +2,7 @@
 #include <x86.h>
 #include <amdev.h>
 #include <klib.h>
+#include <ndl.h>
 
 #define SCREEN_PORT 0x100
 #define SCREEN_H 300
