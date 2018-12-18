@@ -46,6 +46,7 @@ void key_schedule(int target) {
 }
 
 int last_id = 0;
+_Context* last_cp[MAX_NR_PROC];
 _Context* schedule(_Context *prev, bool kill) {
 #ifdef SYS_DEBUG
   Log("prev's   prot is 0x%08x", prev->prot);
@@ -78,11 +79,19 @@ _Context* schedule(_Context *prev, bool kill) {
     return current->cp;
   }
 
-  /* Boot PCB reservation */
-  if (current == &pcb_boot) return current->cp;
-
   int i = 0;
   PCB *next_PCB = NULL;
+
+  /* New process detect and boot PCB reservation */
+  for (i = 0; i < MAX_NR_PROC; ++i) {
+    if (pcb[i].cp != last_cp[i]) {
+      current = &pcb[i];
+      current->cp = pcb[i].cp;
+      last_cp[i] = pcb[i].cp;
+      return current->cp;
+    }
+  }
+  if (current == &pcb_boot) return current->cp;
 
   for (i = 0; i < MAX_NR_PROC; ++i) {
     next_PCB = &pcb[(last_id + i + 1) % MAX_NR_PROC];
