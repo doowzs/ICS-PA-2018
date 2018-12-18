@@ -9,7 +9,9 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
     case _DEVREG_TIMER_UPTIME: {
       _UptimeReg *uptime = (_UptimeReg *)buf;
-      while (event.type != NDL_EVENT_TIMER) NDL_WaitEvent(&event);
+      do {
+        NDL_WaitEvent(&event);
+      } while (event.type != NDL_EVENT_TIMER);
       uptime->hi = 0;
       uptime->lo = event.data;
       return sizeof(_UptimeReg);
