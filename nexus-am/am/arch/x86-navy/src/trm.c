@@ -1,7 +1,7 @@
 #include <am.h>
 #include <x86.h>
-
-#define SERIAL_PORT 0x3f8
+#include <stdio.h>
+#include <stdlib.h>
 
 extern int main();
 
@@ -11,15 +11,11 @@ void _trm_init() {
 }
 
 void _putc(char ch) {
-  while ((inb(SERIAL_PORT + 5) & 0x20) == 0);
-  outb(SERIAL_PORT, ch);
+  putchar(ch);
 }
 
 void _halt(int code) {
-  __asm__ volatile(".byte 0xd6" : :"a"(code));
-
-  // should not reach here
-  while (1);
+  exit(code);
 }
 
 _Area _heap;
