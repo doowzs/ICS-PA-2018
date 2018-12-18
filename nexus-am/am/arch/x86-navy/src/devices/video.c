@@ -38,4 +38,5 @@ size_t video_write(uintptr_t reg, void *buf, size_t size) {
 }
 
 void vga_init() {
+  NDL_OpenDisplay(SCREEN_W, SCREEN_H);
 }
