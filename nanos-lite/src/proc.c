@@ -85,6 +85,7 @@ _Context* schedule(_Context *prev, bool kill) {
   /* New process detect and boot PCB reservation */
   for (i = 0; i < MAX_NR_PROC; ++i) {
     if (pcb[i].cp != last_cp[i]) {
+      Log("pcb of %d has changed!", i);
       current = &pcb[i];
       current->cp = pcb[i].cp;
       last_cp[i] = pcb[i].cp;
