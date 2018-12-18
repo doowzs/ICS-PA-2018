@@ -59,6 +59,23 @@ _Context* schedule(_Context *prev, bool kill) {
     current->cp = prev;
   }
 
+  /* Handle key event */
+  if (schedule_target > -2) {
+    Log("Handling schedule to target %d", schedule_target);
+    if (schedule_target == -1) {
+      current->cp->prot = &pcb_boot.as;
+    } else {
+      assert(schedule_target < MAX_NR_PROC);
+      if (pcb_valid(&pcb[schedule_target])) {
+        current->cp->prot = &pcb[schedule_target].as;
+      } else {
+        Log("Target %d is not in use!", schedule_target);
+      }
+    }
+    schedule_target = -2;
+    return current->cp;
+  }
+
   int i = 0;
   PCB *next_PCB = NULL;
 
@@ -83,22 +100,6 @@ _Context* schedule(_Context *prev, bool kill) {
     }
     switch_boot_pcb();
     return current->cp;
-  }
-  
-  /* Handle key event */
-  if (schedule_target > -2) {
-    Log("Handling schedule to target %d", schedule_target);
-    if (schedule_target == -1) {
-      next_PCB = &pcb_boot;
-    } else {
-      assert(schedule_target < MAX_NR_PROC);
-      if (pcb_valid(&pcb[schedule_target])) {
-        next_PCB = &pcb[schedule_target];
-      } else {
-        Log("Target %d is not in use!", schedule_target);
-      }
-    }
-    schedule_target = -2;
   }
 
 #ifdef SYS_DEBUG
