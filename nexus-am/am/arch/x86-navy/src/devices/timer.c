@@ -2,6 +2,7 @@
 #include <x86.h>
 #include <amdev.h>
 #include <ndl.h>
+#include <stdio.h>
 
 NDL_Event event;
 int cur_time;
@@ -13,6 +14,7 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
       NDL_WaitEvent(&event);
       switch (event.type) {
         case NDL_EVENT_TIMER:
+          printf("time is %d\n", event.data);
           uptime->hi = 0;
           uptime->lo = event.data;
           cur_time = event.data;
