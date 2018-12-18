@@ -42,7 +42,7 @@ struct MenuItem {
   {"AM - dhrystone",   "/bin/dhrystone-am", NULL},
   {"AM - hello",       "/bin/hello-am", NULL},
   {"AM - litenes",     "/bin/litenes-am", NULL},
-  {"AM - microbench",  "/bin/microbench-am", NULL},
+  //{"AM - microbench",  "/bin/microbench-am", NULL},
   {"AM - slider",      "/bin/slider-am", NULL},
   {"AM - typing",      "/bin/typing-am", NULL},
   {"AM - videotest",   "/bin/videotest-am", NULL},
