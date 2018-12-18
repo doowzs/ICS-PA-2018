@@ -12,7 +12,7 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
       _UptimeReg *uptime = (_UptimeReg *)buf;
       while (event.type != NDL_EVENT_TIMER) NDL_WaitEvent(&event);
       uptime->hi = 0;
-      uptime->lo = event.data - boot_time;
+      uptime->lo = event.data;
       return sizeof(_UptimeReg);
     }
     case _DEVREG_TIMER_DATE: {
@@ -30,6 +30,4 @@ size_t timer_read(uintptr_t reg, void *buf, size_t size) {
 }
 
 void timer_init() {
-  while (event.type != NDL_EVENT_TIMER) NDL_WaitEvent(&event);
-  boot_time = event.data;
 }
