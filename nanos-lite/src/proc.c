@@ -63,11 +63,13 @@ _Context* schedule(_Context *prev, bool kill) {
   if (schedule_target > -2) {
     Log("Handling schedule to target %d", schedule_target);
     if (schedule_target == -1) {
-      current->cp->prot = &pcb_boot.as;
+      current = &pcb_boot;
+      current->cp->prot = &(pcb_boot.as);
     } else {
       assert(schedule_target < MAX_NR_PROC);
       if (pcb_valid(&pcb[schedule_target])) {
-        current->cp->prot = &pcb[schedule_target].as;
+        current = &pcb[schedule_target];
+        current->cp->prot = &(pcb[schedule_target].as);
       } else {
         Log("Target %d is not in use!", schedule_target);
       }
