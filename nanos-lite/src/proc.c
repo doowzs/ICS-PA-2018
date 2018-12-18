@@ -71,7 +71,7 @@ _Context* schedule(_Context *prev, bool kill) {
         current->cp->prot = &(pcb[schedule_target].as);
       } else {
         Log("Target PCB No.%d is not in use!", schedule_target);
-        Log("Read the friendly manual to learn how to start new apps!");
+        Log("Read the friendly '171860508.pdf' to learn how to start new apps!");
       }
     }
     schedule_target = -2;
