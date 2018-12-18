@@ -4,7 +4,6 @@
 #include <ndl.h>
 
 NDL_Event event;
-uint32_t boot_time = 0;
 
 size_t timer_read(uintptr_t reg, void *buf, size_t size) {
   switch (reg) {
