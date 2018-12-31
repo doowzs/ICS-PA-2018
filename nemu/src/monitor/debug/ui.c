@@ -36,6 +36,12 @@ static int cmd_p(char *args);
 static int cmd_x(char *args);
 static int cmd_w(char *args);
 static int cmd_d(char *args);
+static int cmd_save(char *args);
+static int cmd_load(char *args);
+#ifdef DIFF_TEST
+static int cmd_detach(char *args);
+static int cmd_attach(char *args);
+#endif
 static void cmd_wrong_parameter();
 
 static struct {
@@ -55,10 +61,17 @@ static struct {
 	{ "x", "Usage: x N EXPR, Calculate EXPR and print 4N bytes of memory data from EXPR.", cmd_x	},
 	{ "w", "usage: w EXPR, Watch point - automaticly pause the program when the value stored in EXPR is changed.", cmd_w },
   { "d", "Usage: d N, Delete watchpoint numbered with N.", cmd_d },
+  { "save", "Usage: save filename, Save NEMU state to a file.", cmd_save },
+  { "load", "Usage: load filename, Load NEMU state from a specific file.", cmd_load },
+#ifdef DIFF_TEST
+  { "detach", "Usage: detach, stop difftest.", cmd_detach },
+  { "attach", "Usage: attach, restart difftest.", cmd_attach },
+#endif
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
 #define PMEM_SIZE (128 * 1024 * 1024)
+#define SAVE_PATH "/home/doowzs/ics2018/savefiles/"
 
 static int cmd_help(char *args) {
   /* extract the first argument */
@@ -113,11 +126,13 @@ static int cmd_info(char *args) {
 	char *arg = strtok(NULL, " ");
 	if (arg == NULL || strcmp(arg, "r") == 0) {
 		/* r-mode (default), print all registers */
+    /* -- GPR+EIP -- */
 		printf("[\033[1;36mInfo\033[0m] Printing all registers.\n");
 		for (int i = 0; i < 8; ++i) {
-			printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", regsl[i], reg_l(i), reg_l(i), reg_l(i));
+			printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", regsl[i], reg_l(i), reg_l(i), reg_l(i));
 		}
-		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
+    /* -- EFLAGS -- */
+		printf("%s = \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", "eip", cpu.eip, cpu.eip, cpu.eip);
 		printf("EFLAGS = ");
 		for (int i = 0; i < EFLAGS_SIZE; ++i) {
 			if ((cpu.eflags32 >> regse_index[i]) & 1) {
@@ -126,7 +141,11 @@ static int cmd_info(char *args) {
 				printf(" %s  ", regse_upper[i]);
 			}
 		}
-		printf("\n");	
+		printf(" [\033[1;33m0x%08d\033[0m]\n", cpu.eflags32);
+    /* -- CR0  -- */
+    printf("Paging status %s\n", ((cpu.CR[0] >> 31) & 1) ? "ON" : "OFF");
+    /* -- IDTR -- */
+    printf("IDTR base \033[1;33m0x%08x\033[0m limit \033[1;33m%d\033[0m\n", cpu.IDTR.base, cpu.IDTR.limit);
 	} else if (strcmp(arg, "w") == 0) {
 		/* w-mode, list all watchnodes */
 		printf("[\033[1;36mInfo\033[0m] Printing all watchpoints.\n");
@@ -145,7 +164,7 @@ static int cmd_p(char *args) {
 		if (overflow) { 
 			printf("[\033[1;33mWarning\033[0m] Overflow detected.\n");
 		}
-		printf("[\033[1;36mPrint\033[0m] The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", res, res, res);
+		printf("[\033[1;36mPrint\033[0m] The result is \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", res, res, res);
 	} else {
 		printf("[\033[1;31mError\033[0m] Calculation failed.\n");
 	}
@@ -171,12 +190,8 @@ static int cmd_x(char *args) {
 		  }
 			int res = 0;
 	  	for (uint32_t i = 0; i < n; ++i, st += 4) {
-        if (st >= PMEM_SIZE) {
-          printf("[\033[1;31mError\033[0m] Memory address 0x%08x is out of bound (128 * 1024 * 1024).\n", st);
-          return 0;
-        }
-        res = paddr_read(st, 4);
-        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%10d\033[0mD = \033[1;33m%10u\033[0mU\n", st, res, res, res);
+        res = vaddr_read(st, 4);
+        printf("0x%08x: \033[1;33m0x%08x\033[0mH = \033[1;33m%11d\033[0mD = \033[1;33m%11u\033[0mU\n", st, res, res, res);
 		  }
 	  } else {
 		  printf("[\033[1;31mError\033[0m] Calculation failed.\n");
@@ -235,6 +250,85 @@ static int cmd_d(char *args) {
 	return 0;
 }
 
+static int cmd_save(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    cmd_wrong_parameter(args);
+    return 0;
+  }
+
+  char fn[128] = SAVE_PATH;
+  strcat(fn, arg);
+  Log("%s", fn);
+  FILE *fp = fopen(fn, "r");
+  if (fp != NULL) {
+    fclose(fp);
+    if ((arg = strtok(NULL, " ")) != NULL && strcmp(arg, "-f") == 0) {
+      printf("[\033[1;31mSAVE\033[0m] Warning: You are force saving to a existent file.\n");
+    } else {
+      printf("[\033[1;31mSAVE\033[0m] ERR: The target file exists. Use -f to force save.\n");
+      return 0;
+    }
+  }
+
+  fp = fopen(fn, "w+");
+  if (fp == NULL) {
+    printf("[\033[1;31mSAVE\033[0m] Open target file failed.\n");
+  } else {
+    printf("[\033[1;31mSAVE\033[0m] Start writing to file %s\n", fn);
+    {
+      fwrite(&cpu, sizeof(CPU_state), 1, fp);
+      fwrite(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
+      fwrite(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
+    }
+    printf("[\033[1;31mSAVE\033[0m] NEMU state save finished.\n");
+    fclose(fp);
+  }
+  return 0;
+}
+
+static int cmd_load(char *args) {
+  char *arg = strtok(NULL, " ");
+  if (arg == NULL) {
+    cmd_wrong_parameter(args);
+    return 0;
+  }
+
+  char fn[128] = SAVE_PATH;
+  strcat(fn, arg);
+  Log("%s", fn);
+  FILE *fp = fopen(fn, "r");
+  if (fp == NULL) {
+    printf("[\033[1;32mLOAD\033[0m] ERR: The target file does not exist.\n");
+    return 0;
+  }
+
+  int sz = 0;
+  printf("[\033[1;32mLOAD\033[0m] Start loading from file %s\n", fn);
+  {
+    sz += fread(&cpu, sizeof(CPU_state), 1, fp);
+    sz += fread(&cpu.IDTR.base, sizeof(int), cpu.IDTR.limit, fp);
+    sz += fread(guest_to_host(0), sizeof(char), PMEM_SIZE + 0x100000, fp);
+  }
+  printf("[\033[1;32mLOAD\033[0m] NEMU state load finished (%u bytes). eip is at 0x%08x.\n", sz, cpu.eip);
+  fclose(fp);
+  return 0;
+}
+
+#ifdef DIFF_TEST
+static int cmd_detach(char *args) {
+  void difftest_detach();
+  difftest_detach();
+  return 0;
+}
+
+static int cmd_attach(char *args) {
+  void difftest_attach();
+  difftest_attach();
+  return 0;
+}
+#endif
+
 static void cmd_wrong_parameter(char *args) {
 	/* input a prompt message and abort running the command */
 	printf("[\033[1;36mCMD\033[0m] Wrong parameter \'%s\'. Please check your input. Type 'help' for usage.\n", args);
@@ -275,6 +369,11 @@ void ui_mainloop(int is_batch_mode) {
       }
     }
 
-    if (i == NR_CMD) { printf("[\033[1;36mCMD\033[0m] Unknown command '%s'. Type 'help' for usage.\n", cmd); }
+    if (i == NR_CMD) { 
+      printf("[\033[1;36mCMD\033[0m] Unknown command '%s'. Type 'help' for usage.\n", cmd); 
+#ifndef DIFF_TEST
+      printf("[\033[1;36mCMD\033[0m] Note that this version does not contain diff-test.\n");
+#endif
+    }
   }
 }

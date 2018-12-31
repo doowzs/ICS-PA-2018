@@ -1,23 +1,32 @@
 #include "cpu/exec.h"
 #include "device/port-io.h"
 
+void raise_intr(uint8_t, vaddr_t);
 void difftest_skip_ref();
 void difftest_skip_dut();
 
 make_EHelper(lidt) {
-  TODO();
+  rtl_lm(&at, &id_src->val, 2);
+  cpu.IDTR.limit = at; 
+  cpu.IDTR.base = id_dest->val;
 
   print_asm_template1(lidt);
 }
 
 make_EHelper(mov_r2cr) {
-  TODO();
+  operand_write(id_dest, &id_src->val);
+  //printf("moving R No.%d to CR No.%d with value 0x%08x\n", id_src->reg, id_dest->reg, id_src->val);
 
   print_asm("movl %%%s,%%cr%d", reg_name(id_src->reg, 4), id_dest->reg);
+
+#if defined(DIFF_TEST)
+  difftest_skip_ref();
+#endif
 }
 
 make_EHelper(mov_cr2r) {
-  TODO();
+  operand_write(id_dest, &id_src->val);
+  //printf("moving CR No.%d to R No.%d with value 0x%08x\n", id_src->reg, id_dest->reg, id_src->val);
 
   print_asm("movl %%cr%d,%%%s", id_src->reg, reg_name(id_dest->reg, 4));
 
@@ -27,7 +36,7 @@ make_EHelper(mov_cr2r) {
 }
 
 make_EHelper(int) {
-  TODO();
+  raise_intr(id_dest->val, decoding.seq_eip);
 
   print_asm("int %s", id_dest->str);
 
@@ -37,7 +46,15 @@ make_EHelper(int) {
 }
 
 make_EHelper(iret) {
-  TODO();
+  if (decoding.is_operand_size_16) {
+    printf("16-bit iret is not implemented!\n");
+    TODO();
+  } else {
+    rtl_pop(&t0); // NEXT EIP
+    rtl_pop(&cpu.CS);
+    rtl_pop(&cpu.eflags32);
+    rtl_j(t0);
+  }
 
   print_asm("iret");
 }

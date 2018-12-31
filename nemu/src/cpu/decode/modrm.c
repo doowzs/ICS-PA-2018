@@ -112,3 +112,35 @@ void read_ModR_M(vaddr_t *eip, Operand *rm, bool load_rm_val, Operand *reg, bool
     }
   }
 }
+
+/**
+ * Read ModR/M for CR instructions.
+ * See http://www.felixcloutier.com/x86/MOV-1.html for detailed manual.
+ *
+ * CR is specified by reg field,
+ *  R is specified by R/M field.
+ *         mod field is ignored.
+ *
+ * IMPORTANT:
+ * Under any circunstance, the code uses 32-bit length operands.
+ */
+void read_Mod_CR2R(vaddr_t *eip, Operand *cr, bool loadCR, Operand *r, bool loadR) {
+  ModR_M m;
+  m.val = instr_fetch(eip, 1);
+  decoding.ext_opcode = m.opcode;
+  
+  cr->type = OP_TYPE_CR;
+  cr->reg = m.reg;
+  if (loadCR) {
+    rtl_mv(&cr->val, &reg_CR(cr->reg));
+    //printf("CR No.%d, loaded with value 0x%08x\n", cr->reg, cr->val);
+  }
+
+  r->type = OP_TYPE_REG;
+  r->reg = m.R_M;
+  r->width = 4; // force using 32-bit
+  if (loadR) {
+    rtl_lr(&r->val, r->reg, r->width);
+    //printf("register No.%d, loaded with value 0x%08x\n", r->reg, r->val);
+  }
+}

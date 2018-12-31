@@ -5,7 +5,7 @@
 
 #include "rtl.h"
 
-enum { OP_TYPE_REG, OP_TYPE_MEM, OP_TYPE_IMM };
+enum { OP_TYPE_REG, OP_TYPE_CR, OP_TYPE_MEM, OP_TYPE_IMM };
 
 #define OP_STR_SIZE 40
 
@@ -96,6 +96,8 @@ make_DHelper(mov_I2r);
 make_DHelper(mov_I2E);
 make_DHelper(mov_G2E);
 make_DHelper(mov_E2G);
+make_DHelper(mov_cr2r);
+make_DHelper(mov_r2cr);
 make_DHelper(lea_M2G);
 make_DHelper(push_SI);
 

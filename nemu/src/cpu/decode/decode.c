@@ -172,6 +172,19 @@ make_DHelper(mov_I2r) {
   decode_op_I(eip, id_src, true);
 }
 
+/* CR <- E
+ * E <- CR
+ * Check modrm.c for read function.
+ */
+void read_Mod_CR2R(vaddr_t *, Operand *, bool, Operand *, bool);
+make_DHelper(mov_cr2r) {
+  read_Mod_CR2R(eip, id_src, true, id_dest, false);
+}
+
+make_DHelper(mov_r2cr) {
+  read_Mod_CR2R(eip, id_dest, false, id_src, true);
+}
+
 /* used by unary operations */
 make_DHelper(I) {
   decode_op_I(eip, id_dest, true);
@@ -320,6 +333,7 @@ make_DHelper(out_a2dx) {
 
 void operand_write(Operand *op, rtlreg_t* src) {
   if (op->type == OP_TYPE_REG) { rtl_sr(op->reg, src, op->width); }
+  else if (op->type == OP_TYPE_CR) { rtl_mv(&reg_CR(op->reg), src); }
   else if (op->type == OP_TYPE_MEM) { rtl_sm(&op->addr, src, op->width); }
   else { assert(0); }
 }

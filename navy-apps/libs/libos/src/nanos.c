@@ -6,6 +6,14 @@
 #include <time.h>
 #include "syscall.h"
 
+void _fork();
+void _wait();
+
+extern char end;
+void *brk_old = &end;
+void *brk_new = NULL;
+void *brk_ret = NULL;
+
 #if defined(__ISA_X86__)
 intptr_t _syscall_(int type, intptr_t a0, intptr_t a1, intptr_t a2){
   int ret = -1;
@@ -28,37 +36,45 @@ void _exit(int status) {
 }
 
 int _open(const char *path, int flags, mode_t mode) {
-  _exit(SYS_open);
-  return 0;
+  int ret = _syscall_(SYS_open, (uintptr_t) path, flags, (uintptr_t) mode);
+  return ret;
 }
 
 int _write(int fd, void *buf, size_t count){
-  _exit(SYS_write);
-  return 0;
+  int ret = _syscall_(SYS_write, fd, (uintptr_t) buf, count);
+  return ret;
 }
 
 void *_sbrk(intptr_t increment){
-  return (void *)-1;
+  brk_ret = brk_old;
+  brk_new = brk_old + increment;
+  int ret = _syscall_(SYS_brk, (uintptr_t) brk_new, 0, 0);
+  if (ret == 0) {
+    brk_old = brk_new;
+    return brk_ret;
+  } else {
+    return (void *) -1;
+  }
 }
 
 int _read(int fd, void *buf, size_t count) {
-  _exit(SYS_read);
-  return 0;
+  int ret = _syscall_(SYS_read, fd, (uintptr_t) buf, count);
+  return ret;
 }
 
 int _close(int fd) {
-  _exit(SYS_close);
-  return 0;
+  int ret = _syscall_(SYS_close, fd, 0, 0);
+  return ret;
 }
 
 off_t _lseek(int fd, off_t offset, int whence) {
-  _exit(SYS_lseek);
-  return 0;
+  int ret = _syscall_(SYS_lseek, fd, (uintptr_t) offset, whence);
+  return ret;
 }
 
 int _execve(const char *fname, char * const argv[], char *const envp[]) {
-  _exit(SYS_execve);
-  return 0;
+  int ret = _syscall_(SYS_execve, (uintptr_t) fname, (uintptr_t) argv, (uintptr_t) envp);
+  return ret;
 }
 
 // The code below is not used by Nanos-lite.
@@ -75,5 +91,5 @@ int _kill(int pid, int sig) {
 
 pid_t _getpid() {
   _exit(-SYS_getpid);
-  return 1;
+  return -1; 
 }

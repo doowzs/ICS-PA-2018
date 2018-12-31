@@ -554,6 +554,7 @@ main_loop() {
    //
    //PAL_TrademarkScreen();
    //PAL_SplashScreen();
+   printf("Slow trademark and splash screen are omitted.\n");
 
    //
    // Run the main game routine

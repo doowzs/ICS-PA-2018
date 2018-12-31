@@ -39,9 +39,19 @@ typedef struct {
 	union {
 		rtlreg_t eflags32;
 		struct {
-			rtlreg_t CF:1, :1, PF:1, :1, AF:1, :1, ZF:1, SF:1, :3, OF:1, :20;
+			rtlreg_t CF:1, :1, PF:1, :1, AF:1, :1, ZF:1, SF:1, :1, IF:1, :1, OF:1, :20;
 		} eflags;
 	};
+
+  rtlreg_t CS;
+  rtlreg_t CR[8];
+
+  struct {
+    rtlreg_t limit :16;
+    vaddr_t base;
+  } IDTR;
+  
+  bool INTR; // timer interrupt
 
 } CPU_state;
 
@@ -55,6 +65,7 @@ static inline int check_reg_index(int index) {
 #define reg_l(index) (cpu.gpr[check_reg_index(index)]._32)
 #define reg_w(index) (cpu.gpr[check_reg_index(index)]._16)
 #define reg_b(index) (cpu.gpr[check_reg_index(index) & 0x3]._8[index >> 2])
+#define reg_CR(index) (cpu.CR[check_reg_index(index)])
 #define EFLAGS_SIZE 4
 
 extern const char* regsl[];

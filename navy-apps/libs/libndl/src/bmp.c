@@ -23,10 +23,8 @@ int NDL_LoadBitmap(NDL_Bitmap *bmp, const char *filename) {
   FILE *fp;
   int w = 0, h = 0;
   uint32_t *pixels = NULL;
-
   w = h = 0;
   if (!(fp = fopen(filename, "r"))) return -1;
-
   struct BitmapHeader hdr;
   assert(sizeof(hdr) == 54);
   assert(1 == fread(&hdr, sizeof(struct BitmapHeader), 1, fp));
@@ -35,10 +33,9 @@ int NDL_LoadBitmap(NDL_Bitmap *bmp, const char *filename) {
   if (hdr.compression != 0) return -1;
   pixels = (uint32_t*)malloc(hdr.width * hdr.height * sizeof(uint32_t));
   if (!pixels) return -1;
-
+  
   w = hdr.width; h = hdr.height;
   int line_off = (w * 3 + 3) & ~0x3;
-
   for (int i = 0; i < h; i ++) {
     fseek(fp, hdr.offset + (h - 1 - i) * line_off, SEEK_SET);
     int nread = fread(&pixels[w * i], 3, w, fp);
@@ -49,7 +46,6 @@ int NDL_LoadBitmap(NDL_Bitmap *bmp, const char *filename) {
       pixels[w * i + j] = (r << 16) | (g << 8) | b;
     }
   }
-
   fclose(fp);
   bmp->w = w;
   bmp->h = h;

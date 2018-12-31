@@ -9,9 +9,10 @@ static void (*ref_difftest_getregs)(void *c);
 static void (*ref_difftest_setregs)(const void *c);
 static void (*ref_difftest_exec)(uint64_t n);
 
-static bool is_skip_ref;
-static bool is_skip_dut;
-static bool is_skip_flg;
+static bool is_skip_ref = false;
+static bool is_skip_dut = false;
+static bool is_skip_flg = false;
+static bool difftest_on =  true;
 
 void difftest_skip_ref() { is_skip_ref = true; }
 void difftest_skip_dut() { is_skip_dut = true; }
@@ -53,7 +54,27 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_setregs(&cpu);
 }
 
+void difftest_detach() {
+  difftest_on = false;
+  Log("Differential testing is turned off.");
+}
+
+void difftest_attach() {
+  Log("Reloading difftest mem/reg...");
+
+  ref_difftest_memcpy_from_dut(0, guest_to_host(0), PMEM_SIZE + 0x100000);
+  ref_difftest_setregs(&cpu);
+
+  difftest_on = true;
+  is_skip_ref = false;
+  is_skip_dut = false;
+  is_skip_flg = false;
+  Log("Differential testing is turned on.");
+}
+
 void difftest_step(uint32_t eip) {
+  if (!difftest_on) return;
+
   CPU_state ref_r;
 
   if (is_skip_dut) {
@@ -94,6 +115,7 @@ void difftest_step(uint32_t eip) {
         OK = false;
       }
     }
+    is_skip_flg = false;
   }
   
   if (!OK) {

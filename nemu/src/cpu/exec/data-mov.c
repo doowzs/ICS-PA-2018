@@ -21,13 +21,51 @@ make_EHelper(pop) {
 }
 
 make_EHelper(pusha) {
-  TODO();
+  if (decoding.is_operand_size_16) {
+    rtl_li(&t0, cpu.gpr[4]._16);
+    for (int i = 0; i < 8; ++i) {
+      if (i == 4) {
+        rtl_push(&t0);
+      } else {
+        printf("16-bit pusha is buggy!\n");
+        TODO(); // BUGGY FIXME
+        rtl_push((rtlreg_t *) &cpu.gpr[i]._16);
+      }
+    }
+  } else {
+    rtl_li(&t0, cpu.gpr[4]._32);
+    for (int i = 0; i < 8; ++i) {
+      if (i == 4) {
+        rtl_push(&t0);
+      } else {
+        rtl_push(&cpu.gpr[i]._32);
+      }
+    }
+  }
 
   print_asm("pusha");
 }
 
 make_EHelper(popa) {
-  TODO();
+  if (decoding.is_operand_size_16) {
+    for (int i = 7; i >= 0; --i) {
+      if (i == 4) {
+        rtl_pop(&t0);
+      } else {
+        printf("16-bit popa is buggy!\n");
+        TODO(); // BUGGY FIXME
+        rtl_pop((rtlreg_t *) &cpu.gpr[i]._16);
+      }
+    }
+  } else {
+    for (int i = 7; i >= 0; --i) {
+      if (i == 4) {
+        rtl_pop(&t0);
+      } else {
+        rtl_pop(&cpu.gpr[i]._32);
+      }
+    }
+  }
 
   print_asm("popa");
 }

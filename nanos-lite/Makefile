@@ -1,6 +1,7 @@
 NAME = nanos-lite
 SRCS = $(shell find -L ./src/ -name "*.c" -o -name "*.cpp" -o -name "*.S")
 LIBS = klib
+ARCH ?= x86-nemu
 include $(AM_HOME)/Makefile.app
 
 ifeq ($(ARCH),native)
@@ -11,11 +12,13 @@ FSIMG_PATH = $(NAVY_HOME)/fsimg
 RAMDISK_FILE = build/ramdisk.img
 
 OBJCOPY_FLAG = -S --set-section-flags .bss=alloc,contents -O binary
-OBJCOPY_FILE = $(NAVY_HOME)/tests/dummy/build/dummy-$(ISA)
+OBJCOPY_APP = $(NAVY_HOME)/tests/hello
+OBJCOPY_FILE = $(OBJCOPY_APP)/build/$(notdir $(OBJCOPY_APP))-$(ISA)
 
 .PHONY: update update-ramdisk-objcopy update-ramdisk-fsimg update-fsimg
 
 update-ramdisk-objcopy:
+	$(MAKE) -s -C $(OBJCOPY_APP) ISA=$(ISA)
 	$(OBJCOPY) $(OBJCOPY_FLAG) $(OBJCOPY_FILE) $(RAMDISK_FILE)
 	touch src/files.h
 
@@ -30,10 +33,10 @@ update-ramdisk-fsimg: update-fsimg
 		fi \
 	done
 	@cat $(FSIMG_FILES) > $(RAMDISK_FILE)
-	@wc -c $(FSIMG_FILES) | grep -v 'total$$' | sed -e 's+ $(FSIMG_PATH)+ +' | awk -v sum=0 '{print "\x7b\x22" $$2 "\x22\x2c " $$1 "\x2c " sum "\x7d\x2c";sum += $$1}' > src/files.h
+	@wc -c $(FSIMG_FILES) | grep -v 'total$$' | sed -e 's+ $(FSIMG_PATH)+ +' | awk -v sum=0 '{print "\x7b\x22" $$2 "\x22\x2c " $$1 "\x2c " sum "\x2c 0\x2c ramdisk_read\x2c ramdisk_write\x7d\x2c";sum += $$1}' > src/files.h
 
 src/syscall.h: $(NAVY_HOME)/libs/libos/src/syscall.h
 	ln -sf $^ $@
 
-update: update-ramdisk-objcopy src/syscall.h
+update: update-ramdisk-fsimg src/syscall.h
 	@touch src/initrd.S

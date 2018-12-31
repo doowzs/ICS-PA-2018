@@ -3,9 +3,10 @@
 int main() {
   FILE *fp = fopen("/dev/events", "r");
   volatile int j = 0;
+printf("start!\n");
   while(1) {
     j ++;
-    if (j == 1000000) {
+    if (j == 50000) {
       char buf[256];
       char *p = buf, ch;
       while ((ch = fgetc(fp)) != -1) {

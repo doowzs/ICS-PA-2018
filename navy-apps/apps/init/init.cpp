@@ -23,14 +23,29 @@ static Font *font;
 struct MenuItem {
   const char *name, *bin, *arg1;
 } items[] = {
-  {"Litenes (Super Mario Bros)", "/bin/litenes", "/share/games/nes/mario.nes"},
-  {"Litenes (Yie Ar Kung Fu)", "/bin/litenes", "/share/games/nes/kungfu.nes"},
-  {"PAL - Xian Jian Qi Xia Zhuan", "/bin/pal", NULL},
-  {"bmptest", "/bin/bmptest", NULL},
-  {"dummy", "/bin/dummy", NULL},
-  {"events", "/bin/events", NULL},
-  {"hello", "/bin/hello", NULL},
-  {"text", "/bin/text", NULL},
+  {"Test - dummy",              "/bin/dummy",   NULL},
+  {"Test - hello",              "/bin/hello",   NULL},
+  {"Test - events",             "/bin/events",  NULL},
+  {"Test - text",               "/bin/text",    NULL},
+  {"Test - bmptest",            "/bin/bmptest", NULL},
+  //{"App - LUA",                 "/bin/lua",     NULL},
+  //{"App - NTerminator",         "/bin/nterm",   NULL},
+  //{"App - NWM",                 "/bin/nwm",     NULL},
+  //{"App - slider",              "/bin/slider",  NULL},
+  {"PAL - Xian Jian Gayme",     "/bin/pal",     NULL},
+  //{"NES - Battle City",         "/bin/litenes", "/share/games/nes/battlecity.nes"},
+  //{"NES - Circus",              "/bin/litenes", "/share/games/nes/circus.nes"},
+  {"NES - Yie Ar Kung Fu",      "/bin/litenes", "/share/games/nes/kungfu.nes"},
+  //{"NES - Lode Runner",         "/bin/litenes", "/share/games/nes/loderunner.nes"},
+  {"NES - Super Mario Bros.",   "/bin/litenes", "/share/games/nes/mario.nes"},
+  {"AM - coremark",    "/bin/coremark-am", NULL},
+  {"AM - dhrystone",   "/bin/dhrystone-am", NULL},
+  {"AM - hello",       "/bin/hello-am", NULL},
+  {"AM - litenes",     "/bin/litenes-am", NULL},
+  //{"AM - microbench",  "/bin/microbench-am", NULL},
+  {"AM - slider",      "/bin/slider-am", NULL},
+  {"AM - typing",      "/bin/typing-am", NULL},
+  {"AM - videotest",   "/bin/videotest-am", NULL},
 };
 
 #define nitems (sizeof(items) / sizeof(items[0]))
@@ -106,13 +121,18 @@ int main(int argc, char *argv[], char *envp[]) {
     if (i != -1 && i <= i_max) {
       i += page * 10;
       auto *item = &items[i];
-      const char *exec_argv[3];
-      exec_argv[0] = item->bin;
-      exec_argv[1] = item->arg1;
-      exec_argv[2] = NULL;
       clear_display();
-      execve(exec_argv[0], (char**)exec_argv, (char**)envp);
-      fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed.\n\n", exec_argv[0]);
+
+      //avoid const complaints
+      char arg1[128], arg2[128], argx[8];
+      strcpy(arg1, item->bin);
+      strcpy(arg2, item->arg1);
+      strcpy(argx, "\0");
+      char* const exec_argv[] = {arg1, arg2, argx};
+      execve(item->bin, &exec_argv[0], envp);
+      
+      fprintf(stderr, "\033[31m[ERROR]\033[0m Exec %s failed. (execve in init.cpp returned!)\n\n", item->bin);
+      // return 66; // REMEMBER THIS SPECIAL CODE!
     } else {
       fprintf(stderr, "Choose a number between %d and %d\n\n", 0, i_max);
     }
@@ -187,18 +207,27 @@ static void draw_text_row(char *s, int r) {
 static void display_menu(int n) {
   clear_display();
   NDL_DrawRect(logo.pixels, W - logo.w, 0, logo.w, logo.h);
-  printf("Available applications:\n");
+  
   char buf[80];
-  int i;
-  for (i = 0; i <= n; i ++) {
-    auto *item = &items[page * 10 + i];
-    sprintf(buf, "  [%d] %s", i, item->name);
-    draw_text_row(buf, i);
+  int i = 0;
+
+  sprintf(buf, "  Welcome to Aunt's custom X-NEMU!\n");
+  draw_text_row(buf, i);
+  i ++;
+
+  sprintf(buf, "  Available applications:\n");
+  draw_text_row(buf, i);
+  i ++;
+
+  for (int j = 0; j <= n; j ++) {
+    auto *item = &items[page * 10 + j];
+    sprintf(buf, "  [%d] %s", j, item->name);
+    draw_text_row(buf, i + j);
   }
 
-  i = 11;
+  i = 13;
 
-  sprintf(buf, "  page = %2d, #total apps = %d", page, nitems);
+  sprintf(buf, "  page = %2d / %2d, #total apps = %d", page + 1, nitems / 10 + 1,  nitems);
   draw_text_row(buf, i);
   i ++;
 
@@ -206,11 +235,11 @@ static void display_menu(int n) {
   draw_text_row(buf, i);
   i ++;
 
-  sprintf(buf, "  <-  PageDown");
+  sprintf(buf, "  <-  PageUp");
   draw_text_row(buf, i);
   i ++;
 
-  sprintf(buf, "  ->  PageUp");
+  sprintf(buf, "  ->  PageDown");
   draw_text_row(buf, i);
   i ++;
 

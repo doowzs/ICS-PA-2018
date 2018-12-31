@@ -5,7 +5,7 @@ void init_ramdisk(void);
 void init_device(void);
 void init_irq(void);
 void init_fs(void);
-void init_proc(void);
+void init_proc(const char *, char* const);
 
 int main() {
 #ifdef HAS_VME
@@ -14,6 +14,10 @@ int main() {
 
   Log("'Hello World!' from Nanos-lite");
   Log("Build time: %s, %s", __TIME__, __DATE__);
+
+#ifdef SYS_DEBUG
+  Log("SYS_DEBUG is on. You can turn it off in nanos/include/common.h.");
+#endif
 
   init_ramdisk();
 
@@ -25,11 +29,11 @@ int main() {
 
   init_fs();
 
-  init_proc();
+  init_proc("/bin/init", NULL);
 
 #ifdef HAS_CTE
   _yield();
 #endif
 
-  panic("Should not reach here");
+  panic("Should not reach here (nanos/src/main.c)");
 }
