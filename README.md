@@ -1,3 +1,9 @@
+This is the repository of the final status of PA of Tianyun Zhang from the elite class of CS Dept., Nanjing University.
+
+Some refactor and modification of the original PA framework is made during the process so that the codes are more reasonable to me. Please do not copy the codes to your PA if you are learning Introduction to Computer System in Nanjing University.
+
+---
+
 # ICS2018 Programming Assignment
 
 This project is the programming assignment of the class ICS(Introduction to Computer System) in Department of Computer Science and Technology, Nanjing University.
